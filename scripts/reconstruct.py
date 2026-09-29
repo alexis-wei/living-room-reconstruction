@@ -1,5 +1,5 @@
 """Local-only COLMAP pipeline. Run using the pinned pycolmap-cuda12 environment."""
-import argparse, json, os, subprocess, sys, time, sqlite3
+import argparse, json, os, subprocess, sys, time, sqlite3, shutil, math
 from pathlib import Path
 
 REPO=Path(__file__).resolve().parents[1]
@@ -42,8 +42,17 @@ def execute_stage(args):
   model.export_PLY(run/'sparse_points.ply')
  elif stage=='bundle_adjustment':
   sel=json.loads((run/'models.json').read_text())['selected_model'];mp=sparse/str(sel);m=p.Reconstruction(mp)
+  backup=run/'sparse_before_bundle_adjustment'/str(sel)
+  if not backup.exists():shutil.copytree(mp,backup)
   opts=p.BundleAdjustmentOptions();opts.ceres.use_gpu=False;opts.ceres.solver_options.num_threads=12
-  p.bundle_adjustment(m,opts);m.write(mp);m.export_PLY(run/'sparse_points.ply')
+  p.bundle_adjustment(m,opts)
+  # Global BA can move observations behind cameras. Reapply mapper-quality
+  # filtering before reporting errors or using the model for dense stereo.
+  filtered=p.ObservationManager(m).filter_all_points3D(4.0,1.5)
+  m.update_point_3d_errors()
+  if not m.num_points3D() or not math.isfinite(m.compute_mean_reprojection_error()):raise RuntimeError('Invalid sparse geometry after bundle adjustment')
+  atomic_json(run/'bundle_adjustment_filter.json',dict(filtered_observations=filtered,max_reprojection_error_px=4.0,min_triangulation_angle_degrees=1.5))
+  m.write(mp);m.export_PLY(run/'sparse_points.ply')
   atomic_json(run/'sparse_metrics.json',dict(registered_images=m.num_reg_images(),points3D=m.num_points3D(),mean_reprojection_error=m.compute_mean_reprojection_error(),mean_track_length=m.compute_mean_track_length(),camera_model='SIMPLE_RADIAL',cameras=[cam.todict() for cam in m.cameras.values()],unregistered_images=sorted(set(x.name for x in images.glob('*.png'))-set(im.name for im in m.images.values()))))
  elif stage=='undistortion':
   sel=json.loads((run/'models.json').read_text())['selected_model'];opts=p.UndistortCameraOptions();opts.max_image_size=max(w,h);opts.max_scale=1.0

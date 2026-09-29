@@ -8,9 +8,22 @@ const stages=[
  ['fusion','Fuse the dense point cloud','Combine consistent depth observations into a dense colored point cloud. Reprojection, depth, and normal checks filter conflicting samples.','CPU','Geometric fusion · 8 threads · 4 GB cache','pycolmap.stereo_fusion'],
  ['mesh','Reconstruct the surface','Poisson meshing converts the fused oriented points into a surface. Holes, reflections, or missing observations can still produce artifacts.','CPU','Poisson · octree depth 10 · color enabled','pycolmap.poisson_meshing']
 ];
-let report,scale='1x',active=0;
+let report,examples,scale='1x',active=0;
 const el=id=>document.getElementById(id),fmt=n=>n==null?'—':n.toLocaleString(),duration=s=>s==null?'Not finished':s<60?`${s.toFixed(1)} seconds`:`${(s/60).toFixed(1)} minutes`;
+function renderExamples(){
+ if(!examples)return;
+ const items=examples.scales[scale];el('examples-scale').textContent=`${scale==='1x'?'FULL RESOLUTION':scale.toUpperCase()+' DOWNSAMPLE'} · ${items[0].width} × ${items[0].height}`;
+ el('example-grid').replaceChildren(...items.map(item=>{
+  const figure=document.createElement('figure'),a=document.createElement('a'),img=document.createElement('img'),cap=document.createElement('figcaption');
+  a.href=item.url;a.target='_blank';a.rel='noopener';a.title=`Open ${item.filename} at ${item.width} × ${item.height}`;
+  img.src=item.url;img.alt=`${item.title}, source frame ${item.frame}, ${scale} resolution`;img.width=item.width;img.height=item.height;img.loading='lazy';
+  cap.innerHTML=`<strong>${item.title}</strong><span>${item.filename} · ${item.time_seconds.toFixed(2)}s</span><span>${item.width} × ${item.height} · ${(item.bytes/1e6).toFixed(2)} MB · PNG</span>`;
+  a.append(img);figure.append(a,cap);return figure;
+ }));
+}
+fetch('examples/index.json').then(r=>{if(!r.ok)throw Error('Examples unavailable');return r.json()}).then(data=>{examples=data;renderExamples()}).catch(()=>{el('example-grid').textContent='Source examples could not be loaded.'});
 function render(){
+ renderExamples();
  const d=report.scales[scale];el('dimensions').textContent=`${d.width} × ${d.height}`;el('registered').textContent=d.registered_images==null?'Pending':`${d.registered_images} / 500`;el('points').textContent=fmt(d.points3D);
  const states=Object.values(d.stages),done=states.filter(s=>s.state==='complete').length;el('runstatus').textContent=`${done} / 8 STEPS COMPLETE`;
  el('steps').replaceChildren(...stages.map(([key,title,desc,device],i)=>{const s=d.stages[key]||{state:'pending'};const b=document.createElement('button');b.className=`step ${i===active?'active':''}`;b.setAttribute('aria-pressed',i===active);b.innerHTML=`<span class="number">${String(i+1).padStart(2,'0')}</span><span><b>${title}</b><small>${device}</small></span><span class="badge ${s.state}">${s.state}</span>`;b.onclick=()=>{active=i;render()};return b}));

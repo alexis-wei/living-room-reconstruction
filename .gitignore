@@ -32,3 +32,6 @@ node_modules/
 
 # Derived geometry is published only to the private Site.
 site/dist/clouds/
+
+# Only the private Site receives the16 requested source examples.
+site/dist/examples/

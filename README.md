@@ -55,3 +55,8 @@ References: [COLMAP CLI](https://colmap.github.io/cli.html), [PyCOLMAP](https://
 ## Point-cloud viewer
 
 Run `python scripts/export_viewer.py` using the COLMAP environment after completed reconstruction stages, then publish the Site. It exports every non-empty sparse component, labels substantial components (at least 10 registered images and 100 points), and includes completed dense fusion. Previews are capped at 200,000 deterministically sampled points; full counts and sampling labels remain visible. Each component has its own coordinate system and is viewed separately. Registration strips show which of the 500 source frames belong to each component, and the union across non-empty models highlights remaining gaps. Derived assets under `site/dist/clouds/` are excluded from GitHub uploads.
+
+
+## Source examples on the private Site
+
+At the user’s request, `scripts/export_examples.py` copies exactly frames0001,0130,0175,0405 at each of the four resolutions to `site/dist/examples/`. The16 PNGs are exact copies (verified by hashes), with timestamps and dimensions. They are included only in the private Site and excluded from GitHub. All other source photographs remain local. Run this exporter when regenerating the Site’s source examples.

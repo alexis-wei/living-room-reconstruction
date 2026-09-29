@@ -1,0 +1,202 @@
+{
+  "updated": "2026-09-29T20:19:47.759011+00:00",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "vram_gb": 24,
+  "pycolmap": "4.2.1",
+  "repo_url": "https://github.com/alexis-wei/living-room-reconstruction",
+  "scales": {
+    "1x": {
+      "folder": "full_resolution",
+      "width": 2160,
+      "height": 3840,
+      "count": 500,
+      "bytes": 3033797562,
+      "stages": {},
+      "registered_images": null,
+      "points3D": null,
+      "mean_reprojection_error": null,
+      "mean_track_length": null,
+      "components": [],
+      "fused": null,
+      "mesh": null
+    },
+    "2x": {
+      "folder": "downsample_2x_1080x1920",
+      "width": 1080,
+      "height": 1920,
+      "count": 500,
+      "bytes": 1118536293,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:17:13Z",
+          "device": "CUDA",
+          "seconds": 102.98,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "running",
+          "started_at": "2026-09-29T20:18:56Z",
+          "device": "CUDA"
+        }
+      },
+      "registered_images": null,
+      "points3D": null,
+      "mean_reprojection_error": null,
+      "mean_track_length": null,
+      "components": [],
+      "fused": null,
+      "mesh": null
+    },
+    "4x": {
+      "folder": "downsample_4x_540x960",
+      "width": 540,
+      "height": 960,
+      "count": 500,
+      "bytes": 324530435,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:09:14Z",
+          "device": "CUDA",
+          "seconds": 72.11,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:10:26Z",
+          "device": "CUDA",
+          "seconds": 121.04,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:12:27Z",
+          "device": "CPU",
+          "seconds": 278.96,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:17:06Z",
+          "device": "CPU",
+          "seconds": 6.75,
+          "exit_code": 0
+        }
+      },
+      "registered_images": 493,
+      "points3D": 74712,
+      "mean_reprojection_error": 0.7038128642609662,
+      "mean_track_length": 6.886912410322305,
+      "components": [
+        {
+          "id": 1,
+          "registered_images": 493,
+          "points3D": 74712,
+          "mean_reprojection_error": 0.7038130498017618
+        },
+        {
+          "id": 2,
+          "registered_images": 14,
+          "points3D": 0,
+          "mean_reprojection_error": 0.0
+        },
+        {
+          "id": 0,
+          "registered_images": 4,
+          "points3D": 1459,
+          "mean_reprojection_error": 0.42789939545263495
+        }
+      ],
+      "fused": null,
+      "mesh": null
+    },
+    "8x": {
+      "folder": "downsample_8x_270x480",
+      "width": 270,
+      "height": 480,
+      "count": 500,
+      "bytes": 91224727,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:04:13Z",
+          "device": "CUDA",
+          "seconds": 2.36,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:04:15Z",
+          "device": "CUDA",
+          "seconds": 3.51,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:04:19Z",
+          "device": "CPU",
+          "seconds": 63.0,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:05:22Z",
+          "device": "CPU",
+          "seconds": 2.59,
+          "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-09-29T20:05:24Z",
+          "device": "CPU",
+          "seconds": 1.08,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "running",
+          "started_at": "2026-09-29T20:05:25Z",
+          "device": "CUDA"
+        }
+      },
+      "registered_images": 343,
+      "points3D": 16294,
+      "mean_reprojection_error": 0.6033422668855217,
+      "mean_track_length": 7.925985025162636,
+      "components": [
+        {
+          "id": 1,
+          "registered_images": 343,
+          "points3D": 16294,
+          "mean_reprojection_error": 0.6043138662994968
+        },
+        {
+          "id": 2,
+          "registered_images": 147,
+          "points3D": 6944,
+          "mean_reprojection_error": 0.6245238147593298
+        },
+        {
+          "id": 4,
+          "registered_images": 13,
+          "points3D": 0,
+          "mean_reprojection_error": 0.0
+        },
+        {
+          "id": 3,
+          "registered_images": 11,
+          "points3D": 1,
+          "mean_reprojection_error": 1.6698513566203807e-05
+        },
+        {
+          "id": 0,
+          "registered_images": 2,
+          "points3D": 260,
+          "mean_reprojection_error": 0.2547002338726568
+        }
+      ],
+      "fused": null,
+      "mesh": null
+    }
+  }
+}

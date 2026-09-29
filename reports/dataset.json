@@ -1,0 +1,45 @@
+{
+  "frame_count": 500,
+  "master": {
+    "directory": "full_resolution",
+    "width": 2160,
+    "height": 3840
+  },
+  "scales": {
+    "2": {
+      "directory": "downsample_2x_1080x1920",
+      "width": 1080,
+      "height": 1920,
+      "count": 500,
+      "total_bytes": 1118536293,
+      "format": "PNG",
+      "mode": "RGB",
+      "bit_depth_per_channel": 8
+    },
+    "4": {
+      "directory": "downsample_4x_540x960",
+      "width": 540,
+      "height": 960,
+      "count": 500,
+      "total_bytes": 324530435,
+      "format": "PNG",
+      "mode": "RGB",
+      "bit_depth_per_channel": 8
+    },
+    "8": {
+      "directory": "downsample_8x_270x480",
+      "width": 270,
+      "height": 480,
+      "count": 500,
+      "total_bytes": 91224727,
+      "format": "PNG",
+      "mode": "RGB",
+      "bit_depth_per_channel": 8
+    }
+  },
+  "resize_filter": "Pillow LANCZOS",
+  "source": "Each scale is independently resized from its full-resolution master.",
+  "filename_alignment": "Identical filenames refer to identical source frames across every scale.",
+  "manifest": "dataset_manifest.csv",
+  "split": "No train/validation/test split assigned."
+}

@@ -53,7 +53,7 @@ def execute_stage(args):
   p.patch_match_stereo(dense,options=opts)
  elif stage=='fusion':
   opts=p.StereoFusionOptions();opts.num_threads=8;opts.max_image_size=max(w,h);opts.use_cache=True;opts.cache_size=4.
-  p.stereo_fusion(dense/'fused.ply',dense,input_type='geometric',options=opts)
+  p.stereo_fusion(dense/'fused.ply',dense,input_type='geometric',options=opts,output_type='ply')
   if not (dense/'fused.ply').exists():raise RuntimeError('No fused point cloud written')
  elif stage=='mesh':
   opts=p.PoissonMeshingOptions();opts.depth=10;opts.num_threads=12

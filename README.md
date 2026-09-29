@@ -1,6 +1,6 @@
 # Living room reconstruction
 
-Reproducible video-frame preparation and independent COLMAP reconstructions at four resolutions. Source photographs, video, previews, databases, point clouds, meshes, and tool environments stay local. This repository contains code, configuration, image dimensions, timestamps, aggregate reconstruction metrics, and a static process report.
+Reproducible video-frame preparation and independent COLMAP reconstructions at four resolutions. Source photographs, video, previews, databases, full reconstruction outputs and tool environments stay local. Derived point-cloud previews are published only to the private Site at the user’s request. This repository contains code, configuration, image dimensions, timestamps, aggregate reconstruction metrics, and a static process report.
 
 ## Dataset
 
@@ -47,6 +47,11 @@ The runner records stage start times, devices, durations, success/failure, and s
 
 [Open the private reconstruction report](https://alexis-living-room-reconstruction.hello420892.chatgpt.site).
 
-`site/dist/` contains an image-free, clickable static report. `scripts/build_report.py` imports only an allowlist of aggregate local statistics. No photographs, video frames, thumbnails, point coordinates, camera poses, or raw logs are published. `scripts/audit_publish.py` checks publishable content before upload.
+`site/dist/` contains an photo-free, clickable static report. `scripts/build_report.py` imports only an allowlist of aggregate local statistics. No photographs, video frames, thumbnails, geometry, camera poses, or raw logs are uploaded to GitHub. The private Site separately includes derived point-cloud previews and camera centers for gap inspection. `scripts/audit_publish.py` checks publishable content before upload.
 
 References: [COLMAP CLI](https://colmap.github.io/cli.html), [PyCOLMAP](https://colmap.github.io/pycolmap/index.html), [COLMAP tutorial](https://colmap.github.io/tutorial.html).
+
+
+## Point-cloud viewer
+
+Run `python scripts/export_viewer.py` using the COLMAP environment after completed reconstruction stages, then publish the Site. It exports every non-empty sparse component, labels substantial components (at least 10 registered images and 100 points), and includes completed dense fusion. Previews are capped at 200,000 deterministically sampled points; full counts and sampling labels remain visible. Each component has its own coordinate system and is viewed separately. Registration strips show which of the 500 source frames belong to each component, and the union across non-empty models highlights remaining gaps. Derived assets under `site/dist/clouds/` are excluded from GitHub uploads.

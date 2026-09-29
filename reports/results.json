@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-29T20:19:47.759011+00:00",
+  "updated": "2026-09-29T20:33:33.471751+00:00",
   "gpu": "NVIDIA GeForce RTX 4090",
   "vram_gb": 24,
   "pycolmap": "4.2.1",
@@ -35,9 +35,16 @@
           "exit_code": 0
         },
         "matching": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-29T20:18:56Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 213.32,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "running",
+          "started_at": "2026-09-29T20:22:29Z",
+          "device": "CPU"
         }
       },
       "registered_images": null,
@@ -82,6 +89,11 @@
           "device": "CPU",
           "seconds": 6.75,
           "exit_code": 0
+        },
+        "undistortion": {
+          "state": "running",
+          "started_at": "2026-09-29T20:33:28Z",
+          "device": "CPU"
         }
       },
       "registered_images": 493,
@@ -154,9 +166,18 @@
           "exit_code": 0
         },
         "depth_maps": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-29T20:05:25Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 1659.6,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "failed",
+          "started_at": "2026-09-29T20:33:05Z",
+          "device": "CPU",
+          "seconds": 23.21,
+          "exit_code": 1
         }
       },
       "registered_images": 343,

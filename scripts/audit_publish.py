@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 R=Path(__file__).resolve().parents[1]
-allowed=[R/'README.md',R/'.gitignore',R/'requirements.txt',*sorted((R/'scripts').glob('*.py')),*sorted((R/'reports').glob('*.json')),*sorted((R/'reports').glob('*.csv')),*sorted((R/'site/dist').glob('*'))]
+allowed=[R/'README.md',R/'.gitignore',R/'requirements.txt',*sorted((R/'scripts').glob('*.py')),*sorted((R/'reports').glob('*.json')),*sorted((R/'reports').glob('*.csv')),*sorted(p for p in (R/'site/dist').glob('*') if p.is_file())]
 for p in allowed:
  assert p.is_file(),p
  assert p.suffix in {'.py','.md','.txt','.json','.csv','.html','.css','.js'} or p.name=='.gitignore',p

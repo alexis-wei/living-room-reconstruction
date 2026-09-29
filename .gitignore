@@ -29,3 +29,6 @@ site/.git/
 site/.sites-runtime/
 site/.openai/
 node_modules/
+
+# Derived geometry is published only to the private Site.
+site/dist/clouds/

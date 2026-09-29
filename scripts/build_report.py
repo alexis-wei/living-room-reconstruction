@@ -9,7 +9,7 @@ SCALES={'1x':('full_resolution',2160,3840),'2x':('downsample_2x_1080x1920',1080,
 def read(p,default=None):return json.loads(p.read_text()) if p.exists() else default
 
 def ply_counts(path):
- if not path.exists():return None
+ if not path.is_file():return None
  result={}
  with path.open('rb') as f:
   for _ in range(100):

@@ -224,3 +224,16 @@ The MOV identifies `iPhone 13 Pro 26mm`, f/1.5, recorded with Blackmagic Camera.
 The lower error comes with fewer registered views and points; it does not establish better geometric accuracy. No ground-truth calibration or dimensions were supplied. The private `camera-comparison.html` page presents both models side by side. Dense reconstruction is queued behind the existing three experiments, using RTX 4090 CUDA depth estimation without overlapping GPU-heavy jobs. Fresh geometry verification, mapping and BA ran on CPU; original CUDA-extracted features were reused.
 
 Local data/status: `../experiments_local/iphone13pro_4x/`. Reproduce from the enclosing workspace with `python3 living-room-reconstruction/scripts/run_camera_model_experiment.py`; its lock prevents duplicate runs. The original reconstruction stays intact. Camera-model background: https://colmap.github.io/cameras.html ; phone specifications: https://support.apple.com/en-us/111871 .
+
+
+### Same OPENCV settings on the 1,000-frame dataset
+
+`iphone13pro_1000_4x` reuses the exact existing `room_1000` native and 540×960 PNGs through local directory links. It repeats the 500-frame OPENCV experiment's shared camera, initial parameters `[693.333333,693.333333,270,480,0,0,0,0]`, no known-focal prior, focal/distortion refinement, fixed centered principal point, six CPU mapping threads, and post-BA filtering. Final calibrated values are independently estimated from the 1,000-image set; the 500-image fitted values are not frozen or copied. Existing SIMPLE_RADIAL models stay intact.
+
+Run from the enclosing workspace:
+
+```bash
+PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/run_camera_model_experiment.py --dataset room_1000
+```
+
+The variant reuses the 1,000-image baseline's features/raw matches, re-verifies geometry, and runs fresh sparse mapping/BA. Dense processing waits for the three original experiments, then the 500-frame OPENCV variant, then an idle GPU. Local outputs are in `experiments_local/iphone13pro_1000_4x/colmap/4x/`. The private `camera-comparison-1000.html` compares the two 1,000-image models; all sparse points from every non-empty component are exported and drawn, with dense previews explicitly sampled. Live measured status is recorded in `reports/experiments.json`.

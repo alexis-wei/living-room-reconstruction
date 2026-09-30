@@ -6,7 +6,7 @@ import export_viewer as ev
 ROOT=Path(__file__).resolve().parents[2];BASE=ROOT/'experiments_local';SITE=ROOT/'living-room-reconstruction/site/dist'
 # At most 40k points per browser cloud to preserve existing Site assets under hosting limits.
 ev.LIMIT=40000
-SPECS=[('room_250','250 frames · whole room',250),('room_1000','1,000 frames · whole room',1000),('dining_500','500 frames · dining area',500),('iphone13pro_4x','500 frames · iPhone-aware OPENCV',500)]
+SPECS=[('room_250','250 frames · whole room',250),('room_1000','1,000 frames · whole room',1000),('dining_500','500 frames · dining area',500),('iphone13pro_4x','500 frames · iPhone-aware OPENCV',500),('iphone13pro_1000_4x','1,000 frames · iPhone-aware OPENCV',1000)]
 def main():
  catalog={'preview_limit':40000,'scales':{}};report={'updated_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'experiments':[]}
  old=json.loads((SITE/'clouds/index.json').read_text());catalog['scales']['baseline_500']={**old['scales']['4x'],'label':'500 frames · original baseline','input_images':500}
@@ -21,9 +21,9 @@ def main():
     m=p.Reconstruction(path);ids=sorted(int(im.name.split('_')[1].split('.')[0]) for im in m.images.values());n=m.num_points3D()
     item={'id':path.name,'kind':'sparse','registered_images':m.num_reg_images(),'frame_ids':ids,'total_points':n,'substantial':m.num_reg_images()>=10 and n>=100}
     if n:
-     ev.LIMIT=n if key in ['room_1000','iphone13pro_4x'] else 40000
+     ev.LIMIT=n if key in ['room_1000','iphone13pro_4x','iphone13pro_1000_4x'] else 40000
      points=list(m.points3D.values());item.update(ev.export_cloud(f'experiment-{key}-sparse-{path.name}',np.array([pt.xyz for pt in points]),np.array([pt.color for pt in points]),[im.projection_center() for im in m.images.values()]));union.update(ids)
-    if key in ['room_1000','iphone13pro_4x']:item['render_all']=True
+    if key in ['room_1000','iphone13pro_4x','iphone13pro_1000_4x']:item['render_all']=True
     models.append(item)
   models.sort(key=lambda m:m['registered_images'],reverse=True);dense=None
   if status['stages'].get('fusion',{}).get('state')=='complete':
@@ -34,6 +34,7 @@ def main():
   report['experiments'].append({'key':key,'label':label,'input_images':count,'dataset':meta,'extraction_complete':(dataset/'validation.json').exists(),'stages':status['stages'],'components':[{'id':m['id'],'registered_images':m['registered_images'],'points':m['total_points']} for m in models],'registered_union':len(union),'metrics':{k:metrics[k] for k in ['registered_images','points3D','mean_reprojection_error','mean_track_length','camera_model','cameras'] if k in metrics},'dense_points':dense['total_points'] if dense else None,'folders':{'native':f'experiments_local/{key}/full_resolution','4x':f'experiments_local/{key}/downsample_4x_540x960','colmap':f'experiments_local/{key}/colmap/4x'},'storage_bytes':{f:sum(x.stat().st_size for x in (dataset/f).glob('*.png')) for f in ['full_resolution','downsample_4x_540x960']}})
  (SITE/'clouds/experiments.json').write_text(json.dumps(catalog,indent=2)+'\n')
  (SITE/'clouds/camera-comparison.json').write_text(json.dumps({'scales':{k:catalog['scales'][k] for k in ['baseline_500','iphone13pro_4x']}},indent=2)+'\n')
+ (SITE/'clouds/camera-comparison-1000.json').write_text(json.dumps({'scales':{k:catalog['scales'][k] for k in ['room_1000','iphone13pro_1000_4x']}},indent=2)+'\n')
  (SITE/'experiments.json').write_text(json.dumps(report,indent=2)+'\n')
  (ROOT/'living-room-reconstruction/reports/experiments.json').write_text(json.dumps(report,indent=2)+'\n')
  print([(x['key'],x['metrics'],x['dense_points']) for x in report['experiments']])

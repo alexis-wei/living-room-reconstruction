@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T15:57:46Z",
+  "updated_at": "2026-09-30T16:05:25Z",
   "experiments": [
     {
       "key": "room_250",
@@ -463,6 +463,93 @@
       "storage_bytes": {
         "full_resolution": 3033797562,
         "downsample_4x_540x960": 324530435
+      }
+    },
+    {
+      "key": "iphone13pro_1000_4x",
+      "label": "1,000 frames \u00b7 iPhone-aware OPENCV",
+      "input_images": 1000,
+      "dataset": {
+        "name": "iphone13pro_1000_4x",
+        "count": 1000,
+        "native_size": [
+          2160,
+          3840
+        ],
+        "colmap_size": [
+          540,
+          960
+        ],
+        "source": "alexis_living_room.mov",
+        "selection": "Exactly the existing 1000 frame IDs; linked immutable input files",
+        "source_ranges_seconds": [
+          [
+            0.0,
+            101.8625
+          ]
+        ],
+        "camera": {
+          "camera_model": "OPENCV",
+          "initial_params": [
+            693.3333333333334,
+            693.3333333333334,
+            270.0,
+            480.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parameter_order": "fx fy cx cy k1 k2 p1 p2",
+          "calibration": "Estimated; not factory or measured calibration",
+          "focal_initialization": "960 * 26 / 36 pixels; nominal full-frame-width approximation, refined by COLMAP",
+          "video_metadata": {
+            "lens": "iPhone 13 Pro 26mm",
+            "aperture": "f/1.5",
+            "software": "Blackmagic Cam 3.5.100017",
+            "shutter": "1/250",
+            "iso": 519,
+            "white_balance_kelvin": 5300
+          },
+          "shared_camera": true,
+          "refine_focal_and_distortion": true,
+          "refine_principal_point": false,
+          "matched_inputs": "Same 1000 source frames at 540x960; reuse CUDA features/raw matches, redo geometric verification",
+          "confounds": "Model complexity and focal initialization both change. No ground-truth geometry; lower reprojection error alone is not accuracy proof."
+        }
+      },
+      "extraction_complete": true,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "device": "reused CUDA baseline",
+          "seconds": 0,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "device": "CPU geometric verification of reused CUDA matches",
+          "seconds": 27.41,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "running",
+          "started_at": "2026-09-30T16:03:33Z",
+          "device": "CPU"
+        }
+      },
+      "components": [],
+      "registered_union": 0,
+      "metrics": {},
+      "dense_points": null,
+      "folders": {
+        "native": "experiments_local/iphone13pro_1000_4x/full_resolution",
+        "4x": "experiments_local/iphone13pro_1000_4x/downsample_4x_540x960",
+        "colmap": "experiments_local/iphone13pro_1000_4x/colmap/4x"
+      },
+      "storage_bytes": {
+        "full_resolution": 6330555339,
+        "downsample_4x_540x960": 646119078
       }
     }
   ],

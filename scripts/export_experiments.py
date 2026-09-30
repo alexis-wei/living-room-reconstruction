@@ -27,7 +27,7 @@ def main():
     models.append(item)
   models.sort(key=lambda m:m['registered_images'],reverse=True);dense=None
   if status['stages'].get('fusion',{}).get('state')=='complete':
-   ev.LIMIT=40000
+   ev.LIMIT=30000 if key=='iphone13pro_1000_4x' else 40000
    xyz,rgb=ev.read_ply(run/'dense/fused.ply');dense={'id':'dense','kind':'dense',**ev.export_cloud(f'experiment-{key}-dense',xyz,rgb,[])}
   catalog['scales'][key]={'label':label,'input_images':count,'components':models,'dense':dense,'registered_union':len(union),'missing_frame_ids':sorted(set(range(1,count+1))-union),'ready':bool(models)}
   metrics=json.loads((run/'sparse_metrics.json').read_text()) if (run/'sparse_metrics.json').exists() else {}

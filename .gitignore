@@ -42,3 +42,6 @@ site/dist/clouds/
 
 # Only the private Site receives the16 requested source examples.
 site/dist/examples/
+
+# Private Gaussian geometry and derived renders
+site/dist/gaussians/

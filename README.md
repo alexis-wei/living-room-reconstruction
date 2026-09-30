@@ -152,3 +152,8 @@ Quality is not approved: a sampled 2x prediction is severely washed out/occluded
 ### Final COLMAP completion and fusion recovery
 
 All four COLMAP pipelines finished on 2026-09-30. Full-resolution fusion produced 5,486,454 points. Its original 4 GB cache repeatedly reread data without finishing the first reference; the failed attempt log is preserved locally. Retrying with `COLMAP_FUSION_CACHE_GB=12` completed fusion in 22.9 minutes, then meshing completed. No image size or geometry thresholds were changed. The runner now accepts that environment override while retaining a 4 GB default. Final counts are in `reports/results.json`. All five gsplat training runs are also complete; visual-quality caveats above remain unresolved baseline limitations, not execution failures.
+
+
+## Private Gaussian viewer
+
+The private Site now includes an interactive Spark 2.3.0 / Three.js 0.180.0 Gaussian viewer for all five models, camera presets, and 20 GPU-rendered previews from the original checkpoints. `scripts/export_gsplat_site.py` preserves every trained Gaussian in 32-byte SPLAT chunks below 25 MB each: float32 centers/scales, 8-bit RGBA and normalized quaternion. Browser colors are SH0 only; view-dependent SH3 appearance remains in the original checkpoints/PLY and the rendered previews (up to 960-pixel long edge). Zero-extent Gaussians are retained. WebGL2 is required for interaction; previews work without it. Private assets under `site/dist/gaussians/` are excluded from public GitHub. Self-hosted vendor libraries are fetched from pinned official distributions, not image/model uploads to third-party viewers.

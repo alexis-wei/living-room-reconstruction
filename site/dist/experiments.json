@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T18:27:31Z",
+  "updated_at": "2026-09-30T19:57:26Z",
   "experiments": [
     {
       "key": "room_250",
@@ -322,9 +322,18 @@
           "exit_code": 0
         },
         "depth_maps": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-30T18:24:49Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 4129.35,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "complete",
+          "started_at": "2026-09-30T19:33:38Z",
+          "device": "CPU",
+          "seconds": 90.75,
+          "exit_code": 0
         }
       },
       "components": [
@@ -357,7 +366,7 @@
           }
         ]
       },
-      "dense_points": null,
+      "dense_points": 869092,
       "folders": {
         "native": "experiments_local/dining_500/full_resolution",
         "4x": "experiments_local/dining_500/downsample_4x_540x960",
@@ -448,6 +457,18 @@
           "device": "CPU",
           "seconds": 9.59,
           "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-09-30T19:35:14Z",
+          "device": "CPU",
+          "seconds": 5.43,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "running",
+          "started_at": "2026-09-30T19:35:20Z",
+          "device": "CUDA"
         }
       },
       "components": [

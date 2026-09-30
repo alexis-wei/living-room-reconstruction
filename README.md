@@ -199,7 +199,7 @@ The original 4× gsplat run **already used the source photographs** after COLMAP
 
 The official trainer reads `data["image"]` and optimizes rendered pixels against those photograph pixels using 0.8 L1 + 0.2 SSIM loss. COLMAP sparse points initialize the Gaussians; camera poses associate images with viewpoints. The saved 30,000-step run, validation renders, and checkpoints belong to this photo-supervised workflow. There is no existing no-photo training baseline.
 
-A source-photo-resolution comparison would instead reuse the 4× COLMAP camera poses and sparse initialization while changing photograph resolution, scaling camera intrinsics consistently and undistorting from native masters. That is distinct from adding previously absent images, and higher resolution alone does not guarantee better geometry. The user's choice between this comparison and retaining 4× photograph supervision is pending; no replacement baseline training has been launched. Existing COLMAP experiments continue unchanged.
+A source-photo-resolution comparison would instead reuse the 4× COLMAP camera poses and sparse initialization while changing photograph resolution, scaling camera intrinsics consistently and undistorting from native masters. That is distinct from adding previously absent images, and higher resolution alone does not guarantee better geometry. The user's choice between this comparison and retaining 4× photograph supervision is pending; no replacement baseline training has been launched. All five additional COLMAP experiments subsequently completed; the gsplat input-resolution decision remains pending.
 
 
 ## Attempt 03 — iPhone 13 Pro 1× camera comparison (2026-09-30)
@@ -221,7 +221,7 @@ The MOV identifies `iPhone 13 Pro 26mm`, f/1.5, recorded with Blackmagic Camera.
 | Sparse points | 74,712 | 61,062 |
 | Mean reprojection error | 0.703813 px | 0.456238 px |
 
-The lower error comes with fewer registered views and points; it does not establish better geometric accuracy. No ground-truth calibration or dimensions were supplied. The private `camera-comparison.html` page presents both models side by side. Dense reconstruction is queued behind the existing three experiments, using RTX 4090 CUDA depth estimation without overlapping GPU-heavy jobs. Fresh geometry verification, mapping and BA ran on CPU; original CUDA-extracted features were reused.
+The lower error comes with fewer registered views and points; it does not establish better geometric accuracy. No ground-truth calibration or dimensions were supplied. The private `camera-comparison.html` page presents both models side by side. Dense reconstruction completed after the three frame-selection experiments, using RTX 4090 CUDA depth estimation without overlapping GPU-heavy jobs. Fresh geometry verification, mapping and BA ran on CPU; original CUDA-extracted features were reused.
 
 Local data/status: `../experiments_local/iphone13pro_4x/`. Reproduce from the enclosing workspace with `python3 living-room-reconstruction/scripts/run_camera_model_experiment.py`; its lock prevents duplicate runs. The original reconstruction stays intact. Camera-model background: https://colmap.github.io/cameras.html ; phone specifications: https://support.apple.com/en-us/111871 .
 
@@ -239,4 +239,19 @@ PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/run_camera_m
 The variant reuses the 1,000-image baseline's features/raw matches, re-verifies geometry, and runs fresh sparse mapping/BA. Dense processing waits for the three original experiments, then the 500-frame OPENCV variant, then an idle GPU. Local outputs are in `experiments_local/iphone13pro_1000_4x/colmap/4x/`. The private `camera-comparison-1000.html` compares the two 1,000-image models; all sparse points from every non-empty component are exported and drawn, with dense previews explicitly sampled. Live measured status is recorded in `reports/experiments.json`.
 
 
-The 1,000-image OPENCV sparse run completed: largest component 968/1,000 registered images, 100,232 points, mean reprojection error 0.494405 px (SIMPLE_RADIAL: 985 images, 113,505 points, 0.803085 px). Secondary models contain 17 images/247 points and 15 images/zero points; zero-point models cannot be rendered. Lower fitting error comes with fewer views in the largest component, so it is not proof of improved geometric accuracy. Dense output remains queued. Fitted OPENCV parameters `[fx,fy,cx,cy,k1,k2,p1,p2]`: `[687.563197,686.422498,270,480,0.0633152613,-0.0729851177,-0.00157287453,0.000789965114]`. All 100,232 + 247 sparse points are included in the private comparison viewer.
+The 1,000-image OPENCV sparse run completed: largest component 968/1,000 registered images, 100,232 points, mean reprojection error 0.494405 px (SIMPLE_RADIAL: 985 images, 113,505 points, 0.803085 px). Secondary models contain 17 images/247 points and 15 images/zero points; zero-point models cannot be rendered. Lower fitting error comes with fewer views in the largest component, so it is not proof of improved geometric accuracy. Dense output is complete; see final counts below. Fitted OPENCV parameters `[fx,fy,cx,cy,k1,k2,p1,p2]`: `[687.563197,686.422498,270,480,0.0633152613,-0.0729851177,-0.00157287453,0.000789965114]`. All 100,232 + 247 sparse points are included in the private comparison viewer.
+
+
+## Final additional COLMAP results — 2026-09-30
+
+All five requested 4× experiments completed sparse reconstruction, bundle adjustment, native-size undistortion, CUDA depth maps and CPU fusion. Each final PLY vertex count was checked against the report. All CUDA stages used the local RTX 4090 sequentially.
+
+| Dataset | Fused points |
+| --- | ---: |
+| room_250 | 751,310 |
+| room_1000 | 2,616,892 |
+| dining_500 | 869,092 |
+| iphone13pro_4x | 1,748,593 |
+| iphone13pro_1000_4x | 2,814,652 |
+
+Private comparison pages include every requested sparse point and labeled 40,000-point dense previews. Full models, photographs and depth maps remain local; public GitHub contains only code and aggregate results. OPENCV intrinsics remain estimated, not measured factory calibration. Point count alone is not a geometric accuracy metric. Original four-scale COLMAP and five gsplat results are preserved. New gsplat experiments have not started because the photograph-resolution comparison choice remains pending.

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T21:27:37Z",
+  "updated_at": "2026-09-30T23:28:57Z",
   "experiments": [
     {
       "key": "room_250",
@@ -605,9 +605,18 @@
           "exit_code": 0
         },
         "depth_maps": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-30T20:53:21Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 9070.5,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "complete",
+          "started_at": "2026-09-30T23:24:32Z",
+          "device": "CPU",
+          "seconds": 217.6,
+          "exit_code": 0
         }
       },
       "components": [
@@ -645,7 +654,7 @@
           }
         ]
       },
-      "dense_points": null,
+      "dense_points": 2814652,
       "folders": {
         "native": "experiments_local/iphone13pro_1000_4x/full_resolution",
         "4x": "experiments_local/iphone13pro_1000_4x/downsample_4x_540x960",

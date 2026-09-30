@@ -36,8 +36,12 @@ function render(){
   if(key==='mesh')measured+=` Mesh: ${fmt(d.mesh?.vertex)} vertices, ${fmt(d.mesh?.face)} faces.`;
  }else if(s.state==='running')measured='Running at the time of this report snapshot. The page does not stream live progress.';
  else if(s.state==='failed')measured='The stage failed. Local logs retain the diagnostic details; later stages are not marked complete.';
+ else if(s.state==='queued')measured='Queued for the GPU while the prior workload completes; CUDA processing has not started.';
+ if(s.queue_wait_seconds)measured+=` A separate ${duration(s.queue_wait_seconds)} GPU queue wait is excluded from the processing time.`;
+ if(key==='depth_maps' && d.dense_reference_images!=null)measured+=` ${d.dense_reference_images} reference views have stereo sources; ${d.dense_skipped_no_sources} registered views are skipped because no usable source views remain. ${d.geometric_depth_maps_written} geometric depth maps have been written.`;
  el('detail').innerHTML=`<p class="eyebrow">STEP ${String(active+1).padStart(2,'0')} / ${scale.toUpperCase()}</p><h3>${title}</h3><p>${desc}</p><dl><dt>Compute device</dt><dd>${device}</dd><dt>Settings</dt><dd>${settings}</dd><dt>Measured result</dt><dd>${measured}</dd><dt>Local output</dt><dd>reconstruction_local/${scale}/</dd></dl><code>${api}(…)</code>`;
  el('coverage').textContent=d.registered_images==null?'Sparse reconstruction metrics will appear once this resolution finishes camera recovery.':`The largest ${scale} model registers ${d.registered_images} of 500 images (${(d.registered_images/5).toFixed(1)}%). COLMAP returned ${d.components.length} sparse components, including small or degenerate results. Dense processing uses the largest component; this does not establish complete room coverage.`;
+ if(d.dense_skipped_no_sources)el('coverage').textContent+=` Dense stereo skips ${d.dense_skipped_no_sources} registered views with no usable source images, leaving ${d.dense_reference_images} reference views. Camera registration alone does not establish dense coverage.`;
  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scale===scale));
 }
 fetch('results.json').then(r=>{if(!r.ok)throw Error('Report unavailable');return r.json()}).then(data=>{

@@ -15,6 +15,8 @@
 *.tar
 *.tar.gz
 *.whl
+*.pt
+*.ckpt
 *.so
 __pycache__/
 .venv/
@@ -25,6 +27,11 @@ living_room_frames/
 reconstruction_local/
 .colmap-tools/
 .video-tools/
+.gsplat-env/
+.gsplat-src/
+.gsplat-cache/
+.cuda-12.4/
+gsplat_local/
 site/.git/
 site/.sites-runtime/
 site/.openai/

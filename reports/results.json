@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-29T20:48:47.674033+00:00",
+  "updated": "2026-09-30T10:18:54.805005+00:00",
   "gpu": "NVIDIA GeForce RTX 4090",
   "vram_gb": 24,
   "pycolmap": "4.2.1",
@@ -20,20 +20,64 @@
           "exit_code": 0
         },
         "matching": {
-          "state": "failed",
-          "started_at": "2026-09-29T20:44:49Z",
+          "state": "complete",
+          "started_at": "2026-09-29T21:44:16Z",
           "device": "CUDA",
-          "seconds": 0.05,
-          "exit_code": 1
+          "seconds": 287.34,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-29T21:49:03Z",
+          "device": "CPU",
+          "seconds": 1553.09,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-29T22:14:56Z",
+          "device": "CPU",
+          "seconds": 28.61,
+          "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-09-30T00:38:35Z",
+          "device": "CPU",
+          "seconds": 62.88,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "complete",
+          "started_at": "2026-09-30T00:39:38Z",
+          "device": "CUDA",
+          "seconds": 21245.67,
+          "exit_code": 0,
+          "queue_wait_seconds": 5895.69
+        },
+        "fusion": {
+          "state": "running",
+          "started_at": "2026-09-30T08:11:59Z",
+          "device": "CPU"
         }
       },
-      "registered_images": null,
-      "points3D": null,
-      "mean_reprojection_error": null,
-      "mean_track_length": null,
-      "components": [],
+      "registered_images": 493,
+      "points3D": 283276,
+      "mean_reprojection_error": 1.1834603070261942,
+      "mean_track_length": 5.680262358971462,
+      "components": [
+        {
+          "id": 0,
+          "registered_images": 493,
+          "points3D": 283284,
+          "mean_reprojection_error": 1.183789673038214
+        }
+      ],
       "fused": null,
-      "mesh": null
+      "mesh": null,
+      "dense_reference_images": 493,
+      "dense_skipped_no_sources": 0,
+      "geometric_depth_maps_written": 493
     },
     "2x": {
       "folder": "downsample_2x_1080x1920",
@@ -69,6 +113,34 @@
           "device": "CPU",
           "seconds": 51.83,
           "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-09-29T21:55:23Z",
+          "device": "CPU",
+          "seconds": 22.35,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "complete",
+          "started_at": "2026-09-29T21:55:45Z",
+          "device": "CUDA",
+          "seconds": 9387.45,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "complete",
+          "started_at": "2026-09-30T00:32:13Z",
+          "device": "CPU",
+          "seconds": 373.55,
+          "exit_code": 0
+        },
+        "mesh": {
+          "state": "complete",
+          "started_at": "2026-09-30T00:38:26Z",
+          "device": "CPU",
+          "seconds": 8.86,
+          "exit_code": 0
         }
       },
       "registered_images": 492,
@@ -89,8 +161,16 @@
           "mean_reprojection_error": 0.9068961171758957
         }
       ],
-      "fused": null,
-      "mesh": null
+      "fused": {
+        "vertex": 3478417
+      },
+      "mesh": {
+        "vertex": 539015,
+        "face": 1031744
+      },
+      "dense_reference_images": 458,
+      "dense_skipped_no_sources": 34,
+      "geometric_depth_maps_written": 458
     },
     "4x": {
       "folder": "downsample_4x_540x960",
@@ -135,9 +215,25 @@
           "exit_code": 0
         },
         "depth_maps": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-29T20:33:35Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 4780.12,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "complete",
+          "started_at": "2026-09-29T21:53:15Z",
+          "device": "CPU",
+          "seconds": 120.55,
+          "exit_code": 0
+        },
+        "mesh": {
+          "state": "complete",
+          "started_at": "2026-09-29T21:55:15Z",
+          "device": "CPU",
+          "seconds": 7.4,
+          "exit_code": 0
         }
       },
       "registered_images": 493,
@@ -164,8 +260,16 @@
           "mean_reprojection_error": 0.42789939545263495
         }
       ],
-      "fused": null,
-      "mesh": null
+      "fused": {
+        "vertex": 1639477
+      },
+      "mesh": {
+        "vertex": 364086,
+        "face": 692323
+      },
+      "dense_reference_images": 493,
+      "dense_skipped_no_sources": 0,
+      "geometric_depth_maps_written": 493
     },
     "8x": {
       "folder": "downsample_8x_270x480",
@@ -273,7 +377,10 @@
       "mesh": {
         "vertex": 102548,
         "face": 189950
-      }
+      },
+      "dense_reference_images": 343,
+      "dense_skipped_no_sources": 0,
+      "geometric_depth_maps_written": 343
     }
   }
 }

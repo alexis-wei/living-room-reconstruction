@@ -1,0 +1,102 @@
+{
+  "updated": "2026-09-30T09:47:44.463724+00:00",
+  "training_complete": true,
+  "quality_note": "Training completion is not a quality pass. A sampled 2x held-out render has severe washed-out/occluded regions. Metrics across resolutions and different held-out sets are not directly comparable.",
+  "runs": {
+    "8x": {
+      "state": "complete",
+      "steps": 30000,
+      "seconds": 781.79,
+      "device": "NVIDIA RTX 4090 CUDA",
+      "metrics": {
+        "psnr": 23.6384220123291,
+        "ssim": 0.828589677810669,
+        "lpips": 0.22177518904209137,
+        "ellipse_time": 0.005069610684417015,
+        "num_GS": 4338943
+      },
+      "local_output": "gsplat_local/runs/8x",
+      "checkpoints": [
+        "ckpts/ckpt_29999_rank0.pt",
+        "ckpts/ckpt_6999_rank0.pt"
+      ],
+      "validation_render_count": 43
+    },
+    "4x": {
+      "state": "complete",
+      "steps": 30000,
+      "seconds": 643.42,
+      "device": "NVIDIA RTX 4090 CUDA",
+      "metrics": {
+        "psnr": 19.669921875,
+        "ssim": 0.7817256450653076,
+        "lpips": 0.4119895398616791,
+        "ellipse_time": 0.003979613704066123,
+        "num_GS": 3311106
+      },
+      "local_output": "gsplat_local/runs/4x",
+      "checkpoints": [
+        "ckpts/ckpt_29999_rank0.pt",
+        "ckpts/ckpt_6999_rank0.pt"
+      ],
+      "validation_render_count": 62
+    },
+    "2x": {
+      "state": "complete",
+      "steps": 30000,
+      "seconds": 574.79,
+      "device": "NVIDIA RTX 4090 CUDA",
+      "metrics": {
+        "psnr": 16.58868408203125,
+        "ssim": 0.7564049363136292,
+        "lpips": 0.5434213280677795,
+        "ellipse_time": 0.003667746820757466,
+        "num_GS": 1539874
+      },
+      "local_output": "gsplat_local/runs/2x",
+      "checkpoints": [
+        "ckpts/ckpt_29999_rank0.pt",
+        "ckpts/ckpt_6999_rank0.pt"
+      ],
+      "validation_render_count": 62
+    },
+    "1x": {
+      "state": "complete",
+      "steps": 30000,
+      "seconds": 1722.47,
+      "device": "NVIDIA RTX 4090 CUDA",
+      "metrics": {
+        "psnr": 13.176762580871582,
+        "ssim": 0.7689108848571777,
+        "lpips": 0.6012338995933533,
+        "ellipse_time": 0.01204677935569517,
+        "num_GS": 343663
+      },
+      "local_output": "gsplat_local/runs/1x",
+      "checkpoints": [
+        "ckpts/ckpt_29999_rank0.pt",
+        "ckpts/ckpt_6999_rank0.pt"
+      ],
+      "validation_render_count": 62
+    },
+    "8x_component_2": {
+      "state": "complete",
+      "steps": 30000,
+      "seconds": 672.05,
+      "device": "NVIDIA RTX 4090 CUDA",
+      "metrics": {
+        "psnr": 23.283475875854492,
+        "ssim": 0.8147851228713989,
+        "lpips": 0.20672613382339478,
+        "ellipse_time": 0.004752937116120991,
+        "num_GS": 3808517
+      },
+      "local_output": "gsplat_local/runs/8x_component_2",
+      "checkpoints": [
+        "ckpts/ckpt_29999_rank0.pt",
+        "ckpts/ckpt_6999_rank0.pt"
+      ],
+      "validation_render_count": 19
+    }
+  }
+}

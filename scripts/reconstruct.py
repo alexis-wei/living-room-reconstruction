@@ -58,6 +58,13 @@ def execute_stage(args):
   sel=json.loads((run/'models.json').read_text())['selected_model'];opts=p.UndistortCameraOptions();opts.max_image_size=max(w,h);opts.max_scale=1.0
   p.undistort_images(dense,sparse/str(sel),images,num_patch_match_src_images=10,undistort_options=opts,num_threads=12)
  elif stage=='depth_maps':
+  # A local scheduler may reserve the next GPU slot for completed-scale gsplat
+  # training. This does not interrupt a PatchMatch process already running.
+  gate=args.output.parent/'gsplat_local'/'before_1x_depth.wait'
+  if scale=='1x' and gate.exists():
+   waiting=time.time();print('Waiting for the completed-scale gsplat queue before 1x CUDA stereo.',flush=True)
+   while gate.exists():time.sleep(10)
+   atomic_json(run/'depth_queue_wait.json',{'seconds':round(time.time()-waiting,2)})
   opts=p.PatchMatchOptions();opts.gpu_index='0';opts.max_image_size=max(w,h);opts.geom_consistency=True;opts.cache_size=4.;opts.num_threads=8
   p.patch_match_stereo(dense,options=opts)
  elif stage=='fusion':

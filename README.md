@@ -186,7 +186,7 @@ python3 living-room-reconstruction/scripts/run_experiments.py
 PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/export_experiments.py
 ```
 
-Run from the enclosing local project directory, with the existing project-local dependencies. Queue progress is in `experiments_local/queue_status.json`; each dataset's `colmap/4x/status.json` and stage logs provide measured progress. Completed outputs are `colmap/4x/sparse_points.ply`, each camera model under `sparse/`, and `dense/fused.ply`. The private Site's `experiments.html` compares registration, fragmentation, reprojection error and point counts against the existing 500-frame baseline, with a coverage strip per component. New browser previews deterministically sample at most 40,000 points to fit hosting limits; the complete PLYs remain local. Preview density is not reconstruction completeness. The original Site assets and models remain available.
+Run from the enclosing local project directory, with the existing project-local dependencies. Queue progress is in `experiments_local/queue_status.json`; each dataset's `colmap/4x/status.json` and stage logs provide measured progress. Completed outputs are `colmap/4x/sparse_points.ply`, each camera model under `sparse/`, and `dense/fused.ply`. The private Site's `experiments.html` compares registration, fragmentation, reprojection error and point counts against the existing 500-frame baseline, with a coverage strip per component. The 1,000-frame sparse viewer exports and draws every point in every component (113,505 + 5,427 + 668 points); the camera-model experiment also shows all sparse points. Other new browser previews sample at most 40,000 points to fit hosting limits; complete PLYs remain local. Preview density is not reconstruction completeness. The original Site assets and models remain available.
 
 All 1,750 native/reduced image pairs passed full PNG decoding, dimensions, uniqueness and checksum checks. Nine sampled source frames matched fresh video decoding and direct LANCZOS resizing pixel-for-pixel (`verify_experiment_pixels.py`; local `pixel_verification.json`).
 
@@ -200,3 +200,27 @@ The original 4× gsplat run **already used the source photographs** after COLMAP
 The official trainer reads `data["image"]` and optimizes rendered pixels against those photograph pixels using 0.8 L1 + 0.2 SSIM loss. COLMAP sparse points initialize the Gaussians; camera poses associate images with viewpoints. The saved 30,000-step run, validation renders, and checkpoints belong to this photo-supervised workflow. There is no existing no-photo training baseline.
 
 A source-photo-resolution comparison would instead reuse the 4× COLMAP camera poses and sparse initialization while changing photograph resolution, scaling camera intrinsics consistently and undistorting from native masters. That is distinct from adding previously absent images, and higher resolution alone does not guarantee better geometry. The user's choice between this comparison and retaining 4× photograph supervision is pending; no replacement baseline training has been launched. Existing COLMAP experiments continue unchanged.
+
+
+## Attempt 03 — iPhone 13 Pro 1× camera comparison (2026-09-30)
+
+The original model was explicitly **SIMPLE_RADIAL**, shared by all images. It estimated focal length and one radial distortion coefficient; it was not calibrated specifically for this phone. Original 4× initialization was f=1152 px, cx=270, cy=480, k=0, with no known-focal prior. The final baseline parameters were f=690.281615, cx=270, cy=480, k=0.019731457.
+
+The MOV identifies `iPhone 13 Pro 26mm`, f/1.5, recorded with Blackmagic Camera. It supplies no calibrated intrinsic matrix or distortion coefficients; stabilization/cropping cannot be recovered from the phone name alone. The new shared **OPENCV** experiment uses the exact same 500 original 4× PNGs and initializes fx=fy=693.333333 px (960×26/36, a nominal full-frame-width approximation), cx=270, cy=480 and k1=k2=p1=p2=0. This is an estimated camera-aware variant, **not a measured or guaranteed correct calibration**. COLMAP refines focal lengths and distortion while keeping the principal point centered. The focal prior remains false.
+
+`scripts/run_camera_model_experiment.py` copies the baseline feature/match database without modifying it, replaces the camera, discards old two-view geometry, verifies matches again, and runs fresh mapping and bundle adjustment. Both model complexity and initialization change, so this is not a single-variable experiment. Final OPENCV parameters (fx, fy, cx, cy, k1, k2, p1, p2):
+
+```text
+687.577687, 686.596229, 270, 480,
+0.0650665682, -0.0757400330, -0.00148717409, 0.000813173908
+```
+
+| Largest sparse component | SIMPLE_RADIAL baseline | OPENCV variant |
+| --- | ---: | ---: |
+| Registered frames | 493 / 500 | 485 / 500 |
+| Sparse points | 74,712 | 61,062 |
+| Mean reprojection error | 0.703813 px | 0.456238 px |
+
+The lower error comes with fewer registered views and points; it does not establish better geometric accuracy. No ground-truth calibration or dimensions were supplied. The private `camera-comparison.html` page presents both models side by side. Dense reconstruction is queued behind the existing three experiments, using RTX 4090 CUDA depth estimation without overlapping GPU-heavy jobs. Fresh geometry verification, mapping and BA ran on CPU; original CUDA-extracted features were reused.
+
+Local data/status: `../experiments_local/iphone13pro_4x/`. Reproduce from the enclosing workspace with `python3 living-room-reconstruction/scripts/run_camera_model_experiment.py`; its lock prevents duplicate runs. The original reconstruction stays intact. Camera-model background: https://colmap.github.io/cameras.html ; phone specifications: https://support.apple.com/en-us/111871 .

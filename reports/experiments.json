@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T15:28:03Z",
+  "updated_at": "2026-09-30T15:38:15Z",
   "experiments": [
     {
       "key": "room_250",
@@ -87,7 +87,18 @@
         "registered_images": 249,
         "points3D": 36805,
         "mean_reprojection_error": 0.6461362021666451,
-        "mean_track_length": 4.999212063578319
+        "mean_track_length": 4.999212063578319,
+        "camera_model": "SIMPLE_RADIAL",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.SIMPLE_RADIAL",
+            "width": 540,
+            "height": 960,
+            "params": "[6.90054363e+02 2.70000000e+02 4.80000000e+02 2.19136101e-02]",
+            "has_prior_focal_length": false
+          }
+        ]
       },
       "dense_points": null,
       "folders": {
@@ -184,7 +195,18 @@
         "registered_images": 985,
         "points3D": 113505,
         "mean_reprojection_error": 0.8030853645399029,
-        "mean_track_length": 10.778000969120303
+        "mean_track_length": 10.778000969120303,
+        "camera_model": "SIMPLE_RADIAL",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.SIMPLE_RADIAL",
+            "width": 540,
+            "height": 960,
+            "params": "[6.89640516e+02 2.70000000e+02 4.80000000e+02 1.87299701e-02]",
+            "has_prior_focal_length": false
+          }
+        ]
       },
       "dense_points": null,
       "folders": {
@@ -280,7 +302,18 @@
         "registered_images": 444,
         "points3D": 29420,
         "mean_reprojection_error": 0.8982914085801916,
-        "mean_track_length": 26.883786539768863
+        "mean_track_length": 26.883786539768863,
+        "camera_model": "SIMPLE_RADIAL",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.SIMPLE_RADIAL",
+            "width": 540,
+            "height": 960,
+            "params": "[6.92150045e+02 2.70000000e+02 4.80000000e+02 2.21013717e-02]",
+            "has_prior_focal_length": false
+          }
+        ]
       },
       "dense_points": null,
       "folders": {
@@ -292,6 +325,124 @@
         "full_resolution": 3427580054,
         "downsample_4x_540x960": 353988175
       }
+    },
+    {
+      "key": "iphone13pro_4x",
+      "label": "500 frames \u00b7 iPhone-aware OPENCV",
+      "input_images": 500,
+      "dataset": {
+        "name": "iphone13pro_4x",
+        "count": 500,
+        "native_size": [
+          2160,
+          3840
+        ],
+        "colmap_size": [
+          540,
+          960
+        ],
+        "source": "alexis_living_room.mov",
+        "selection": "Exactly the original500frame IDs; linked immutable input files",
+        "source_ranges_seconds": [
+          [
+            0,
+            101.9
+          ]
+        ],
+        "camera": {
+          "camera_model": "OPENCV",
+          "initial_params": [
+            693.3333333333334,
+            693.3333333333334,
+            270.0,
+            480.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parameter_order": "fx fy cx cy k1 k2 p1 p2",
+          "calibration": "Estimated; not factory or measured calibration",
+          "focal_initialization": "960 * 26 / 36 pixels; nominal full-frame-width approximation, refined by COLMAP",
+          "video_metadata": {
+            "lens": "iPhone 13 Pro 26mm",
+            "aperture": "f/1.5",
+            "software": "Blackmagic Cam 3.5.100017",
+            "shutter": "1/250",
+            "iso": 519,
+            "white_balance_kelvin": 5300
+          },
+          "shared_camera": true,
+          "refine_focal_and_distortion": true,
+          "refine_principal_point": false,
+          "matched_inputs": "Original5004x540x960; reuse CUDA-extracted features/raw matches, redo geometric verification under new model",
+          "confounds": "Model complexity and focal initialization both change. No ground-truth geometry; lower reprojection error alone is not accuracy proof."
+        }
+      },
+      "extraction_complete": true,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "device": "reused CUDA baseline",
+          "seconds": 0,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "device": "CPU geometric verification of reused CUDA matches",
+          "seconds": 8.4,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-30T15:34:56Z",
+          "device": "CPU",
+          "seconds": 167.98,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-30T15:37:44Z",
+          "device": "CPU",
+          "seconds": 9.59,
+          "exit_code": 0
+        }
+      },
+      "components": [
+        {
+          "id": "0",
+          "registered_images": 485,
+          "points": 61062
+        }
+      ],
+      "registered_union": 485,
+      "metrics": {
+        "registered_images": 485,
+        "points3D": 61062,
+        "mean_reprojection_error": 0.45623793595903295,
+        "mean_track_length": 6.9243555730241395,
+        "camera_model": "CameraModelId.OPENCV",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV",
+            "width": 540,
+            "height": 960,
+            "params": "[ 6.87577687e+02  6.86596229e+02  2.70000000e+02  4.80000000e+02\n  6.50665682e-02 -7.57400330e-02 -1.48717409e-03  8.13173908e-04]",
+            "has_prior_focal_length": false
+          }
+        ]
+      },
+      "dense_points": null,
+      "folders": {
+        "native": "experiments_local/iphone13pro_4x/full_resolution",
+        "4x": "experiments_local/iphone13pro_4x/downsample_4x_540x960",
+        "colmap": "experiments_local/iphone13pro_4x/colmap/4x"
+      },
+      "storage_bytes": {
+        "full_resolution": 3033797562,
+        "downsample_4x_540x960": 324530435
+      }
     }
   ],
   "baseline": {
@@ -299,6 +450,16 @@
     "registered_images": 493,
     "sparse_points": 74712,
     "dense_points": 1639477,
-    "reprojection_error": 0.7038128642609662
+    "reprojection_error": 0.7038128642609662,
+    "cameras": [
+      {
+        "camera_id": 1,
+        "model": "CameraModelId.SIMPLE_RADIAL",
+        "width": 540,
+        "height": 960,
+        "params": "[6.90281615e+02 2.70000000e+02 4.80000000e+02 1.97314570e-02]",
+        "has_prior_focal_length": false
+      }
+    ]
   }
 }

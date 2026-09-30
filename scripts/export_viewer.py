@@ -2,7 +2,7 @@
 The clouds directory is excluded from GitHub source uploads.
 """
 from pathlib import Path
-import json,re
+import json,re,gzip
 import numpy as np
 import pycolmap as p
 R=Path(__file__).resolve().parents[1];LOCAL=R.parent/'reconstruction_local';OUT=R/'site/dist/clouds';OUT.mkdir(exist_ok=True)
@@ -14,9 +14,9 @@ def export_cloud(key,xyz,rgb,cameras):
  ix=np.linspace(0,n-1,min(n,LIMIT),dtype=np.int64)
  center=np.median(xyz,axis=0);radius=float(np.percentile(np.linalg.norm(xyz-center,axis=1),95));radius=max(radius,1e-6)
  packed=np.concatenate(((xyz[ix]-center)/radius,np.asarray(rgb[ix],dtype=np.float32)/255),axis=1).astype('<f4')
- (OUT/(key+'.bin')).write_bytes(packed.tobytes())
+ (OUT/(key+'.bin.gz')).write_bytes(gzip.compress(packed.tobytes(),6))
  camera_positions=[((np.array(c)-center)/radius).round(6).tolist() for c in cameras]
- return dict(url='clouds/'+key+'.bin',total_points=n,displayed_points=len(ix),sampled=n>LIMIT,camera_positions=camera_positions)
+ return dict(url='clouds/'+key+'.bin.gz',total_points=n,displayed_points=len(ix),sampled=n>LIMIT,camera_positions=camera_positions)
 
 def read_ply(path):
  types={'float':'<f4','float32':'<f4','double':'<f8','uchar':'u1','uint8':'u1','int':'<i4','uint':'<u4'}

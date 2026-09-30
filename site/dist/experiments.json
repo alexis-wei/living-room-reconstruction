@@ -1,0 +1,210 @@
+{
+  "updated_at": "2026-09-30T14:34:49Z",
+  "experiments": [
+    {
+      "key": "room_250",
+      "label": "250 frames \u00b7 whole room",
+      "input_images": 250,
+      "dataset": {
+        "name": "room_250",
+        "count": 250,
+        "source": "alexis_living_room.mov",
+        "source_ranges_seconds": [
+          [
+            0.0,
+            101.8625
+          ]
+        ],
+        "native_size": [
+          2160,
+          3840
+        ],
+        "colmap_size": [
+          540,
+          960
+        ],
+        "selection": "55% time / 45% capped optical flow bins; locally sharp exposure-aware candidate; unique source frames",
+        "downsample": "Pillow LANCZOS directly from upright native RGB; no crop or enhancement",
+        "gap_seconds": {
+          "median": 0.41458333333333997,
+          "p95": 0.6916666666666677,
+          "maximum": 0.875
+        },
+        "eligible_source_frames": 2446
+      },
+      "extraction_complete": true,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:32:44Z",
+          "device": "CUDA",
+          "seconds": 2.37,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:32:46Z",
+          "device": "CUDA",
+          "seconds": 12.35,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:32:58Z",
+          "device": "CPU",
+          "seconds": 81.13,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:34:19Z",
+          "device": "CPU",
+          "seconds": 7.01,
+          "exit_code": 0
+        }
+      },
+      "components": [
+        {
+          "id": "0",
+          "registered_images": 249,
+          "points": 36805
+        }
+      ],
+      "registered_union": 249,
+      "metrics": {
+        "registered_images": 249,
+        "points3D": 36805,
+        "mean_reprojection_error": 0.6461362021666451,
+        "mean_track_length": 4.999212063578319
+      },
+      "dense_points": null,
+      "folders": {
+        "native": "experiments_local/room_250/full_resolution",
+        "4x": "experiments_local/room_250/downsample_4x_540x960",
+        "colmap": "experiments_local/room_250/colmap/4x"
+      },
+      "storage_bytes": {
+        "full_resolution": 1565896692,
+        "downsample_4x_540x960": 163109986
+      }
+    },
+    {
+      "key": "room_1000",
+      "label": "1,000 frames \u00b7 whole room",
+      "input_images": 1000,
+      "dataset": {
+        "name": "room_1000",
+        "count": 1000,
+        "source": "alexis_living_room.mov",
+        "source_ranges_seconds": [
+          [
+            0.0,
+            101.8625
+          ]
+        ],
+        "native_size": [
+          2160,
+          3840
+        ],
+        "colmap_size": [
+          540,
+          960
+        ],
+        "selection": "55% time / 45% capped optical flow bins; locally sharp exposure-aware candidate; unique source frames",
+        "downsample": "Pillow LANCZOS directly from upright native RGB; no crop or enhancement",
+        "gap_seconds": {
+          "median": 0.0833333333333357,
+          "p95": 0.1666666666666714,
+          "maximum": 0.2083333333333428
+        },
+        "eligible_source_frames": 2446
+      },
+      "extraction_complete": true,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:34:27Z",
+          "device": "CUDA",
+          "seconds": 7.81,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "running",
+          "started_at": "2026-09-30T14:34:34Z",
+          "device": "CUDA"
+        }
+      },
+      "components": [],
+      "registered_union": 0,
+      "metrics": {},
+      "dense_points": null,
+      "folders": {
+        "native": "experiments_local/room_1000/full_resolution",
+        "4x": "experiments_local/room_1000/downsample_4x_540x960",
+        "colmap": "experiments_local/room_1000/colmap/4x"
+      },
+      "storage_bytes": {
+        "full_resolution": 6330555339,
+        "downsample_4x_540x960": 646119078
+      }
+    },
+    {
+      "key": "dining_500",
+      "label": "500 frames \u00b7 dining area",
+      "input_images": 500,
+      "dataset": {
+        "name": "dining_500",
+        "count": 500,
+        "source": "alexis_living_room.mov",
+        "source_ranges_seconds": [
+          [
+            34.5,
+            37.0
+          ],
+          [
+            61.0,
+            81.0
+          ]
+        ],
+        "native_size": [
+          2160,
+          3840
+        ],
+        "colmap_size": [
+          540,
+          960
+        ],
+        "selection": "55% time / 45% capped optical flow bins; locally sharp exposure-aware candidate; unique source frames",
+        "downsample": "Pillow LANCZOS directly from upright native RGB; no crop or enhancement",
+        "gap_seconds": {
+          "median": 0.041666666666671404,
+          "p95": 0.0833333333333286,
+          "maximum": 24.0375
+        },
+        "eligible_source_frames": 540
+      },
+      "extraction_complete": true,
+      "stages": {},
+      "components": [],
+      "registered_union": 0,
+      "metrics": {},
+      "dense_points": null,
+      "folders": {
+        "native": "experiments_local/dining_500/full_resolution",
+        "4x": "experiments_local/dining_500/downsample_4x_540x960",
+        "colmap": "experiments_local/dining_500/colmap/4x"
+      },
+      "storage_bytes": {
+        "full_resolution": 3427580054,
+        "downsample_4x_540x960": 353988175
+      }
+    }
+  ],
+  "baseline": {
+    "count": 500,
+    "registered_images": 493,
+    "sparse_points": 74712,
+    "dense_points": 1639477,
+    "reprojection_error": 0.7038128642609662
+  }
+}

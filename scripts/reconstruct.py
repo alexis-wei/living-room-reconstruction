@@ -37,7 +37,7 @@ def execute_stage(args):
   if not models:raise RuntimeError('COLMAP did not recover a sparse model')
   ranked=sorted(models.items(),key=lambda kv:kv[1].num_reg_images(),reverse=True)
   chosen,model=ranked[0]
-  stats={'selected_model':int(chosen),'models':[{'id':int(k),'registered_images':m.num_reg_images(),'points3D':m.num_points3D(),'mean_reprojection_error':m.compute_mean_reprojection_error()} for k,m in ranked],'input_images':500}
+  stats={'selected_model':int(chosen),'models':[{'id':int(k),'registered_images':m.num_reg_images(),'points3D':m.num_points3D(),'mean_reprojection_error':m.compute_mean_reprojection_error()} for k,m in ranked],'input_images':len(list(images.glob('*.png')))}
   atomic_json(run/'models.json',stats)
   model.export_PLY(run/'sparse_points.ply')
  elif stage=='bundle_adjustment':

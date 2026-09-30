@@ -45,3 +45,6 @@ site/dist/examples/
 
 # Private Gaussian geometry and derived renders
 site/dist/gaussians/
+
+# Local frame-count and focused-area experiments
+experiments_local/

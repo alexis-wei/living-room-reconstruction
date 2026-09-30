@@ -36,25 +36,28 @@ def read_ply(path):
  xyz=np.column_stack([v[k] for k in ['x','y','z']]);rgb=np.column_stack([v[k] for k in ['red','green','blue']])
  return xyz,rgb
 
-index={'preview_limit':LIMIT,'component_rule':'Substantial: at least 10 registered images and 100 3D points. Smaller non-empty components are also available and explicitly labeled.','alignment':'Components and resolutions use independent coordinate systems. They are displayed separately, not falsely overlaid.','scales':{}}
-for scale in ['1x','2x','4x','8x']:
- run=LOCAL/scale;status=json.loads((run/'status.json').read_text()) if (run/'status.json').exists() else {'stages':{}}
- models=[];union=set();component_members=[]
- if status['stages'].get('mapping',{}).get('state')=='complete':
-  for path in sorted((run/'sparse').glob('*')):
-   if not path.is_dir() or not (path/'points3D.bin').exists():continue
-   m=p.Reconstruction(path);names=sorted(im.name for im in m.images.values());ids=[int(re.search(r'(\d+)',n).group(1)) for n in names]
-   n=m.num_points3D();item=dict(id=path.name,kind='sparse',registered_images=m.num_reg_images(),frame_ids=ids,total_points=n,substantial=m.num_reg_images()>=10 and n>=100)
-   if n:
-    points=list(m.points3D.values());xyz=np.array([pt.xyz for pt in points]);rgb=np.array([pt.color for pt in points]);cams=[im.projection_center() for im in m.images.values()]
-    item.update(export_cloud(f'{scale}-sparse-{path.name}',xyz,rgb,cams));union.update(ids)
-   else:item['reason']='No triangulated points; camera registration alone is not a usable point cloud.'
-   models.append(item)
-  models.sort(key=lambda x:(x['substantial'],x['registered_images'],x['total_points']),reverse=True)
- dense=None
- if status['stages'].get('fusion',{}).get('state')=='complete':
-  xyz,rgb=read_ply(run/'dense/fused.ply')
-  if len(xyz):dense=dict(id='dense',kind='dense',**export_cloud(f'{scale}-dense',xyz,rgb,[]))
- index['scales'][scale]=dict(components=models,dense=dense,registered_union=len(union),missing_frame_ids=sorted(set(range(1,501))-union),ready=bool(models))
- print(scale,[(m['id'],m['registered_images'],m['total_points']) for m in models],flush=True)
-(OUT/'index.json').write_text(json.dumps(index,indent=2)+'\n')
+def main():
+ index={'preview_limit':LIMIT,'component_rule':'Substantial: at least 10 registered images and 100 3D points. Smaller non-empty components are also available and explicitly labeled.','alignment':'Components and resolutions use independent coordinate systems. They are displayed separately, not falsely overlaid.','scales':{}}
+ for scale in ['1x','2x','4x','8x']:
+  run=LOCAL/scale;status=json.loads((run/'status.json').read_text()) if (run/'status.json').exists() else {'stages':{}}
+  models=[];union=set();component_members=[]
+  if status['stages'].get('mapping',{}).get('state')=='complete':
+   for path in sorted((run/'sparse').glob('*')):
+    if not path.is_dir() or not (path/'points3D.bin').exists():continue
+    m=p.Reconstruction(path);names=sorted(im.name for im in m.images.values());ids=[int(re.search(r'(\d+)',n).group(1)) for n in names]
+    n=m.num_points3D();item=dict(id=path.name,kind='sparse',registered_images=m.num_reg_images(),frame_ids=ids,total_points=n,substantial=m.num_reg_images()>=10 and n>=100)
+    if n:
+     points=list(m.points3D.values());xyz=np.array([pt.xyz for pt in points]);rgb=np.array([pt.color for pt in points]);cams=[im.projection_center() for im in m.images.values()]
+     item.update(export_cloud(f'{scale}-sparse-{path.name}',xyz,rgb,cams));union.update(ids)
+    else:item['reason']='No triangulated points; camera registration alone is not a usable point cloud.'
+    models.append(item)
+   models.sort(key=lambda x:(x['substantial'],x['registered_images'],x['total_points']),reverse=True)
+  dense=None
+  if status['stages'].get('fusion',{}).get('state')=='complete':
+   xyz,rgb=read_ply(run/'dense/fused.ply')
+   if len(xyz):dense=dict(id='dense',kind='dense',**export_cloud(f'{scale}-dense',xyz,rgb,[]))
+  index['scales'][scale]=dict(components=models,dense=dense,registered_union=len(union),missing_frame_ids=sorted(set(range(1,501))-union),ready=bool(models))
+  print(scale,[(m['id'],m['registered_images'],m['total_points']) for m in models],flush=True)
+ (OUT/'index.json').write_text(json.dumps(index,indent=2)+'\n')
+
+if __name__=='__main__':main()

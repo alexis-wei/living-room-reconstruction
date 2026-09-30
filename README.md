@@ -159,3 +159,35 @@ All four COLMAP pipelines finished on 2026-09-30. Full-resolution fusion produce
 The private Site now includes an interactive Spark 2.3.0 / Three.js 0.180.0 Gaussian viewer for all five models, camera presets, and 20 GPU-rendered previews from the original checkpoints. `scripts/export_gsplat_site.py` preserves every trained Gaussian in 32-byte SPLAT chunks below 25 MB each: float32 centers/scales, 8-bit RGBA and normalized quaternion. Browser colors are SH0 only; view-dependent SH3 appearance remains in the original checkpoints/PLY and the rendered previews (up to 960-pixel long edge). Zero-extent Gaussians are retained. WebGL2 is required for interaction; previews work without it. Private assets under `site/dist/gaussians/` are excluded from public GitHub. Self-hosted vendor libraries are fetched from pinned official distributions, not image/model uploads to third-party viewers.
 
 Browser hosting uses `scripts/compact_gsplat_site.py` after export: chunk-local float16 positions, 8-bit logarithmic scales, RGB565 colors, 8-bit opacity/quaternion, gzipped without removing Gaussians. Client-side decompression restores the standard SPLAT layout. This is a quantized visualization copy, not the original training output.
+
+## Attempt 02 — frame-count and area experiments (2026-09-30)
+
+The successful 4× baseline remains unchanged. Three independent datasets test frame count and coverage, all reconstructed at **540 × 960**:
+
+| Experiment | Frames | Video coverage | Local dataset |
+| --- | ---: | --- | --- |
+| Whole room / fewer frames | 250 | Full video | `experiments_local/room_250/` |
+| Whole room / more frames | 1,000 | Full video | `experiments_local/room_1000/` |
+| Focused dining area | 500 | 34.5–37.0 and 61.0–81.0 seconds | `experiments_local/dining_500/` |
+
+Each dataset has `full_resolution/` (2160 × 3840 RGB PNG), `downsample_4x_540x960/`, `manifest.csv`, exact selected source indices, `dataset.json`, local contact sheets, checksums, and PNG validation. Filenames are chronological within each experiment; the same filename across experiments does **not** necessarily identify the same video frame. Use source indices/timestamps to join datasets. Local hard links share identical source-frame files across sets; treat image inputs as immutable.
+
+Whole-room selection uses 55% elapsed-time and 45% capped optical-flow weighting, one locally sharp exposure-aware frame per chronological bin, with a capacity constraint ensuring exactly the requested number of distinct recorded frames. No frame interpolation, cropping, sharpening or synthetic views. Upright native RGB frames are decoded from the original MOV; every reduced PNG is generated directly with Pillow LANCZOS, or reuses the identical original dataset output.
+
+The dining area was selected after visually inspecting the video: the table appears from multiple sides, whereas the couch is predominantly front-facing. The focused intervals include nearby furniture/walls to help registration; this is not object segmentation. Many of its 500 frames are near-neighbors. The temporal discontinuity can cause separate components. No dataset supplies unseen backs, undersides or a guaranteed 360° reconstruction.
+
+COLMAP settings match Attempt 01 at 4×: PyCOLMAP 4.2.1 CUDA; SINGLE SIMPLE_RADIAL camera per dataset; 8,192 feature limit; 15 sequential neighbors plus offsets 20/40/80/160/320 and every-20-image anchors; guided matching; CPU incremental mapping/global BA; post-BA filtering 4 px/1.5°; native-size undistortion; up to 10 source views; geometric CUDA PatchMatch with five iterations; CPU fusion. Indexed pair rules cover different time distances at different frame counts, so this is a practical comparison rather than a rigorously isolated image-count study. A former hardcoded `input_images=500` reporting field now counts the actual dataset.
+
+`run_experiments.py` holds an exclusive lock, waits for validated extraction, reconstructs sparse cameras for all three sets, then processes their dense clouds sequentially through fusion. There is no new gsplat training or meshing in this request. CUDA feature extraction, matching and depth estimation use the local **RTX 4090**; mapping, BA and fusion use CPU. All meaningful sparse components are retained; dense processing uses the largest registered component, as in the baseline.
+
+```bash
+PYTHONPATH=.video-tools python3 living-room-reconstruction/scripts/prepare_experiments.py
+python3 living-room-reconstruction/scripts/run_experiments.py
+PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/export_experiments.py
+```
+
+Run from the enclosing local project directory, with the existing project-local dependencies. Queue progress is in `experiments_local/queue_status.json`; each dataset's `colmap/4x/status.json` and stage logs provide measured progress. Completed outputs are `colmap/4x/sparse_points.ply`, each camera model under `sparse/`, and `dense/fused.ply`. The private Site's `experiments.html` compares registration, fragmentation, reprojection error and point counts against the existing 500-frame baseline, with a coverage strip per component. New browser previews deterministically sample at most 40,000 points to fit hosting limits; the complete PLYs remain local. Preview density is not reconstruction completeness. The original Site assets and models remain available.
+
+All 1,750 native/reduced image pairs passed full PNG decoding, dimensions, uniqueness and checksum checks. Nine sampled source frames matched fresh video decoding and direct LANCZOS resizing pixel-for-pixel (`verify_experiment_pixels.py`; local `pixel_verification.json`).
+
+`reports/experiments.json` records measured status; queued/running stages are not completed results. Source images and geometry remain excluded from GitHub. Only derived point-cloud previews are uploaded to the existing private Site for these experiments.

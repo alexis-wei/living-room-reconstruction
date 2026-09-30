@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T19:57:26Z",
+  "updated_at": "2026-09-30T21:27:37Z",
   "experiments": [
     {
       "key": "room_250",
@@ -466,9 +466,18 @@
           "exit_code": 0
         },
         "depth_maps": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-30T19:35:20Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 4533.11,
+          "exit_code": 0
+        },
+        "fusion": {
+          "state": "complete",
+          "started_at": "2026-09-30T20:50:53Z",
+          "device": "CPU",
+          "seconds": 112.25,
+          "exit_code": 0
         }
       },
       "components": [
@@ -496,7 +505,7 @@
           }
         ]
       },
-      "dense_points": null,
+      "dense_points": 1748593,
       "folders": {
         "native": "experiments_local/iphone13pro_4x/full_resolution",
         "4x": "experiments_local/iphone13pro_4x/downsample_4x_540x960",
@@ -587,6 +596,18 @@
           "device": "CPU",
           "seconds": 23.94,
           "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-09-30T20:53:11Z",
+          "device": "CPU",
+          "seconds": 10.79,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "running",
+          "started_at": "2026-09-30T20:53:21Z",
+          "device": "CUDA"
         }
       },
       "components": [

@@ -147,3 +147,8 @@ All four main datasets and the substantial secondary 8x component completed 30,0
 See `reports/gsplat_results.json` for timings and held-out metrics. Local checkpoints, PLY files and validation source/prediction pairs are in `../gsplat_local/runs/<dataset>/`. Do not publish these assets to public GitHub.
 
 Quality is not approved: a sampled 2x prediction is severely washed out/occluded, despite successful process completion. Cross-resolution metrics are not directly comparable because image resolution and registered/held-out frame sets differ. Preserve these first-attempt outputs for diagnosis. Full-resolution COLMAP fusion remains separate from completed gsplat training.
+
+
+### Final COLMAP completion and fusion recovery
+
+All four COLMAP pipelines finished on 2026-09-30. Full-resolution fusion produced 5,486,454 points. Its original 4 GB cache repeatedly reread data without finishing the first reference; the failed attempt log is preserved locally. Retrying with `COLMAP_FUSION_CACHE_GB=12` completed fusion in 22.9 minutes, then meshing completed. No image size or geometry thresholds were changed. The runner now accepts that environment override while retaining a 4 GB default. Final counts are in `reports/results.json`. All five gsplat training runs are also complete; visual-quality caveats above remain unresolved baseline limitations, not execution failures.

@@ -68,7 +68,7 @@ def execute_stage(args):
   opts=p.PatchMatchOptions();opts.gpu_index='0';opts.max_image_size=max(w,h);opts.geom_consistency=True;opts.cache_size=4.;opts.num_threads=8
   p.patch_match_stereo(dense,options=opts)
  elif stage=='fusion':
-  opts=p.StereoFusionOptions();opts.num_threads=8;opts.max_image_size=max(w,h);opts.use_cache=True;opts.cache_size=4.
+  opts=p.StereoFusionOptions();opts.num_threads=8;opts.max_image_size=max(w,h);opts.use_cache=True;opts.cache_size=float(os.environ.get('COLMAP_FUSION_CACHE_GB', '4'))
   p.stereo_fusion(dense/'fused.ply',dense,input_type='geometric',options=opts,output_type='ply')
   if not (dense/'fused.ply').exists():raise RuntimeError('No fused point cloud written')
  elif stage=='mesh':

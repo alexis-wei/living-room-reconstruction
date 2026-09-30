@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-30T10:18:54.805005+00:00",
+  "updated": "2026-09-30T11:18:14.181203+00:00",
   "gpu": "NVIDIA GeForce RTX 4090",
   "vram_gb": 24,
   "pycolmap": "4.2.1",
@@ -56,9 +56,18 @@
           "queue_wait_seconds": 5895.69
         },
         "fusion": {
-          "state": "running",
-          "started_at": "2026-09-30T08:11:59Z",
-          "device": "CPU"
+          "state": "complete",
+          "started_at": "2026-09-30T10:48:18Z",
+          "device": "CPU",
+          "seconds": 1377.64,
+          "exit_code": 0
+        },
+        "mesh": {
+          "state": "complete",
+          "started_at": "2026-09-30T11:11:16Z",
+          "device": "CPU",
+          "seconds": 12.71,
+          "exit_code": 0
         }
       },
       "registered_images": 493,
@@ -73,8 +82,13 @@
           "mean_reprojection_error": 1.183789673038214
         }
       ],
-      "fused": null,
-      "mesh": null,
+      "fused": {
+        "vertex": 5486454
+      },
+      "mesh": {
+        "vertex": 705730,
+        "face": 1357488
+      },
       "dense_reference_images": 493,
       "dense_skipped_no_sources": 0,
       "geometric_depth_maps_written": 493

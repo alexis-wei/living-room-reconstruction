@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T16:05:25Z",
+  "updated_at": "2026-09-30T16:27:21Z",
   "experiments": [
     {
       "key": "room_250",
@@ -533,14 +533,55 @@
           "exit_code": 0
         },
         "mapping": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-30T16:03:33Z",
-          "device": "CPU"
+          "device": "CPU",
+          "seconds": 469.53,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-30T16:11:23Z",
+          "device": "CPU",
+          "seconds": 23.94,
+          "exit_code": 0
         }
       },
-      "components": [],
-      "registered_union": 0,
-      "metrics": {},
+      "components": [
+        {
+          "id": "0",
+          "registered_images": 968,
+          "points": 100232
+        },
+        {
+          "id": "1",
+          "registered_images": 17,
+          "points": 247
+        },
+        {
+          "id": "2",
+          "registered_images": 15,
+          "points": 0
+        }
+      ],
+      "registered_union": 982,
+      "metrics": {
+        "registered_images": 968,
+        "points3D": 100232,
+        "mean_reprojection_error": 0.49440521130575316,
+        "mean_track_length": 10.409001117407614,
+        "camera_model": "CameraModelId.OPENCV",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV",
+            "width": 540,
+            "height": 960,
+            "params": "[ 6.87563197e+02  6.86422498e+02  2.70000000e+02  4.80000000e+02\n  6.33152613e-02 -7.29851177e-02 -1.57287453e-03  7.89965114e-04]",
+            "has_prior_focal_length": false
+          }
+        ]
+      },
       "dense_points": null,
       "folders": {
         "native": "experiments_local/iphone13pro_1000_4x/full_resolution",

@@ -237,3 +237,6 @@ PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/run_camera_m
 ```
 
 The variant reuses the 1,000-image baseline's features/raw matches, re-verifies geometry, and runs fresh sparse mapping/BA. Dense processing waits for the three original experiments, then the 500-frame OPENCV variant, then an idle GPU. Local outputs are in `experiments_local/iphone13pro_1000_4x/colmap/4x/`. The private `camera-comparison-1000.html` compares the two 1,000-image models; all sparse points from every non-empty component are exported and drawn, with dense previews explicitly sampled. Live measured status is recorded in `reports/experiments.json`.
+
+
+The 1,000-image OPENCV sparse run completed: largest component 968/1,000 registered images, 100,232 points, mean reprojection error 0.494405 px (SIMPLE_RADIAL: 985 images, 113,505 points, 0.803085 px). Secondary models contain 17 images/247 points and 15 images/zero points; zero-point models cannot be rendered. Lower fitting error comes with fewer views in the largest component, so it is not proof of improved geometric accuracy. Dense output remains queued. Fitted OPENCV parameters `[fx,fy,cx,cy,k1,k2,p1,p2]`: `[687.563197,686.422498,270,480,0.0633152613,-0.0729851177,-0.00157287453,0.000789965114]`. All 100,232 + 247 sparse points are included in the private comparison viewer.

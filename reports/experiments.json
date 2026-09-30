@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T14:34:49Z",
+  "updated_at": "2026-09-30T14:58:02Z",
   "experiments": [
     {
       "key": "room_250",
@@ -129,14 +129,51 @@
           "exit_code": 0
         },
         "matching": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-09-30T14:34:34Z",
-          "device": "CUDA"
+          "device": "CUDA",
+          "seconds": 86.65,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:36:01Z",
+          "device": "CPU",
+          "seconds": 1105.0,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:54:26Z",
+          "device": "CPU",
+          "seconds": 28.93,
+          "exit_code": 0
         }
       },
-      "components": [],
-      "registered_union": 0,
-      "metrics": {},
+      "components": [
+        {
+          "id": "1",
+          "registered_images": 985,
+          "points": 113505
+        },
+        {
+          "id": "2",
+          "registered_images": 33,
+          "points": 5427
+        },
+        {
+          "id": "0",
+          "registered_images": 2,
+          "points": 668
+        }
+      ],
+      "registered_union": 998,
+      "metrics": {
+        "registered_images": 985,
+        "points3D": 113505,
+        "mean_reprojection_error": 0.8030853645399029,
+        "mean_track_length": 10.778000969120303
+      },
       "dense_points": null,
       "folders": {
         "native": "experiments_local/room_1000/full_resolution",
@@ -184,7 +221,27 @@
         "eligible_source_frames": 540
       },
       "extraction_complete": true,
-      "stages": {},
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:54:55Z",
+          "device": "CUDA",
+          "seconds": 4.26,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-09-30T14:54:59Z",
+          "device": "CUDA",
+          "seconds": 44.06,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "running",
+          "started_at": "2026-09-30T14:55:43Z",
+          "device": "CPU"
+        }
+      },
       "components": [],
       "registered_union": 0,
       "metrics": {},

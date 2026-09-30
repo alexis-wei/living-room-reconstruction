@@ -1,0 +1,17 @@
+{
+  "original_4x_used_images": true,
+  "image_directory": "reconstruction_local/4x/dense/images",
+  "registered_images": 493,
+  "training_images": 431,
+  "validation_images": 62,
+  "sample_shape_hwc": [
+    947,
+    532,
+    3
+  ],
+  "data_factor": 1,
+  "loss": "0.8 L1 + 0.2 SSIM against photograph pixels",
+  "initialization": "COLMAP sparse points and camera poses",
+  "training_steps": 30000,
+  "no_image_training_run_exists": false
+}

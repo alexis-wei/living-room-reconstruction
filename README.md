@@ -191,3 +191,12 @@ Run from the enclosing local project directory, with the existing project-local 
 All 1,750 native/reduced image pairs passed full PNG decoding, dimensions, uniqueness and checksum checks. Nine sampled source frames matched fresh video decoding and direct LANCZOS resizing pixel-for-pixel (`verify_experiment_pixels.py`; local `pixel_verification.json`).
 
 `reports/experiments.json` records measured status; queued/running stages are not completed results. Source images and geometry remain excluded from GitHub. Only derived point-cloud previews are uploaded to the existing private Site for these experiments.
+
+
+### Verified gsplat photograph inputs (2026-09-30)
+
+The original 4× gsplat run **already used the source photographs** after COLMAP undistortion. It was not trained from a point cloud alone. The saved configuration uses `gsplat_local/datasets/4x`, whose `images/` link resolves to `reconstruction_local/4x/dense/images/`, and `data_factor=1` (no additional reduction). The parser successfully loads 493 registered photographs: 431 training images and 62 held-out validation images (`test_every=8`). An audited training sample is 532 × 947 RGB, reflecting undistortion of the 540 × 960 input.
+
+The official trainer reads `data["image"]` and optimizes rendered pixels against those photograph pixels using 0.8 L1 + 0.2 SSIM loss. COLMAP sparse points initialize the Gaussians; camera poses associate images with viewpoints. The saved 30,000-step run, validation renders, and checkpoints belong to this photo-supervised workflow. There is no existing no-photo training baseline.
+
+A source-photo-resolution comparison would instead reuse the 4× COLMAP camera poses and sparse initialization while changing photograph resolution, scaling camera intrinsics consistently and undistorting from native masters. That is distinct from adding previously absent images, and higher resolution alone does not guarantee better geometry. The user's choice between this comparison and retaining 4× photograph supervision is pending; no replacement baseline training has been launched. Existing COLMAP experiments continue unchanged.

@@ -1,5 +1,7 @@
 """Official trainer entry with PyTorch 2.6 build-path quoting compatibility."""
 import runpy
+import json
+import os
 import shlex
 import sys
 from pathlib import Path
@@ -22,5 +24,22 @@ if '--compile-only' in sys.argv:
 else:
     trainer = Path(__file__).resolve().parents[2] / '.gsplat-src/gsplat/examples/simple_trainer.py'
     sys.path.insert(0, str(trainer.parent))
+    # Matching trials hold out the same source frames even when COLMAP recovers
+    # different subsets. Leave the original trainer split unchanged otherwise.
+    if os.environ.get('GSPLAT_HOLDOUT_FILE'):
+        import numpy as np
+        from datasets.colmap import Dataset
+        held_out = set(json.loads(Path(os.environ['GSPLAT_HOLDOUT_FILE']).read_text()))
+        original_dataset_init = Dataset.__init__
+
+        def fixed_split(self, parser, split='train', **kwargs):
+            original_dataset_init(self, parser, split=split, **kwargs)
+            use_validation = split != 'train'
+            self.indices = np.asarray([i for i, name in enumerate(parser.image_names)
+                                       if (name in held_out) == use_validation], dtype=int)
+            if not len(self.indices):
+                raise ValueError(f'No images in the fixed {split} split')
+
+        Dataset.__init__ = fixed_split
     sys.argv[0] = str(trainer)
     runpy.run_path(str(trainer), run_name='__main__')

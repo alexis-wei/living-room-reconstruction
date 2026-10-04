@@ -31,6 +31,11 @@ def main():
     shared = sorted(common)
     # Four chronological viewpoints present and held out in all three main models.
     choices = [shared[i] for i in np.linspace(0, len(shared) - 1, 4, dtype=int)]
+    secondary_views = {j['name']: [j['validation_frames'][i] for i in np.linspace(0, len(j['validation_frames']) - 1, 2, dtype=int)]
+                       for j in manifest['jobs'] if not j['primary_component']}
+    # Include the fragments' viewpoints in every model that recovered the same
+    # held-out frame, so a split room section can be compared with joined models.
+    candidates = sorted(set(choices).union(*(set(frames) for frames in secondary_views.values())))
     catalog = dict(source_run_id=manifest['source_run_id'], updated_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
                    settings=manifest['settings'], shared_frames=choices, models={},
                    skipped_components=manifest['skipped_components'], local_viewer='http://127.0.0.1:8790/')
@@ -54,10 +59,19 @@ def main():
             assert all(math.isfinite(metrics[k]) for k in ('psnr', 'ssim', 'lpips'))
             ply = run / 'ply/point_cloud_29999.ply'
             assert ply.is_file()
+            with ply.open('rb') as stream:
+                count = None
+                while line := stream.readline():
+                    if line.startswith(b'element vertex '):
+                        count = int(line.split()[-1])
+                    if line.strip() == b'end_header':
+                        break
+            assert count is not None and 0 < count <= metrics['num_GS']
             item.update(metrics=metrics, seconds=status['seconds'], elapsed_ns=status['elapsed_ns'],
-                        gaussian_count=metrics['num_GS'], model_bytes=ply.stat().st_size)
+                        gaussian_count=count, trained_gaussian_count=metrics['num_GS'],
+                        excluded_invalid_gaussians=metrics['num_GS'] - count, model_bytes=ply.stat().st_size)
             parser = Parser(job['dataset'], factor=1, normalize=True, test_every=8)
-            selected = choices if job['primary_component'] else [job['validation_frames'][i] for i in np.linspace(0, len(job['validation_frames']) - 1, 2, dtype=int)]
+            selected = (choices if job['primary_component'] else secondary_views[job['name']]) + candidates
             for frame in dict.fromkeys(selected):
                 if frame not in job['validation_frames']:
                     continue
@@ -67,9 +81,11 @@ def main():
                     assert im.width % 2 == 0
                     prediction = im.crop((im.width // 2, 0, im.width, im.height))
                     name = f'{job["name"]}-{Path(frame).stem}.webp'
-                    prediction.save(out / name, 'WEBP', lossless=True, method=6)
-                    with Image.open(out / name) as decoded:
+                    temporary = (out / name).with_suffix('.tmp.webp')
+                    prediction.save(temporary, 'WEBP', lossless=True, method=6)
+                    with Image.open(temporary) as decoded:
                         assert prediction.tobytes() == decoded.tobytes()
+                    temporary.replace(out / name)
                     width, height = prediction.size
                 ix = parser.image_names.index(frame)
                 pose = parser.camtoworlds[ix]

@@ -335,6 +335,40 @@ It listens only at `http://127.0.0.1:8790/`, serves a restricted completed-model
 
 The queue lock prevents duplicate training; completed jobs are retained and skipped. Failed outputs must be preserved before a retry. `reports/matching_gsplat_results.json` contains the current aggregate results and settings. The original photograph-resolution comparison question remains separate from this authorized 4× matching experiment.
 
+## Attempt 06 — Insta360 X5, native and 4× (2026-10-04)
+
+The new upload is `insta360_living_room_footage.mp4`: inspected 3840 × 2160, 24 fps, HEVC, 92.958333 seconds, 8-bit full-range YUV420. Its exported dimensions are 4K regardless of the original recording setting. `prepare_insta360.py` excludes every frame before 10.0 seconds, takes one candidate from each of 500 equal-duration intervals, and favours preview sharpness (0.55), local spatial appearance novelty (0.30), bin-center proximity (0.15), with exposure penalties. It does not create views, interpolate video frames or upscale pixels.
+
+Completed extraction: exactly 500 unique decoded RGB frames at 10.083333–92.875 seconds, saved as native RGB PNGs and aligned 960 × 540 PNGs resized directly with Lanczos. All 1,000 PNGs were decoded and checked pixel-for-pixel against their respective expected images; checksums and source frame indices/PTS/timestamps are retained locally. Median time gap is 0.166667 seconds, minimum 0.041667 and maximum 0.291667. This gives even temporal coverage and modest within-interval diversity, not proof of unique 3D angles or minimal geometric overlap.
+
+Local source folders are `../insta360_frames_500/full_resolution/` and `../insta360_frames_500/downsample_4x_960x540/`; their names align from `frame_0001.png` to `frame_0500.png`. Storage at extraction is 2,782,855,203 and 337,607,788 bytes. Local `review/index.html`, ten contact sheets, manifest and checksums allow inspection. Native photographs, the video and review copies are excluded from this repository and the hosted Site.
+
+### Camera research and assumptions
+
+[Insta360's X5 explanation](https://www.insta360.com/blog/tips/understanding-8K-360-video.html) describes MegaView as 170°; [Studio FOV documentation](https://onlinemanual.insta360.com/studio/en-us/operation-guide/edit-function/adjust-the-perspective) describes reframing at export. Neither consulted source provides a factory or per-export intrinsic matrix. The uploaded video is a flat 16:9 wide-angle view, not an unprocessed dual-lens stream or a 2:1 equirectangular panorama. The original sensor calibration cannot simply be copied onto arbitrary reframed/stabilized pixels.
+
+Use the explicitly requested `OPENCV_FISHEYE`, parameter order `fx, fy, cx, cy, k1, k2, k3, k4`. Initialization interprets nominal 170° as a **horizontal equidistant FOV assumption**, setting `fx=fy=width/radians(170)`, center at half width/height, and coefficients zero. This is an initial optimization prior, not measured calibration. Full initialization is approximately `1294.2105,1294.2105,1920,1080,0,0,0,0`; 4× approximately `323.5526,323.5526,480,270,0,0,0,0`. Use the precise values in the saved configuration. Shared focal lengths/distortion are refined by COLMAP; principal point stays fixed. MegaView warping or a changing zoom may limit this model; report estimated parameters and image fit without claiming certified physical accuracy. [COLMAP camera models](https://colmap.github.io/cameras.html) and [OpenCV fisheye equations](https://docs.opencv.org/4.x/db/d58/group__calib3d__fisheye.html) define the model.
+
+### Reproducible pipeline
+
+From the enclosing photo workspace, with the existing environments:
+
+```sh
+PYTHONPATH="$PWD/.video-tools" python3 living-room-reconstruction/scripts/prepare_insta360.py
+python3 living-room-reconstruction/scripts/run_insta360_pipeline.py
+PYTHONPATH="$PWD/.colmap-tools" python3 living-room-reconstruction/scripts/export_insta360_colmap.py
+.gsplat-env/bin/python living-room-reconstruction/scripts/export_insta360_gsplat.py
+python3 living-room-reconstruction/scripts/serve_insta360.py
+```
+
+The queue holds the existing gsplat GPU lock and preserves completed stages. It runs sparse stages for 4× and native, then 4× dense reconstruction plus gsplat, then native undistortion plus gsplat followed by native dense stereo/fusion/meshing. At most one CUDA stage runs at a time on the RTX 4090. Idle existing COLMAP GUI windows stay open. Failed outputs require diagnosis/preservation before retrying.
+
+COLMAP settings reuse the documented original pipeline: native SIFT cap8,192; 15 sequential neighbors, offsets20/40/80/160/320 and anchors every20 images with guided matching; CPU incremental mapper seed0/12threads; Ceres global BA and filtering4px/1.5°; native-ceiling calibrated undistortion/10sourceviews; five CUDA geometric PatchMatch iterations; CPU fusion with12GBcache; Poisson depth10. Accurate monotonic nanosecond timings include process startup/output saving and exclude preceding GPU waits. All components are retained; dense uses the largest refined component.
+
+gsplat1.5.3 uses the original-derived undistorted photographs **with their corresponding pinhole camera matrices**, data_factor1,30,000steps,batch1,packed,SH3,seed42,default densification,L1/SSIM0.8/0.2,no camera/appearance optimization. Fixed source frames1,9,...497 are held out; COLMAP still used their geometry. Each component with at least10 cameras/100points trains separately. All checkpoints/native predictions/full SH3 PLYs stay in `../insta360_local/gsplat/`; other small components remain in COLMAP. Full local viewer runs on127.0.0.1:8791 and requires WebGL2. The original matching experiment viewer remains on8790.
+
+Chapter07 compares source dimensions/storage, feature/match counts, registration/components, sparse/dense/mesh counts, native/full-resolution-equivalent reprojection error, intrinsics, stage timings, Gaussians and PSNR/SSIM/LPIPS, with numeric factor1-versus4 charts. Two resolutions do not establish a general correlation; native appearance metrics have different pixel sizes/crops/registered sets and are not ground-truth geometry scores. Private browser clouds are explicitly sampled (sparse25,000/dense15,000 cap per model), and prediction-only previews use a maximum960px long edge followed by lossless WebP. This does not resize training inputs or full local outputs. Aggregate reports and code alone may be uploaded to this public repository; `site/dist/insta360-assets/` remains private.
+
 To stay within the private Site's archive limit, twenty existing prediction renders and sixteen previously authorized source-example browser copies were converted from PNG to pixel-verified lossless WebP. Native PNG masters, image dimensions, all baseline Gaussian geometry and all COLMAP point-cloud assets remain unchanged. Only code and aggregate reports are published to public GitHub; all new rendered images stay on the owner-private Site. Official workflow: [gsplat COLMAP capture trainer](https://docs.gsplat.studio/main/examples/colmap.html).
 
 

@@ -54,3 +54,7 @@ experiments_local/
 insta360_frames_500/
 insta360_local/
 site/dist/insta360-assets/
+
+# Full-resolution gsplat cleanup previews and isolated private Site checkout.
+site/dist/fixing-gsplat-assets/
+site-step8/

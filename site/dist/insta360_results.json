@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T20:39:46.256546+00:00",
+  "updated": "2026-10-04T21:21:25.764698+00:00",
   "dataset": {
     "count": 500,
     "exclude_before_seconds": 10.0,
@@ -144,15 +144,44 @@
       "input_images": 500,
       "folder": "full_resolution",
       "storage_bytes": 2782855203,
-      "stages": {},
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-10-04T20:45:22.019912+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-04T20:46:05.055329+00:00",
+          "elapsed_ns": 43035199625,
+          "seconds": 43.035199625,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-10-04T20:46:05.071072+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-04T20:48:17.809655+00:00",
+          "elapsed_ns": 132738376893,
+          "seconds": 132.738376893,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "running",
+          "started_at": "2026-10-04T20:48:17.809865+00:00",
+          "device": "CPU"
+        }
+      },
       "selected_model": null,
       "components": [],
-      "sift_keypoints": null,
+      "sift_keypoints": 4809985,
       "metrics": {},
       "dense": null,
       "mesh": null,
-      "solver_warning_count": 0,
-      "registered_union": 0
+      "solver_warning_count": 289,
+      "matching_counts": {
+        "matched_pairs": 20345,
+        "verified_pairs": 10783,
+        "verified_inliers": 8249577
+      },
+      "registered_union": null
     },
     "4x": {
       "label": "4\u00d7 downsample",
@@ -181,24 +210,67 @@
           "exit_code": 0
         },
         "mapping": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-10-04T20:29:57.971395+00:00",
-          "device": "CPU"
+          "device": "CPU",
+          "finished_at": "2026-10-04T20:45:10.703111+00:00",
+          "elapsed_ns": 912731593607,
+          "seconds": 912.731593607,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-10-04T20:45:10.703321+00:00",
+          "device": "CPU",
+          "finished_at": "2026-10-04T20:45:21.998988+00:00",
+          "elapsed_ns": 11295537318,
+          "seconds": 11.295537318,
+          "exit_code": 0
         }
       },
-      "selected_model": null,
-      "components": [],
+      "selected_model": 0,
+      "components": [
+        {
+          "id": "0",
+          "kind": "sparse",
+          "registered_images": 500,
+          "total_points": 112825,
+          "substantial": true,
+          "mean_reprojection_error": 1.199882753454637,
+          "displayed_points": 112825,
+          "sampled": false,
+          "render_all": true
+        }
+      ],
       "sift_keypoints": 1218200,
-      "metrics": {},
+      "metrics": {
+        "registered_images": 500,
+        "points3D": 112825,
+        "mean_reprojection_error": 1.199882753454637,
+        "mean_track_length": 5.675337912696654,
+        "camera_model": "CameraModelId.OPENCV_FISHEYE",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV_FISHEYE",
+            "width": 960,
+            "height": 540,
+            "params": "[ 3.16926306e+02  3.38208982e+02  4.80000000e+02  2.70000000e+02\n  1.83986103e-01 -1.19276336e-01  7.19649274e-02 -1.38088448e-02]",
+            "has_prior_focal_length": false
+          }
+        ],
+        "unregistered_images": [],
+        "full_resolution_equivalent_error_px": 4.799531013818548
+      },
       "dense": null,
       "mesh": null,
-      "solver_warning_count": 21,
+      "solver_warning_count": 54,
       "matching_counts": {
         "matched_pairs": 13167,
         "verified_pairs": 10237,
         "verified_inliers": 3232477
       },
-      "registered_union": 0
+      "registered_union": 500
     }
   }
 }

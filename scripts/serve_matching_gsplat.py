@@ -15,6 +15,8 @@ PAGE = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=
 
 
 class Handler(BaseHTTPRequestHandler):
+    catalog_path = SITE / 'matching-gsplat/index.json'
+    model_root = ROOT
     def end_headers(self):
         origin = self.headers.get('Origin')
         if origin in ALLOWED_ORIGINS:
@@ -47,14 +49,14 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(data)
             return
         if route == '/catalog.json':
-            target = SITE / 'matching-gsplat/index.json'
+            target = self.catalog_path
         elif route.startswith('/model/') and route.endswith('.ply'):
             key = route[len('/model/'):-4]
-            catalog = json.loads((SITE / 'matching-gsplat/index.json').read_text())
+            catalog = json.loads(self.catalog_path.read_text())
             if key not in catalog['models'] or catalog['models'][key]['state'] != 'complete':
                 self.send_error(404, 'Completed model unavailable')
                 return
-            target = ROOT / 'runs' / key / 'ply/point_cloud_29999.ply'
+            target = self.model_root / 'runs' / key / 'ply/point_cloud_29999.ply'
         elif route in ('/style.css', '/matching-full-viewer.js') or route.startswith('/vendor/'):
             target = (SITE / route.lstrip('/')).resolve()
             allowed_base = SITE / 'vendor' if route.startswith('/vendor/') else SITE

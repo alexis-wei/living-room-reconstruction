@@ -32,7 +32,7 @@ def colmap(scale, stages):
         if stage=='fusion':env['COLMAP_FUSION_CACHE_GB']='12'
         start=time.perf_counter_ns()
         with (folder/f'{stage}.log').open('w') as log:
-            result=subprocess.run(['python3',str(HERE/'run_insta360_colmap_stage.py'),'--scale',scale,'--stage',stage],env=env,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)
+            result=subprocess.run(['python3',str(HERE/'run_insta360_colmap_stage.py'),'--scale',scale,'--stage',stage,'--output',str(OUT/'colmap')],env=env,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)
         elapsed=time.perf_counter_ns()-start
         entry.update(state='complete' if result.returncode==0 else 'failed',finished_at=now(),elapsed_ns=elapsed,seconds=elapsed/1e9,exit_code=result.returncode)
         save(status_path,status);print(f'{scale}/{stage} {entry["state"]} {entry["seconds"]:.6f}s',flush=True)

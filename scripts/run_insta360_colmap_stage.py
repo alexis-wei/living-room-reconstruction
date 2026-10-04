@@ -11,6 +11,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scale',choices=list(reconstruct.SCALES),required=True)
     parser.add_argument('--stage',choices=reconstruct.STAGES,required=True)
+    parser.add_argument('--output',type=Path,default=ROOT/'insta360_local/colmap')
     args=parser.parse_args()
     width,height=reconstruct.SCALES[args.scale][1:]
     # Nominal 170-degree MegaView description, interpreted horizontally ONLY
@@ -19,7 +20,6 @@ def main():
     args.camera_model='OPENCV_FISHEYE'
     args.camera_params=','.join(str(x) for x in [f,f,width/2,height/2,0,0,0,0])
     args.data=ROOT/'insta360_frames_500'
-    args.output=ROOT/'insta360_local/colmap'
     args.num_threads=12
     if args.stage=='depth_maps':
         import pycolmap as p

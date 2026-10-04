@@ -16,6 +16,7 @@ def main():
   # Existing exporter writes only this report into repository/reports. All
   # private derived images and catalogs use staging, never shared Site.
   ex.main()
+  (STAGE/'insta360_gsplat_results.json').replace(STAGE/'insta360_recovery_gsplat_results.json')
   for file in [assets/'gsplat.json']:
    data=json.loads(file.read_text());data['local_viewer']='http://127.0.0.1:8793/'
    for model in data['models'].values():

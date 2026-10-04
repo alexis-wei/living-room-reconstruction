@@ -1,12 +1,18 @@
 """Export only aggregate, non-image statistics to the static report."""
 from pathlib import Path
 from datetime import datetime,timezone
-import json,csv,re
+import json,csv,re,sqlite3
 R=Path(__file__).resolve().parents[1]
 LOCAL=R.parent/'reconstruction_local'
 DATA=R.parent/'living_room_frames'
 SCALES={'1x':('full_resolution',2160,3840),'2x':('downsample_2x_1080x1920',1080,1920),'4x':('downsample_4x_540x960',540,960),'8x':('downsample_8x_270x480',270,480)}
 def read(p,default=None):return json.loads(p.read_text()) if p.exists() else default
+
+def sift_keypoint_count(database):
+ if not database.is_file():return None
+ with sqlite3.connect(f'file:{database}?mode=ro',uri=True) as db:
+  row=db.execute('SELECT SUM(rows) FROM keypoints').fetchone()
+ return int(row[0] or 0)
 
 def ply_counts(path):
  if not path.is_file():return None
@@ -29,7 +35,10 @@ for scale,(folder,w,h) in SCALES.items():
   if depth.get('seconds') is not None:depth['seconds']=round(max(0,depth['seconds']-wait['seconds']),2)
  if scale=='1x' and (R.parent/'gsplat_local/before_1x_depth.wait').exists() and status['stages'].get('depth_maps',{}).get('state')=='running':
   status['stages']['depth_maps']['state']='queued'
- item={'folder':folder,'width':w,'height':h,'count':500,'bytes':sum(p.stat().st_size for p in (DATA/folder).glob('*.png')),'stages':status['stages'],'registered_images':metrics.get('registered_images'),'points3D':metrics.get('points3D'),'mean_reprojection_error':metrics.get('mean_reprojection_error'),'mean_track_length':metrics.get('mean_track_length'),'components':models,'fused':ply_counts(run/'dense/fused.ply'),'mesh':ply_counts(run/'dense/mesh_poisson.ply')}
+ item={'folder':folder,'width':w,'height':h,'count':500,'bytes':sum(p.stat().st_size for p in (DATA/folder).glob('*.png')),'sift_keypoints':sift_keypoint_count(run/'database.db'),'stages':status['stages'],'registered_images':metrics.get('registered_images'),'points3D':metrics.get('points3D'),'mean_reprojection_error':metrics.get('mean_reprojection_error'),'mean_track_length':metrics.get('mean_track_length'),'components':models,'fused':ply_counts(run/'dense/fused.ply'),'mesh':ply_counts(run/'dense/mesh_poisson.ply')}
+ error=item['mean_reprojection_error']
+ item['mean_reprojection_error_full_resolution_px']=error*int(scale[:-1]) if error is not None else None
+ item['reprojection_error_stage']='after_bundle_adjustment_and_filtering' if status['stages'].get('bundle_adjustment',{}).get('state')=='complete' else None
  config=run/'dense/stereo/patch-match.cfg'
  if config.is_file():
   lines=[line.strip() for line in config.read_text().splitlines() if not line.startswith('#')]
@@ -46,4 +55,4 @@ for scale,(folder,w,h) in SCALES.items():
  result['scales'][scale]=item
 for dest in [R/'reports/results.json',R/'site/dist/results.json']:
  dest.write_text(json.dumps(result,indent=2)+'\n')
-print('Published report data only: scale dimensions, counts, timing, stage states, aggregate metrics.')
+print('Published report data only: scale dimensions, SIFT keypoint totals, counts, timing, stage states, aggregate metrics.')

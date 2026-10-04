@@ -255,3 +255,39 @@ All five requested 4× experiments completed sparse reconstruction, bundle adjus
 | iphone13pro_1000_4x | 2,814,652 |
 
 Private comparison pages include every requested sparse point and labeled dense previews (40,000 points each; the final 1,000-frame OPENCV preview uses 30,000 to fit the hosting archive limit). Full models, photographs and depth maps remain local; public GitHub contains only code and aggregate results. OPENCV intrinsics remain estimated, not measured factory calibration. Point count alone is not a geometric accuracy metric. Original four-scale COLMAP and five gsplat results are preserved. New gsplat experiments have not started because the photograph-resolution comparison choice remains pending.
+
+
+## Attempt 04 — sequential vocabulary-tree loop detection timing (2026-10-03)
+
+A third 500-frame matching trial toggled COLMAP sequential loop detection on, and reran the no-loop sequential and exhaustive baselines under the same timing workflow. Each strategy used a fresh copy of the same SIFT feature database and the same OPENCV camera. Matching ran serially on the RTX 4090; incremental sparse mapping and bundle adjustment ran serially on the CPU with 32 logical threads.
+
+| Strategy | Feature matching | Sparse mapping + bundle adjustment | Sum of measured stages |
+| --- | ---: | ---: | ---: |
+| Sequential, loop detection off | 13.143 s | 184.879 s | 198.022 s |
+| Sequential, loop detection on | 96.788 s | 393.999 s | 490.787 s |
+| Exhaustive | 52.144 s | 405.635 s | 457.779 s |
+
+The timer uses Python `time.perf_counter_ns` around each COLMAP child process; the local audit record retains elapsed nanoseconds. Ten-second callbacks only report progress. Startup and exit are included. Image extraction, database copying/reset, feature-cache warmup, pauses between stages, and dense reconstruction are excluded. These are single runs, not averages.
+
+| Strategy | Pair records | Geometries with inliers | Unique registered frames | Models | Largest component | Sparse points summed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Sequential, loop off | 3,989 | 2,012 | 493 / 500 | 4 | 256 frames | 67,642 |
+| Sequential, loop on | 5,986 | 2,870 | 496 / 500 | 1 | 496 frames | 69,847 |
+| Exhaustive | 124,750 | 10,964 | 499 / 500 | 4 | 492 frames | 78,885 |
+
+The loop-enabled COLMAP matcher used the cached Flickr vocabulary tree, querying every tenth frame for up to 50 similar views while retaining sequential overlap 10 and quadratic offsets. Relative to the no-loop run it tested 1,997 more pairs, raised the count of geometries with inliers from 2,012 to 2,870, and joined 496 registered images into a single model. The no-loop reconstruction split into four components. Exhaustive matching registered 499 unique frames but retained three small fragments beside its 492-frame component.
+
+The exhaustive mapper exited successfully and saved its models, but its log contains CHOLMOD/Eigen linear-solver warnings during global bundle adjustment. Interpret that output cautiously. Point count and reprojection error alone do not establish geometric accuracy. This new timed run is separate from the earlier point clouds displayed by the private Site; its images, feature databases, logs, text exports and full sparse models remain local and are excluded from this public repository.
+
+To reproduce on the local workspace, use the CUDA-enabled COLMAP launcher, existing extracted-feature database and frame folder; choose a new empty output directory:
+
+```bash
+python3 living-room-reconstruction/scripts/run_matching_strategy_timing.py \
+  --workspace-root "/path/to/peripheral-project" \
+  --output-dir "/path/to/peripheral-project/colmap_gui/iphone13pro_500_4x_comparison/new-timed-run"
+python3 living-room-reconstruction/scripts/summarize_matching_strategy_timing.py \
+  --run-dir "/path/to/peripheral-project/colmap_gui/iphone13pro_500_4x_comparison/new-timed-run" \
+  --colmap-launcher "/path/to/peripheral-project/colmap_gui/run_cuda_colmap.sh"
+```
+
+The runner accepts explicit overrides for the workspace paths, matcher and mapper project files, vocabulary tree, COLMAP launcher, and callback interval. It refuses to overwrite a non-empty run and keeps copied databases and all run outputs in the selected local output directory. The public aggregate audit is `reports/matching_timing.json`; raw images, feature databases, process logs, and model files are not stored in GitHub.

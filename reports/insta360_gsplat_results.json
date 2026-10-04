@@ -1,0 +1,20 @@
+{
+  "updated": "2026-10-04T20:33:03.990720+00:00",
+  "shared_frames": [],
+  "settings": {
+    "version": "1.5.3",
+    "steps": 30000,
+    "data_factor": 1,
+    "batch_size": 1,
+    "packed": true,
+    "sh_degree": 3,
+    "pose_opt": false,
+    "appearance_opt": false,
+    "ssim_lambda": 0.2,
+    "seed": 42,
+    "holdout": "Fixed source frames1,9,...497; SfM used all views. Images are original-derived calibrated undistorted pixels with matching pinhole cameras."
+  },
+  "skipped_components": [],
+  "preview_policy": "Prediction-only browser images resized to at most960px long edge then saved as lossless WebP. Native predictions and complete SH3 PLYs remain local.",
+  "models": {}
+}

@@ -1,0 +1,301 @@
+{
+  "source_run_id": "timed_rerun_20261003_loop_enabled",
+  "updated_at": "2026-10-04T15:55:56.483386+00:00",
+  "settings": {
+    "gsplat": "1.5.3",
+    "steps": 30000,
+    "data_factor": 1,
+    "seed": 42,
+    "batch_size": 1,
+    "sh_degree": 3,
+    "packed": true,
+    "pose_optimization": false,
+    "appearance_optimization": false,
+    "ssim_lambda": 0.2,
+    "input": "Original 4x PNGs and refined OPENCV COLMAP cameras; gsplat parser undistorts without another downsample.",
+    "validation": "Fixed source frames 1,9,17,...,497, excluded from all Gaussian training; cameras/SfM used all registered frames."
+  },
+  "shared_frames": [
+    "frame_0249.png",
+    "frame_0329.png",
+    "frame_0409.png",
+    "frame_0497.png"
+  ],
+  "skipped_components": [
+    {
+      "name": "exhaustive_component_0",
+      "method": "exhaustive",
+      "label": "Exhaustive",
+      "component": "0",
+      "registered_images": 2,
+      "sparse_points": 200,
+      "reason": "Fewer than 10 recovered cameras or 100 sparse points; sparse result retained, insufficient for a reliable gsplat comparison."
+    }
+  ],
+  "common_validation": {
+    "source_run_id": "timed_rerun_20261003_loop_enabled",
+    "frame_count": 32,
+    "frames": [
+      "frame_0249.png",
+      "frame_0257.png",
+      "frame_0265.png",
+      "frame_0273.png",
+      "frame_0281.png",
+      "frame_0289.png",
+      "frame_0297.png",
+      "frame_0305.png",
+      "frame_0313.png",
+      "frame_0321.png",
+      "frame_0329.png",
+      "frame_0337.png",
+      "frame_0345.png",
+      "frame_0353.png",
+      "frame_0361.png",
+      "frame_0369.png",
+      "frame_0377.png",
+      "frame_0385.png",
+      "frame_0393.png",
+      "frame_0401.png",
+      "frame_0409.png",
+      "frame_0417.png",
+      "frame_0425.png",
+      "frame_0433.png",
+      "frame_0441.png",
+      "frame_0449.png",
+      "frame_0457.png",
+      "frame_0465.png",
+      "frame_0473.png",
+      "frame_0481.png",
+      "frame_0489.png",
+      "frame_0497.png"
+    ],
+    "source": "Saved 8-bit validation canvases: source left, prediction right.",
+    "caveat": "Common source-frame set; camera undistortion differs per method. Appearance agreement is not independent geometric accuracy.",
+    "models": {
+      "sequential_no_loop_component_1": {
+        "method": "sequential_no_loop",
+        "frames": 32,
+        "mean": {
+          "psnr": 28.092308282852173,
+          "ssim": 0.9177554324269295,
+          "lpips": 0.1431389581412077
+        }
+      },
+      "sequential_loop_component_0": {
+        "method": "sequential_loop",
+        "frames": 32,
+        "mean": {
+          "psnr": 20.942395597696304,
+          "ssim": 0.8101176423951983,
+          "lpips": 0.37950127269141376
+        }
+      },
+      "exhaustive_component_1": {
+        "method": "exhaustive",
+        "frames": 32,
+        "mean": {
+          "psnr": 20.566183507442474,
+          "ssim": 0.7991466531530023,
+          "lpips": 0.3913013453129679
+        }
+      }
+    }
+  },
+  "models": {
+    "sequential_no_loop_component_1": {
+      "name": "sequential_no_loop_component_1",
+      "method": "sequential_no_loop",
+      "label": "Sequential \u00b7 loop off",
+      "component": "1",
+      "registered_images": 256,
+      "sparse_points": 32322,
+      "primary_component": true,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "complete",
+      "training_images": 224,
+      "validation_images": 32,
+      "steps": 30000,
+      "metrics": {
+        "psnr": 28.078964233398438,
+        "ssim": 0.9184949398040771,
+        "lpips": 0.14684106409549713,
+        "ellipse_time": 0.004597008228302002,
+        "num_GS": 3430406
+      },
+      "seconds": 724.898140216,
+      "elapsed_ns": 724898140216,
+      "gaussian_count": 3430406,
+      "model_bytes": 809577294
+    },
+    "sequential_loop_component_0": {
+      "name": "sequential_loop_component_0",
+      "method": "sequential_loop",
+      "label": "Sequential \u00b7 loop on",
+      "component": "0",
+      "registered_images": 496,
+      "sparse_points": 69847,
+      "primary_component": true,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "complete",
+      "training_images": 435,
+      "validation_images": 61,
+      "steps": 30000,
+      "metrics": {
+        "psnr": 19.587732315063477,
+        "ssim": 0.7766784429550171,
+        "lpips": 0.414704829454422,
+        "ellipse_time": 0.004107033620115186,
+        "num_GS": 3277924
+      },
+      "seconds": 677.863874068,
+      "elapsed_ns": 677863874068,
+      "gaussian_count": 3277924,
+      "model_bytes": 773591542
+    },
+    "exhaustive_component_1": {
+      "name": "exhaustive_component_1",
+      "method": "exhaustive",
+      "label": "Exhaustive",
+      "component": "1",
+      "registered_images": 492,
+      "sparse_points": 76630,
+      "primary_component": true,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "complete",
+      "training_images": 430,
+      "validation_images": 62,
+      "steps": 30000,
+      "metrics": {
+        "psnr": 20.544921875,
+        "ssim": 0.7958029508590698,
+        "lpips": 0.39159923791885376,
+        "ellipse_time": 0.0044599348498928935,
+        "num_GS": 3357036
+      },
+      "seconds": 688.14238543,
+      "elapsed_ns": 688142385430,
+      "gaussian_count": 3357036,
+      "model_bytes": 792261974
+    },
+    "sequential_no_loop_component_2": {
+      "name": "sequential_no_loop_component_2",
+      "method": "sequential_no_loop",
+      "label": "Sequential \u00b7 loop off",
+      "component": "2",
+      "registered_images": 150,
+      "sparse_points": 19241,
+      "primary_component": false,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "running",
+      "training_images": 131,
+      "validation_images": 19,
+      "steps": 30000,
+      "metrics": null,
+      "seconds": null
+    },
+    "sequential_no_loop_component_0": {
+      "name": "sequential_no_loop_component_0",
+      "method": "sequential_no_loop",
+      "label": "Sequential \u00b7 loop off",
+      "component": "0",
+      "registered_images": 77,
+      "sparse_points": 15256,
+      "primary_component": false,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "queued",
+      "training_images": 68,
+      "validation_images": 9,
+      "steps": 30000,
+      "metrics": null,
+      "seconds": null
+    },
+    "sequential_no_loop_component_3": {
+      "name": "sequential_no_loop_component_3",
+      "method": "sequential_no_loop",
+      "label": "Sequential \u00b7 loop off",
+      "component": "3",
+      "registered_images": 30,
+      "sparse_points": 823,
+      "primary_component": false,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "queued",
+      "training_images": 26,
+      "validation_images": 4,
+      "steps": 30000,
+      "metrics": null,
+      "seconds": null
+    },
+    "exhaustive_component_3": {
+      "name": "exhaustive_component_3",
+      "method": "exhaustive",
+      "label": "Exhaustive",
+      "component": "3",
+      "registered_images": 27,
+      "sparse_points": 735,
+      "primary_component": false,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "queued",
+      "training_images": 23,
+      "validation_images": 4,
+      "steps": 30000,
+      "metrics": null,
+      "seconds": null
+    },
+    "exhaustive_component_2": {
+      "name": "exhaustive_component_2",
+      "method": "exhaustive",
+      "label": "Exhaustive",
+      "component": "2",
+      "registered_images": 20,
+      "sparse_points": 1320,
+      "primary_component": false,
+      "undistorted_sizes": [
+        [
+          539,
+          959
+        ]
+      ],
+      "state": "queued",
+      "training_images": 17,
+      "validation_images": 3,
+      "steps": 30000,
+      "metrics": null,
+      "seconds": null
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T21:21:25.764698+00:00",
+  "updated": "2026-10-04T22:25:40.652678+00:00",
   "dataset": {
     "count": 500,
     "exclude_before_seconds": 10.0,
@@ -132,9 +132,9 @@
     "privacy": "Native images, full clouds, meshes and checkpoints remain local. Private Site gets derived previews only."
   },
   "queue": {
-    "state": "running",
-    "started_at": "2026-10-04T20:29:28.757307+00:00",
-    "order": "Sparse both scales;4x dense+gsplat;full undistortion+gsplat;full dense"
+    "state": "failed",
+    "failed_at": "2026-10-04T22:03:19.662524+00:00",
+    "error": "4x/depth_maps failed"
   },
   "scales": {
     "1x": {
@@ -164,24 +164,73 @@
           "exit_code": 0
         },
         "mapping": {
-          "state": "running",
+          "state": "complete",
           "started_at": "2026-10-04T20:48:17.809865+00:00",
-          "device": "CPU"
+          "device": "CPU",
+          "finished_at": "2026-10-04T21:34:58.279136+00:00",
+          "elapsed_ns": 2800469136209,
+          "seconds": 2800.469136209,
+          "exit_code": 0
+        },
+        "bundle_adjustment": {
+          "state": "complete",
+          "started_at": "2026-10-04T21:34:58.279411+00:00",
+          "device": "CPU",
+          "finished_at": "2026-10-04T21:36:05.663883+00:00",
+          "elapsed_ns": 67384331918,
+          "seconds": 67.384331918,
+          "exit_code": 0
         }
       },
-      "selected_model": null,
-      "components": [],
+      "selected_model": 0,
+      "components": [
+        {
+          "id": "0",
+          "kind": "sparse",
+          "registered_images": 500,
+          "total_points": 260369,
+          "substantial": true,
+          "mean_reprojection_error": 1.297525613169547,
+          "displayed_points": 260369,
+          "sampled": false,
+          "render_all": true,
+          "format": "xyz-f32-rgb-u8"
+        }
+      ],
       "sift_keypoints": 4809985,
-      "metrics": {},
+      "metrics": {
+        "registered_images": 500,
+        "points3D": 260369,
+        "mean_reprojection_error": 1.297525613169547,
+        "mean_track_length": 4.751072516313386,
+        "camera_model": "CameraModelId.OPENCV_FISHEYE",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV_FISHEYE",
+            "width": 3840,
+            "height": 2160,
+            "params": "[ 1.30398671e+03  1.38780320e+03  1.92000000e+03  1.08000000e+03\n  1.44299121e-01 -7.03219693e-02  4.74671596e-02 -9.60153424e-03]",
+            "has_prior_focal_length": false
+          }
+        ],
+        "unregistered_images": [],
+        "full_resolution_equivalent_error_px": 1.297525613169547
+      },
       "dense": null,
       "mesh": null,
-      "solver_warning_count": 289,
+      "geometry_quality": {
+        "state": "degenerate_camera_groups_detected",
+        "cameras_with_median_observed_depth_below_1e_minus_5": 34,
+        "warning": "Some camera/point groups collapse to near-zero local depth relative to the overall scene. Registration and reprojection error do not demonstrate physical accuracy; dense processing may fail."
+      },
+      "solver_warning_count": 522,
       "matching_counts": {
         "matched_pairs": 20345,
         "verified_pairs": 10783,
         "verified_inliers": 8249577
       },
-      "registered_union": null
+      "registered_union": 500
     },
     "4x": {
       "label": "4\u00d7 downsample",
@@ -226,6 +275,24 @@
           "elapsed_ns": 11295537318,
           "seconds": 11.295537318,
           "exit_code": 0
+        },
+        "undistortion": {
+          "state": "complete",
+          "started_at": "2026-10-04T21:36:05.664195+00:00",
+          "device": "CPU",
+          "finished_at": "2026-10-04T21:36:11.616356+00:00",
+          "elapsed_ns": 5952004984,
+          "seconds": 5.952004984,
+          "exit_code": 0
+        },
+        "depth_maps": {
+          "state": "failed",
+          "started_at": "2026-10-04T21:36:11.638882+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-04T22:03:19.662159+00:00",
+          "elapsed_ns": 1628022944567,
+          "seconds": 1628.022944567,
+          "exit_code": -6
         }
       },
       "selected_model": 0,
@@ -239,7 +306,8 @@
           "mean_reprojection_error": 1.199882753454637,
           "displayed_points": 112825,
           "sampled": false,
-          "render_all": true
+          "render_all": true,
+          "format": "xyz-f32-rgb-u8"
         }
       ],
       "sift_keypoints": 1218200,
@@ -264,6 +332,11 @@
       },
       "dense": null,
       "mesh": null,
+      "geometry_quality": {
+        "state": "degenerate_camera_groups_detected",
+        "cameras_with_median_observed_depth_below_1e_minus_5": 180,
+        "warning": "Some camera/point groups collapse to near-zero local depth relative to the overall scene. Registration and reprojection error do not demonstrate physical accuracy; dense processing may fail."
+      },
       "solver_warning_count": 54,
       "matching_counts": {
         "matched_pairs": 13167,

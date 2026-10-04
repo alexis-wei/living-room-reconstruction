@@ -10,6 +10,7 @@ from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'insta360_local/gsplat';SITE=ROOT/'living-room-reconstruction/site/dist';ASSETS=SITE/'insta360-assets'
+REPORT=ROOT/'living-room-reconstruction/reports/insta360_gsplat_results.json'
 sys.path.insert(0,str(ROOT/'.gsplat-src/gsplat/examples'))
 from datasets.colmap import Parser
 
@@ -90,7 +91,7 @@ def main():
     aggregate={k:v for k,v in catalog.items() if k not in ['models','local_viewer']}
     aggregate['models']={key:{k:v for k,v in item.items() if k not in ['views','scene_scale']} for key,item in catalog['models'].items()}
     write(SITE/'insta360_gsplat_results.json',aggregate)
-    write(ROOT/'living-room-reconstruction/reports/insta360_gsplat_results.json',aggregate)
+    write(REPORT,aggregate)
     print(json.dumps({key:row['state'] for key,row in catalog['models'].items()}))
 
 if __name__=='__main__':main()

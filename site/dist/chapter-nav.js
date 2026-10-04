@@ -8,6 +8,7 @@
     { id: 5, title: 'Exhaustive vs. sequential', href: 'matching.html' },
     { id: 6, title: 'COLMAP GUI experiments', href: 'gui-experiments.html' },
     { id: 7, title: 'Insta360 X5 · full vs. 4×', href: 'insta360.html' },
+    { id: 8, title: 'Fixing gsplat · full resolution', href: 'fixing-gsplat.html' },
   ];
   const header = document.querySelector('.site-header');
   if (header && !header.querySelector('.always-compare')) {

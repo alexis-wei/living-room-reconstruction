@@ -1,0 +1,111 @@
+{
+  "updated": "2026-10-04T23:32:12.527591+00:00",
+  "queue": {
+    "state": "running",
+    "started_at": "2026-10-04T23:16:08.961217+00:00"
+  },
+  "policy": "Separate screened partial recovery; original 500-view sparse models and all photographs preserved. Intrinsics unchanged; no new BA.",
+  "scales": {
+    "1x": {
+      "label": "Full resolution \u00b7 screened recovery",
+      "input_images": 500,
+      "usable_images": 457,
+      "excluded_images": 43,
+      "criterion": "median positive observed depth < 1e-5 * original camera-radius95, or fewer than100 positive observations",
+      "metrics": {
+        "registered_images": 457,
+        "points3D": 242918,
+        "mean_reprojection_error": 1.3014429444267102,
+        "mean_track_length": 4.77875661745939,
+        "camera_model": "OPENCV_FISHEYE"
+      },
+      "baseline_metrics": {
+        "registered_images": 500,
+        "points3D": 260369,
+        "mean_reprojection_error": 1.297525613169547,
+        "mean_track_length": 4.751072516313386,
+        "camera_model": "CameraModelId.OPENCV_FISHEYE",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV_FISHEYE",
+            "width": 3840,
+            "height": 2160,
+            "params": "[ 1.30398671e+03  1.38780320e+03  1.92000000e+03  1.08000000e+03\n  1.44299121e-01 -7.03219693e-02  4.74671596e-02 -9.60153424e-03]",
+            "has_prior_focal_length": false
+          }
+        ],
+        "unregistered_images": []
+      },
+      "stages": {
+        "undistortion": {
+          "state": "complete",
+          "device": "CPU",
+          "finished_at": "2026-10-04T22:30:22.548261+00:00",
+          "note": "Separate screened recovery images; original baseline unchanged"
+        }
+      },
+      "mvs_validation": {
+        "references": 457,
+        "invalid_bounds": [],
+        "minimum_depth": 0.000616706907749176,
+        "maximum_depth": 36.43776321411133
+      },
+      "dense": null,
+      "mesh": null
+    },
+    "4x": {
+      "label": "4\u00d7 \u00b7 screened recovery",
+      "input_images": 500,
+      "usable_images": 320,
+      "excluded_images": 180,
+      "criterion": "median positive observed depth < 1e-5 * original camera-radius95, or fewer than100 positive observations",
+      "metrics": {
+        "registered_images": 320,
+        "points3D": 67152,
+        "mean_reprojection_error": 1.0643966552635635,
+        "mean_track_length": 5.94379914224446,
+        "camera_model": "OPENCV_FISHEYE"
+      },
+      "baseline_metrics": {
+        "registered_images": 500,
+        "points3D": 112825,
+        "mean_reprojection_error": 1.199882753454637,
+        "mean_track_length": 5.675337912696654,
+        "camera_model": "CameraModelId.OPENCV_FISHEYE",
+        "cameras": [
+          {
+            "camera_id": 1,
+            "model": "CameraModelId.OPENCV_FISHEYE",
+            "width": 960,
+            "height": 540,
+            "params": "[ 3.16926306e+02  3.38208982e+02  4.80000000e+02  2.70000000e+02\n  1.83986103e-01 -1.19276336e-01  7.19649274e-02 -1.38088448e-02]",
+            "has_prior_focal_length": false
+          }
+        ],
+        "unregistered_images": []
+      },
+      "stages": {
+        "undistortion": {
+          "state": "complete",
+          "device": "CPU",
+          "finished_at": "2026-10-04T22:30:22.215423+00:00",
+          "note": "Separate screened recovery images; original baseline unchanged"
+        },
+        "depth_maps": {
+          "state": "running",
+          "started_at": "2026-10-04T23:16:08.977844+00:00",
+          "device": "CUDA"
+        }
+      },
+      "mvs_validation": {
+        "references": 320,
+        "invalid_bounds": [],
+        "minimum_depth": 0.007833883166313171,
+        "maximum_depth": 114.54327392578125
+      },
+      "dense": null,
+      "mesh": null
+    }
+  }
+}

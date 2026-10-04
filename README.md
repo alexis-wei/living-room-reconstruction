@@ -153,6 +153,19 @@ Quality is not approved: a sampled 2x prediction is severely washed out/occluded
 
 All four COLMAP pipelines finished on 2026-09-30. Full-resolution fusion produced 5,486,454 points. Its original 4 GB cache repeatedly reread data without finishing the first reference; the failed attempt log is preserved locally. Retrying with `COLMAP_FUSION_CACHE_GB=12` completed fusion in 22.9 minutes, then meshing completed. No image size or geometry thresholds were changed. The runner now accepts that environment override while retaining a 4 GB default. Final counts are in `reports/results.json`. All five gsplat training runs are also complete; visual-quality caveats above remain unresolved baseline limitations, not execution failures.
 
+### Step 01 final reprojection error comparison — verified 2026-10-04
+
+The Step 01 table reports the largest component's mean reprojection error **after bundle adjustment and observation filtering**, from `sparse_metrics.json`, rather than the earlier mapping values in `models.json`. Reading each saved final model, updating its point errors in memory, and recalculating the COLMAP mean reproduced the saved values to within 1e-9 pixels. No model files were changed and no reconstruction was rerun.
+
+| Input resolution | Registered / 500 | Mean error, input-image px | Full-resolution-equivalent px |
+| --- | ---: | ---: | ---: |
+| Full, 2160 × 3840 | 493 | 1.183460 | 1.183460 |
+| 2× downsample, 1080 × 1920 | 492 | 0.904950 | 1.809900 |
+| 4× downsample, 540 × 960 | 493 | 0.703813 | 2.815251 |
+| 8× downsample, 270 × 480 | 343 | 0.603342 | 4.826738 |
+
+Reprojection error describes the image-plane distance between observed features and projected reconstructed points. The equivalent value multiplies the native error by the downsample factor (1, 2, 4 or 8), putting residuals on the same pixel scale. It does not rescore all models on identical observations: registration, detected features and surviving tracks differ, particularly at 8×. Lower error indicates tighter image fit, not verified room geometry. These measurements do not provide dense-cloud, mesh or physical-dimension error; that would require reference geometry. The exporter retains full numerical precision in `reports/results.json` and records the metric stage and equivalent pixel value.
+
 
 ## Private Gaussian viewer
 

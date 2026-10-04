@@ -48,7 +48,7 @@ document.getElementById('matching-full-reset').onclick=preset;
 document.getElementById('matching-full-fetch').onclick=()=>load(`${catalog.local_viewer}model/${encodeURIComponent(select.value)}.ply`);
 select.onchange=()=>{if(mesh){runtime.scene.remove(mesh);mesh.dispose();mesh=null;}selected();};
 const local=document.body.dataset.localFullViewer==='true';
-fetch(local?'catalog.json':'matching-gsplat/index.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Full-model catalog unavailable.');return r.json();}).then(data=>{
+fetch(local?'catalog.json':(document.body.dataset.fullCatalog||'matching-gsplat/index.json'),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Full-model catalog unavailable.');return r.json();}).then(data=>{
  catalog=data;const entries=Object.entries(data.models).filter(([,m])=>m.state==='complete');
  select.replaceChildren(...entries.map(([key,m])=>new Option(`${m.label} · component ${m.component} · ${m.registered_images} cameras`,key)));
  if(!entries.length){status.textContent='Training is still running. Full models will appear after completion.';return;}

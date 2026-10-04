@@ -17,7 +17,7 @@ function renderExamples(){
   const figure=document.createElement('figure'),a=document.createElement('a'),img=document.createElement('img'),cap=document.createElement('figcaption');
   a.href=item.url;a.target='_blank';a.rel='noopener';a.title=`Open ${item.filename} at ${item.width} × ${item.height}`;
   img.src=item.url;img.alt=`${item.title}, source frame ${item.frame}, ${scale} resolution`;img.width=item.width;img.height=item.height;img.loading='lazy';
-  cap.innerHTML=`<strong>${item.title}</strong><span>${item.filename} · ${item.time_seconds.toFixed(2)}s</span><span>${item.width} × ${item.height} · ${(item.bytes/1e6).toFixed(2)} MB · PNG</span>`;
+  cap.innerHTML=`<strong>${item.title}</strong><span>${item.filename} · ${item.time_seconds.toFixed(2)}s</span><span>${item.width} × ${item.height} · ${(item.bytes/1e6).toFixed(2)} MB · ${item.format||'PNG'}</span>`;
   a.append(img);figure.append(a,cap);return figure;
  }));
 }
@@ -40,7 +40,8 @@ function render(){
  if(s.queue_wait_seconds)measured+=` A separate ${duration(s.queue_wait_seconds)} GPU queue wait is excluded from the processing time.`;
  if(key==='depth_maps' && d.dense_reference_images!=null)measured+=` ${d.dense_reference_images} reference views have stereo sources; ${d.dense_skipped_no_sources} registered views are skipped because no usable source views remain. ${d.geometric_depth_maps_written} geometric depth maps have been written.`;
  el('detail').innerHTML=`<p class="eyebrow">STEP ${String(active+1).padStart(2,'0')} / ${scale.toUpperCase()}</p><h3>${title}</h3><p>${desc}</p><dl><dt>Compute device</dt><dd>${device}</dd><dt>Settings</dt><dd>${settings}</dd><dt>Measured result</dt><dd>${measured}</dd><dt>Local output</dt><dd>reconstruction_local/${scale}/</dd></dl><code>${api}(…)</code>`;
- el('coverage').textContent=d.registered_images==null?'Sparse reconstruction metrics will appear once this resolution finishes camera recovery.':`The largest ${scale} model registers ${d.registered_images} of 500 images (${(d.registered_images/5).toFixed(1)}%). COLMAP returned ${d.components.length} sparse components, including small or degenerate results. Dense processing uses the largest component; this does not establish complete room coverage.`;
+ const inputLabel=scale==='8x'?'8× downsampled inputs (270 × 480 px; the smallest images in this comparison)':`${scale} inputs (${d.width} × ${d.height} px)`;
+ el('coverage').textContent=d.registered_images==null?'Sparse reconstruction metrics will appear once this resolution finishes camera recovery.':`The main ${scale} component—largest by registered-image count, using ${inputLabel}—contains ${d.registered_images} of 500 images (${(d.registered_images/5).toFixed(1)}%). “Largest” means the component with the most registered images, not the highest-resolution input or the most 3D points. COLMAP returned ${d.components.length} sparse components, including small or degenerate results. Dense processing uses the main component; this does not establish complete room coverage.`;
  if(d.dense_skipped_no_sources)el('coverage').textContent+=` Dense stereo skips ${d.dense_skipped_no_sources} registered views with no usable source images, leaving ${d.dense_reference_images} reference views. Camera registration alone does not establish dense coverage.`;
  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scale===scale));
 }

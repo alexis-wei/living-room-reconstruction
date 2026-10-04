@@ -1,0 +1,211 @@
+{
+  "title": "Timed COLMAP matching-strategy rerun",
+  "run_started_local": "2026-10-03T22:33:08-04:00",
+  "colmap_version": "4.2.1",
+  "input": {
+    "frames": 500,
+    "resolution": "4x downsample, 540x960",
+    "camera_model": "OPENCV",
+    "extracted_sift_keypoints": 904554,
+    "pair_records_processed": {
+      "sequential": 3989,
+      "exhaustive": 124750
+    },
+    "feature_extraction_included": false
+  },
+  "measurement": {
+    "clock": "time.perf_counter_ns",
+    "process_start_and_exit_included": true,
+    "database_copy_reset_and_feature_cache_warmup_included": false,
+    "callback_interval_seconds": 10,
+    "single_repeat": true,
+    "matching_gpu": "NVIDIA GeForce RTX 4090, CUDA device 0",
+    "sparse_mapper": "CPU; bundle adjustment GPU disabled; 32 logical CPU threads"
+  },
+  "settings": {
+    "feature_matching_guided": true,
+    "sequential_overlap": 10,
+    "sequential_quadratic_overlap": true,
+    "sequential_loop_detection": false,
+    "exhaustive_block_size": 50,
+    "mapper_multiple_models": true,
+    "mapper_max_models": 50,
+    "mapper_min_model_size": 10,
+    "mapper_refine_focal_length": true,
+    "mapper_refine_distortion": true,
+    "mapper_refine_principal_point": false,
+    "mapper_random_seed": -1
+  },
+  "stage_order": [
+    "sequential_matching",
+    "exhaustive_matching",
+    "sequential_sparse_mapping",
+    "exhaustive_sparse_mapping"
+  ],
+  "timings": {
+    "sequential": {
+      "feature_matching_seconds": 13.549,
+      "sparse_mapping_and_bundle_adjustment_seconds": 169.446,
+      "sum_of_measured_stages_seconds": 182.995
+    },
+    "exhaustive": {
+      "feature_matching_seconds": 52.627,
+      "sparse_mapping_and_bundle_adjustment_seconds": 303.655,
+      "sum_of_measured_stages_seconds": 356.282
+    }
+  },
+  "timed_rerun_output": {
+    "sequential_model_folders": 3,
+    "exhaustive_model_folders": 2,
+    "note": "Mapper random_seed=-1; the rerun components differ from the separate saved models displayed on the Site. The timed rerun did not replace those displayed models."
+  },
+  "limitations": [
+    "One run per method; durations are not averages.",
+    "Stage times include the COLMAP child-process startup and shutdown, but exclude copying/resetting databases, loading cached features, SIFT extraction, and gaps between stages.",
+    "Dense depth maps, fusion, and meshing were not part of the sparse reconstruction timer."
+  ],
+  "three_way_loop_detection_trial": {
+    "run_started_utc": "2026-10-04T03:10:20.072+00:00",
+    "run_finished_utc": "2026-10-04T03:29:26.676+00:00",
+    "input": {
+      "frames": 500,
+      "resolution": "4x downsample, 540x960",
+      "camera_model": "OPENCV",
+      "features_reused": true,
+      "feature_extraction_included": false
+    },
+    "timing_method": "time.perf_counter_ns; raw elapsed nanoseconds saved per stage; 10-second callbacks are progress checkpoints, not reported result values; startup and exit included.",
+    "timings": {
+      "sequential_no_loop": {
+        "feature_matching_seconds": 13.143,
+        "sparse_mapping_and_bundle_adjustment_seconds": 184.879,
+        "sum_of_measured_stages_seconds": 198.022,
+        "feature_matching_ns": 13142793484,
+        "sparse_mapping_and_bundle_adjustment_ns": 184879430137
+      },
+      "sequential_loop_detection": {
+        "feature_matching_seconds": 96.788,
+        "sparse_mapping_and_bundle_adjustment_seconds": 393.999,
+        "sum_of_measured_stages_seconds": 490.787,
+        "feature_matching_ns": 96788104033,
+        "sparse_mapping_and_bundle_adjustment_ns": 393999087888
+      },
+      "exhaustive": {
+        "feature_matching_seconds": 52.144,
+        "sparse_mapping_and_bundle_adjustment_seconds": 405.635,
+        "sum_of_measured_stages_seconds": 457.779,
+        "feature_matching_ns": 52144191160,
+        "sparse_mapping_and_bundle_adjustment_ns": 405635155398
+      }
+    },
+    "matching_and_reconstruction_summary": {
+      "sequential_no_loop": {
+        "pair_records": 3989,
+        "geometric_verification_records": 3989,
+        "geometries_with_inliers": 2012,
+        "inlier_correspondences": 2106324,
+        "model_count": 4,
+        "unique_registered_source_images": 493,
+        "largest_component_registered_images": 256,
+        "sparse_points_summed_across_components": 67642,
+        "components": [
+          {
+            "model": "0",
+            "registered_images": 77,
+            "sparse_points": 15256
+          },
+          {
+            "model": "1",
+            "registered_images": 256,
+            "sparse_points": 32322
+          },
+          {
+            "model": "2",
+            "registered_images": 150,
+            "sparse_points": 19241
+          },
+          {
+            "model": "3",
+            "registered_images": 30,
+            "sparse_points": 823
+          }
+        ]
+      },
+      "sequential_loop": {
+        "pair_records": 5986,
+        "geometric_verification_records": 5986,
+        "geometries_with_inliers": 2870,
+        "inlier_correspondences": 2613754,
+        "model_count": 1,
+        "unique_registered_source_images": 496,
+        "largest_component_registered_images": 496,
+        "sparse_points_summed_across_components": 69847,
+        "components": [
+          {
+            "model": "0",
+            "registered_images": 496,
+            "sparse_points": 69847
+          }
+        ]
+      },
+      "exhaustive": {
+        "pair_records": 124750,
+        "geometric_verification_records": 124750,
+        "geometries_with_inliers": 10964,
+        "inlier_correspondences": 5608900,
+        "model_count": 4,
+        "unique_registered_source_images": 499,
+        "largest_component_registered_images": 492,
+        "sparse_points_summed_across_components": 78885,
+        "components": [
+          {
+            "model": "0",
+            "registered_images": 2,
+            "sparse_points": 200
+          },
+          {
+            "model": "1",
+            "registered_images": 492,
+            "sparse_points": 76630
+          },
+          {
+            "model": "2",
+            "registered_images": 20,
+            "sparse_points": 1320
+          },
+          {
+            "model": "3",
+            "registered_images": 27,
+            "sparse_points": 735
+          }
+        ]
+      }
+    },
+    "settings": {
+      "sequential_overlap": 10,
+      "sequential_quadratic_overlap": true,
+      "loop_detection_on": {
+        "period_images": 10,
+        "retrieval_candidates": 50,
+        "min_index_distance": 0,
+        "nearest_neighbors": 1,
+        "checks": 64,
+        "cached_colmap_flickr_vocabulary_tree": "Flickr 100K / 256K-word"
+      },
+      "exhaustive_block_size": 50,
+      "guided_matching": true,
+      "sift_max_ratio": 0.8,
+      "sift_max_distance": 0.7,
+      "sift_cross_check": true,
+      "matching_gpu": "NVIDIA GeForce RTX 4090, CUDA device 0",
+      "mapper": "incremental mapper; CPU bundle adjustment; all available CPU threads; multiple models enabled"
+    },
+    "limitations": [
+      "One run per method; not an average.",
+      "Feature extraction, database preparation, feature cache warmup, and between-stage gaps are excluded; process startup and exit are included.",
+      "Dense reconstruction stages were not run.",
+      "The exhaustive mapper emitted CHOLMOD/Eigen solver-failure warnings during bundle adjustment even though it exited successfully and saved models."
+    ],
+    "outputs_note": "All copied databases, logs, and full sparse models remain in the local project workspace and are excluded from this public repository."
+  }
+}

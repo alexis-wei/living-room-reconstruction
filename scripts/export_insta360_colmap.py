@@ -1,4 +1,4 @@
-"""Export aggregate X5 results and explicitly sampled PRIVATE cloud previews."""
+"""Export aggregate X5 results and complete sparse clouds and sampled PRIVATE dense previews."""
 from pathlib import Path
 import datetime, gzip, json, sqlite3
 import numpy as np
@@ -8,7 +8,7 @@ from export_viewer import read_ply
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'insta360_local';SITE=ROOT/'living-room-reconstruction/site/dist'
 ASSETS=SITE/'insta360-assets'
-SPARSE_LIMIT,DENSE_LIMIT=25000,15000
+SPARSE_LIMIT,DENSE_LIMIT=None,15000
 
 def load(path,default=None):return json.loads(path.read_text()) if path.exists() else default
 def ply_counts(path):
@@ -25,7 +25,7 @@ def write(path,data):
 
 def cloud(key,xyz,rgb,cameras,limit):
     n=len(xyz);assert n and np.isfinite(xyz).all()
-    ix=np.linspace(0,n-1,min(n,limit),dtype=np.int64)
+    ix=np.arange(n,dtype=np.int64) if limit is None else np.linspace(0,n-1,min(n,limit),dtype=np.int64)
     center=np.median(xyz,axis=0);radius=max(float(np.percentile(np.linalg.norm(xyz-center,axis=1),95)),1e-6)
     packed=np.column_stack(((xyz[ix]-center)/radius,rgb[ix]/255)).astype('<f4')
     assert np.isfinite(packed).all()

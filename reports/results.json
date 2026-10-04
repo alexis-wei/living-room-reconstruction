@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-30T11:18:14.181203+00:00",
+  "updated": "2026-10-04T17:56:51.616178+00:00",
   "gpu": "NVIDIA GeForce RTX 4090",
   "vram_gb": 24,
   "pycolmap": "4.2.1",
@@ -11,6 +11,7 @@
       "height": 3840,
       "count": 500,
       "bytes": 3033797562,
+      "sift_keypoints": 4164392,
       "stages": {
         "features": {
           "state": "complete",
@@ -89,6 +90,8 @@
         "vertex": 705730,
         "face": 1357488
       },
+      "mean_reprojection_error_full_resolution_px": 1.1834603070261942,
+      "reprojection_error_stage": "after_bundle_adjustment_and_filtering",
       "dense_reference_images": 493,
       "dense_skipped_no_sources": 0,
       "geometric_depth_maps_written": 493
@@ -99,6 +102,7 @@
       "height": 1920,
       "count": 500,
       "bytes": 1118536293,
+      "sift_keypoints": 2551407,
       "stages": {
         "features": {
           "state": "complete",
@@ -182,6 +186,8 @@
         "vertex": 539015,
         "face": 1031744
       },
+      "mean_reprojection_error_full_resolution_px": 1.8098999537024318,
+      "reprojection_error_stage": "after_bundle_adjustment_and_filtering",
       "dense_reference_images": 458,
       "dense_skipped_no_sources": 34,
       "geometric_depth_maps_written": 458
@@ -192,6 +198,7 @@
       "height": 960,
       "count": 500,
       "bytes": 324530435,
+      "sift_keypoints": 904898,
       "stages": {
         "features": {
           "state": "complete",
@@ -281,6 +288,8 @@
         "vertex": 364086,
         "face": 692323
       },
+      "mean_reprojection_error_full_resolution_px": 2.815251457043865,
+      "reprojection_error_stage": "after_bundle_adjustment_and_filtering",
       "dense_reference_images": 493,
       "dense_skipped_no_sources": 0,
       "geometric_depth_maps_written": 493
@@ -291,6 +300,7 @@
       "height": 480,
       "count": 500,
       "bytes": 91224727,
+      "sift_keypoints": 282901,
       "stages": {
         "features": {
           "state": "complete",
@@ -392,6 +402,8 @@
         "vertex": 102548,
         "face": 189950
       },
+      "mean_reprojection_error_full_resolution_px": 4.826738135084174,
+      "reprojection_error_stage": "after_bundle_adjustment_and_filtering",
       "dense_reference_images": 343,
       "dense_skipped_no_sources": 0,
       "geometric_depth_maps_written": 343

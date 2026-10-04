@@ -1,6 +1,6 @@
 {
   "source_run_id": "timed_rerun_20261003_loop_enabled",
-  "updated_at": "2026-10-04T15:55:56.483386+00:00",
+  "updated_at": "2026-10-04T17:13:14.768814+00:00",
   "settings": {
     "gsplat": "1.5.3",
     "steps": 30000,
@@ -130,6 +130,8 @@
       "seconds": 724.898140216,
       "elapsed_ns": 724898140216,
       "gaussian_count": 3430406,
+      "trained_gaussian_count": 3430406,
+      "excluded_invalid_gaussians": 0,
       "model_bytes": 809577294
     },
     "sequential_loop_component_0": {
@@ -160,6 +162,8 @@
       "seconds": 677.863874068,
       "elapsed_ns": 677863874068,
       "gaussian_count": 3277924,
+      "trained_gaussian_count": 3277924,
+      "excluded_invalid_gaussians": 0,
       "model_bytes": 773591542
     },
     "exhaustive_component_1": {
@@ -190,6 +194,8 @@
       "seconds": 688.14238543,
       "elapsed_ns": 688142385430,
       "gaussian_count": 3357036,
+      "trained_gaussian_count": 3357036,
+      "excluded_invalid_gaussians": 0,
       "model_bytes": 792261974
     },
     "sequential_no_loop_component_2": {
@@ -206,12 +212,23 @@
           959
         ]
       ],
-      "state": "running",
+      "state": "complete",
       "training_images": 131,
       "validation_images": 19,
       "steps": 30000,
-      "metrics": null,
-      "seconds": null
+      "metrics": {
+        "psnr": 28.029760360717773,
+        "ssim": 0.9126337766647339,
+        "lpips": 0.1302042305469513,
+        "ellipse_time": 0.006141047728689094,
+        "num_GS": 4779697
+      },
+      "seconds": 994.044605493,
+      "elapsed_ns": 994044605493,
+      "gaussian_count": 4779697,
+      "trained_gaussian_count": 4779697,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 1128009970
     },
     "sequential_no_loop_component_0": {
       "name": "sequential_no_loop_component_0",
@@ -227,12 +244,23 @@
           959
         ]
       ],
-      "state": "queued",
+      "state": "complete",
       "training_images": 68,
       "validation_images": 9,
       "steps": 30000,
-      "metrics": null,
-      "seconds": null
+      "metrics": {
+        "psnr": 22.981033325195312,
+        "ssim": 0.8363470435142517,
+        "lpips": 0.20943287014961243,
+        "ellipse_time": 0.00813452402750651,
+        "num_GS": 6181200
+      },
+      "seconds": 1261.870877321,
+      "elapsed_ns": 1261870877321,
+      "gaussian_count": 6181200,
+      "trained_gaussian_count": 6181200,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 1458764678
     },
     "sequential_no_loop_component_3": {
       "name": "sequential_no_loop_component_3",
@@ -248,12 +276,23 @@
           959
         ]
       ],
-      "state": "queued",
+      "state": "complete",
       "training_images": 26,
       "validation_images": 4,
       "steps": 30000,
-      "metrics": null,
-      "seconds": null
+      "metrics": {
+        "psnr": 10.378314971923828,
+        "ssim": 0.5359264612197876,
+        "lpips": 0.6909971237182617,
+        "ellipse_time": 0.0036875009536743164,
+        "num_GS": 2413974
+      },
+      "seconds": 503.79736053,
+      "elapsed_ns": 503797360530,
+      "gaussian_count": 2413974,
+      "trained_gaussian_count": 2413974,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 569699342
     },
     "exhaustive_component_3": {
       "name": "exhaustive_component_3",
@@ -269,12 +308,23 @@
           959
         ]
       ],
-      "state": "queued",
+      "state": "complete",
       "training_images": 23,
       "validation_images": 4,
       "steps": 30000,
-      "metrics": null,
-      "seconds": null
+      "metrics": {
+        "psnr": 14.815977096557617,
+        "ssim": 0.6789487600326538,
+        "lpips": 0.45497530698776245,
+        "ellipse_time": 0.00522536039352417,
+        "num_GS": 1214448
+      },
+      "seconds": 412.526292627,
+      "elapsed_ns": 412526292627,
+      "gaussian_count": 1214328,
+      "trained_gaussian_count": 1214448,
+      "excluded_invalid_gaussians": 120,
+      "model_bytes": 286582886
     },
     "exhaustive_component_2": {
       "name": "exhaustive_component_2",
@@ -290,12 +340,23 @@
           959
         ]
       ],
-      "state": "queued",
+      "state": "complete",
       "training_images": 17,
       "validation_images": 3,
       "steps": 30000,
-      "metrics": null,
-      "seconds": null
+      "metrics": {
+        "psnr": 14.479995727539062,
+        "ssim": 0.5415658950805664,
+        "lpips": 0.505725085735321,
+        "ellipse_time": 0.003938039143880208,
+        "num_GS": 1228458
+      },
+      "seconds": 516.019219587,
+      "elapsed_ns": 516019219587,
+      "gaussian_count": 1228458,
+      "trained_gaussian_count": 1228458,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 289917566
     }
   }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="A seven-chapter record of living-room reconstruction experiments using COLMAP and gsplat.">
+<meta name="description" content="An experimental record of living-room reconstruction experiments using COLMAP and gsplat.">
 <title>Contents · Living Room Reconstruction Lab</title><link rel="stylesheet" href="style.css">
 </head>
 <body class="contents-page">
@@ -11,7 +11,7 @@
 <p class="journal-line">COMPUTATIONAL RECONSTRUCTION STUDY <span>·</span> PROJECT NOTEBOOK</p>
 <h1>Living-Room Reconstruction</h1>
 <p class="contents-subtitle">An experimental record of image sampling, camera assumptions, feature matching, and 3D reconstruction.</p>
-<div class="contents-meta"><span>Seven chapters + comparison tool</span><span>COLMAP · gsplat · iPhone 13 Pro / Insta360 X5</span><span>RTX 4090 used for CUDA stages</span></div>
+<div class="contents-meta"><span>Experiment chapters + comparison tool</span><span>COLMAP · gsplat · iPhone 13 Pro / Insta360 X5</span><span>RTX 4090 used for CUDA stages</span></div>
 <section class="contents-section" aria-labelledby="contents-heading"><div class="contents-heading"><h2 id="contents-heading">Contents</h2><span>SELECT A CHAPTER TO BEGIN</span></div>
 <ol class="contents-list">
 <li><a href="compare.html"><span class="toc-number">00</span><span class="toc-copy"><strong>Compare any two results</strong><small>An always-accessible selector for two COLMAP clouds or gsplat models from across the study.</small></span><span class="toc-state">Comparison tool</span><span class="toc-arrow">↗</span></a></li>
@@ -22,6 +22,7 @@
 <li><a href="matching.html"><span class="toc-number">05</span><span class="toc-copy"><strong>Exhaustive versus sequential matching</strong><small>A 500-frame comparison with shared SIFT features and the same iPhone-aware OPENCV starting estimate. Compare the newest exhaustive, sequential loop-off, and sequential loop-on results: all nine sparse models, camera coverage, gaps, and measured matching and mapping times.</small></span><span class="toc-state">Sparse results available</span><span class="toc-arrow">↗</span></a></li>
 <li><a href="gui-experiments.html"><span class="toc-number">06</span><span class="toc-copy"><strong>COLMAP GUI experiment notebook</strong><small>Manual resolution tests: feature counts for each of the 500 images, distributions at full, 2×, 4×, and 8× resolution, and the average features per image.</small></span><span class="toc-state">Feature detection study</span><span class="toc-arrow">↗</span></a></li>
 <li><a href="insta360.html"><span class="toc-number">07</span><span class="toc-copy"><strong>Insta360 X5: a new wide-angle capture</strong><small>500 frames after a ten-second trim, native and 4× resolutions, estimated OPENCV_FISHEYE cameras, COLMAP clouds, gsplat models, timings and comparison charts.</small></span><span class="toc-state">New experiment</span><span class="toc-arrow">↗</span></a></li>
+<li><a href="fixing-gsplat.html"><span class="toc-number">08</span><span class="toc-copy"><strong>Fixing gsplat: full-resolution camera cleanup</strong><small>Exclude poorly supported camera poses, retrain at native resolution, and compare the same held-out views with the original model.</small></span><span class="toc-state">Before / after results</span><span class="toc-arrow">↗</span></a></li>
 </ol>
 </section>
 <aside class="contents-note"><strong>Reading this study.</strong> Chapters are ordered by how the experiments developed, but each can be opened directly. Once inside a chapter, use Previous, Next, or the chapter selector to move through the sequence. Original photographs and complete reconstruction files stay local; the private site serves selected examples and derived previews.</aside>

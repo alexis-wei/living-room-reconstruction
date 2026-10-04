@@ -254,7 +254,7 @@ All five requested 4× experiments completed sparse reconstruction, bundle adjus
 | iphone13pro_4x | 1,748,593 |
 | iphone13pro_1000_4x | 2,814,652 |
 
-Private comparison pages include every requested sparse point and labeled dense previews (40,000 points each; the final 1,000-frame OPENCV preview uses 30,000 to fit the hosting archive limit). Full models, photographs and depth maps remain local; public GitHub contains only code and aggregate results. OPENCV intrinsics remain estimated, not measured factory calibration. Point count alone is not a geometric accuracy metric. Original four-scale COLMAP and five gsplat results are preserved. New gsplat experiments have not started because the photograph-resolution comparison choice remains pending.
+Private comparison pages include every requested sparse point and labeled dense previews (40,000 points each; the final 1,000-frame OPENCV preview uses 30,000 to fit the hosting archive limit). Full models, photographs and depth maps remain local; public GitHub contains only code and aggregate results. OPENCV intrinsics remain estimated, not measured factory calibration. Point count alone is not a geometric accuracy metric. Original four-scale COLMAP and five gsplat results are preserved. The source-photograph-resolution comparison remains pending; the later 4× matching-strategy gsplat experiment is documented under Attempt 05.
 
 
 ## Attempt 04 — sequential vocabulary-tree loop detection timing (2026-10-03)
@@ -298,15 +298,15 @@ Step 05 adds photo-supervised gsplat reconstructions for sequential matching wit
 
 Each disconnected component has its own coordinate system and is trained independently. Eight components have at least ten cameras and 100 sparse points; all eight are included in the queue. The exhaustive two-camera/200-point fragment remains available in the COLMAP viewer but is too small for a reliable Gaussian comparison and is explicitly excluded. Main components are trained first, followed by smaller fragments.
 
-The recipe is the pinned gsplat 1.5.3 official `examples/simple_trainer.py` default strategy: 30,000 steps, seed 42, batch size 1, packed CUDA rasterization, SH degree 3, 0.8 L1 + 0.2 SSIM loss, and no camera-pose or appearance optimization. Evaluation and checkpoints occur at 7,000 and 30,000 steps; a full SH3 PLY is saved at 30,000. `data_factor=1` means no additional image reduction. The parser undistorts the OPENCV input and removes one border pixel, giving 539×959 training views. GPU jobs run serially on the local RTX 4090, without closing desktop COLMAP windows. The settings are held constant across methods; they are not tuned separately to favor a result.
+The recipe is the pinned gsplat 1.5.3 official `examples/simple_trainer.py` default strategy: 30,000 steps, seed 42, batch size 1, packed CUDA rasterization, SH degree 3, 0.8 L1 + 0.2 SSIM loss, and no camera-pose or appearance optimization. Evaluation and checkpoints occur at 7,000 and 30,000 steps; a full SH3 PLY is saved at 30,000. `data_factor=1` means no additional image reduction. The parser undistorts the OPENCV input and removes one border pixel, giving 539×959 training views. GPU jobs run serially on the local RTX 4090, without closing desktop COLMAP windows. The settings are held constant across methods; they are not tuned separately to favor a result. This is a fixed-step comparison, not equal epochs: the three main training sets receive about 134, 69 and 70 image updates per view on average. Smaller components receive more updates per photograph, which also limits conclusions about geometric quality.
 
 Source frames 1, 9, 17, …, 497 are excluded from Gaussian fitting in every component. The main no-loop, loop-on, and exhaustive components use 224/32, 435/61, and 430/62 training/validation images respectively. Thirty-two validation frames are shared by all three main components. COLMAP camera estimation and sparse initialization already used these images, so this evaluates held-out appearance, not independent geometric accuracy.
 
-The private page provides paired method/component selectors and four same-frame predictions from the full SH3 models (frames 249, 329, 409 and 497). Smaller components provide two viewpoints each. Native prediction pixels are preserved in lossless WebP; the source-photo half of the trainer's validation canvas is not uploaded. Metrics are shown for every component with their different validation subsets disclosed. A second comparison recalculates PSNR, SSIM and AlexNet LPIPS on all 32 shared frames from the saved 8-bit canvases, CPU only. Each method uses its own camera undistortion, which still limits exact cross-method comparability. These metrics measure image agreement and do not establish correct room geometry.
+The private page provides paired method/component selectors and four same-frame predictions from the full SH3 models (frames 249, 329, 409 and 497). Smaller components provide at least two viewpoints each; their saved frame IDs are also rendered in the main models wherever those frames were recovered, allowing the couch and other fragments to be compared directly. The shared-frame selector updates for the chosen pair. Native prediction pixels are preserved in lossless WebP; the source-photo half of the trainer's validation canvas is not uploaded. Metrics are shown for every component with their different validation subsets disclosed. A second comparison recalculates PSNR, SSIM and AlexNet LPIPS on all 32 shared frames from the saved 8-bit canvases, CPU only. Each method uses its own camera undistortion, which still limits exact cross-method comparability. These metrics measure image agreement and do not establish correct room geometry.
 
 Measured training durations use `time.perf_counter_ns` around each complete trainer process, including startup, evaluation and saving. Raw nanoseconds and unrounded seconds remain in the aggregate report; the page displays milliseconds. This is separate from the earlier matching/mapping timers. Saved checkpoints, configuration files, logs, validation canvases and full PLYs are retained locally in `gsplat_local/matching_20261003` and are excluded from public GitHub.
 
-Full 3D viewing loads every trained Gaussian and SH3 coefficients directly from this computer through the loopback viewer, or from a local PLY selected in the browser. The private Site's “Explore a full trained model in 3D” control uses this local viewer; no full PLY is hosted or uploaded. WebGL2 and enough browser memory are required (the main models contain millions of Gaussians). If local-network loading is blocked, open the local-viewer link or choose the corresponding PLY. Start or restart the server with:
+Full 3D viewing loads every valid exported Gaussian and SH3 coefficients directly from this computer through the loopback viewer, or from a local PLY selected in the browser. The private Site's “Explore a full trained model in 3D” control uses this local viewer; no full PLY is hosted or uploaded. WebGL2 and enough browser memory are required (the main models contain millions of Gaussians). If local-network loading is blocked, open the local-viewer link or choose the corresponding PLY. Start or restart the server with:
 
 ```bash
 python3 living-room-reconstruction/scripts/serve_matching_gsplat.py
@@ -323,3 +323,21 @@ It listens only at `http://127.0.0.1:8790/`, serves a restricted completed-model
 The queue lock prevents duplicate training; completed jobs are retained and skipped. Failed outputs must be preserved before a retry. `reports/matching_gsplat_results.json` contains the current aggregate results and settings. The original photograph-resolution comparison question remains separate from this authorized 4× matching experiment.
 
 To stay within the private Site's archive limit, twenty existing prediction renders and sixteen previously authorized source-example browser copies were converted from PNG to pixel-verified lossless WebP. Native PNG masters, image dimensions, all baseline Gaussian geometry and all COLMAP point-cloud assets remain unchanged. Only code and aggregate reports are published to public GitHub; all new rendered images stay on the owner-private Site. Official workflow: [gsplat COLMAP capture trainer](https://docs.gsplat.studio/main/examples/colmap.html).
+
+
+### Completed matching-strategy gsplat runs
+
+| Method / component | Recovered cameras | Exported / trained Gaussians | Validation PSNR | Complete process time |
+| --- | ---: | ---: | ---: | ---: |
+| Sequential · loop off / 1 | 256 | 3,430,406 | 28.079 | 724.898 s |
+| Sequential · loop on / 0 | 496 | 3,277,924 | 19.588 | 677.864 s |
+| Exhaustive / 1 | 492 | 3,357,036 | 20.545 | 688.142 s |
+| Sequential · loop off / 2 | 150 | 4,779,697 | 28.030 | 994.045 s |
+| Sequential · loop off / 0 | 77 | 6,181,200 | 22.981 | 1261.871 s |
+| Sequential · loop off / 3 | 30 | 2,413,974 | 10.378 | 503.797 s |
+| Exhaustive / 3 | 27 | 1,214,328 / 1,214,448 | 14.816 | 412.526 s |
+| Exhaustive / 2 | 20 | 1,228,458 | 14.480 | 516.019 s |
+
+All eight runs completed and retain their original checkpoints and full valid SH3 PLY exports locally, without sampling. The 27-camera exhaustive fragment had 120 non-finite scale rows in its checkpoint; gsplat’s standard exporter omitted those rows (1,214,328 valid exported vs 1,214,448 trained entries). The raw checkpoint remains intact. All eight PLYs were validated for exact vertex/file sizes and finite float values; all 41 hosted renders match the native prediction pixels exactly.
+
+Four models are disconnected sequential loop-off components; three belong to exhaustive matching; loop-on has one. Scores above cover each component’s validation set. The common 32-frame main-model scores are recorded separately in the aggregate report and on Step 05. Tiny or fragmented models can have poor appearance agreement despite containing many Gaussians; they remain visible for inspecting gaps.

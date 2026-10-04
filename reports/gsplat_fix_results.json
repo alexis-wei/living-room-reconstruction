@@ -1,0 +1,154 @@
+{
+  "updated_at": "2026-10-04T22:34:30.537873+00:00",
+  "state": "complete",
+  "shared_frames": [
+    "frame_0001.png",
+    "frame_0162.png",
+    "frame_0324.png",
+    "frame_0492.png"
+  ],
+  "cleanup": {
+    "original_registered_images": 493,
+    "retained_images": 487,
+    "removed_cameras": [
+      {
+        "frame": "frame_0227.png",
+        "point_observations": 8,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations"
+        ]
+      },
+      {
+        "frame": "frame_0228.png",
+        "point_observations": 9,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations"
+        ]
+      },
+      {
+        "frame": "frame_0229.png",
+        "point_observations": 9,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations"
+        ]
+      },
+      {
+        "frame": "frame_0230.png",
+        "point_observations": 6,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations",
+          "camera radius exceeds five times the median radius"
+        ]
+      },
+      {
+        "frame": "frame_0232.png",
+        "point_observations": 3,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations"
+        ]
+      },
+      {
+        "frame": "frame_0243.png",
+        "point_observations": 7,
+        "reasons": [
+          "fewer than 20 surviving sparse-point observations"
+        ]
+      }
+    ],
+    "original_sparse_points": 283276,
+    "retained_sparse_points": 283245,
+    "policy": {
+      "min_point_observations": 20,
+      "max_radius_over_median": 5,
+      "support_counted_before_deletions": true,
+      "point_handling": "COLMAP removes deleted-image observations and points that lose sufficient track support",
+      "intrinsics": "Original undistorted PINHOLE intrinsics unchanged; estimated SIMPLE_RADIAL calibration upstream",
+      "photos": "Same native-resolution undistorted PNGs; data_factor=1",
+      "comparison": "Same 62 original validation views and seed 42. Only camera/track cleanup changes the inputs; default trainer settings retained."
+    }
+  },
+  "settings": {
+    "steps": 30000,
+    "gsplat": "1.5.3",
+    "seed": 42,
+    "data_factor": 1,
+    "batch_size": 1,
+    "packed": true,
+    "sh_degree": 3,
+    "pose_optimization": false,
+    "appearance_optimization": false,
+    "ssim_lambda": 0.2,
+    "refine_start": 500,
+    "refine_stop": 15000,
+    "refine_every": 100,
+    "grow_grad2d": 0.0002,
+    "grow_scale3d": 0.01,
+    "prune_scale3d": 0.1,
+    "prune_opacity": 0.005,
+    "absgrad": false,
+    "gpu": "RTX 4090 CUDA",
+    "comparison": "Same native 2126\u00d73781 undistorted photographs and the same 62 original held-out views. Training removed six unreliable cameras and 31 sparse points. Intrinsics, retained poses, seed and trainer configuration unchanged."
+  },
+  "validation": {
+    "passed": true,
+    "checked_at": "2026-10-04T22:31:56.314911+00:00",
+    "checks": 284,
+    "errors": 0,
+    "warnings": 0,
+    "held_out_views": 62,
+    "native_prediction_dimensions": [
+      2126,
+      3781
+    ],
+    "original_inputs_unchanged": true,
+    "scope": "Checkpoint and full SH3 PLY integrity; every native held-out canvas and exact original source-frame identity. No surveyed geometric ground truth."
+  },
+  "models": {
+    "original": {
+      "label": "Original full resolution",
+      "component": 0,
+      "state": "complete",
+      "registered_images": 493,
+      "training_images": 431,
+      "validation_images": 62,
+      "steps": 30000,
+      "seconds": 1722.47,
+      "metrics": {
+        "psnr": 13.176762580871582,
+        "ssim": 0.7689108848571777,
+        "lpips": 0.6012338995933533,
+        "ellipse_time": 0.01204677935569517,
+        "num_GS": 343663
+      },
+      "gaussian_count": 343663,
+      "trained_gaussian_count": 343663,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 81105945,
+      "scene_scale": 19.68099837637107,
+      "trainer_scene_scale": 21.649098214008177
+    },
+    "full_resolution_cleaned": {
+      "label": "Full resolution \u00b7 cleaned cameras",
+      "component": 0,
+      "state": "complete",
+      "registered_images": 487,
+      "training_images": 425,
+      "validation_images": 62,
+      "steps": 30000,
+      "seconds": 1701.8677089,
+      "metrics": {
+        "psnr": 15.53478717803955,
+        "ssim": 0.7694727182388306,
+        "lpips": 0.5254483222961426,
+        "ellipse_time": 0.008868405895848428,
+        "num_GS": 1355457
+      },
+      "gaussian_count": 1355457,
+      "trained_gaussian_count": 1355457,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 319889330,
+      "scene_scale": 2.251310524573236,
+      "trainer_scene_scale": 2.47644157703056
+    }
+  }
+}

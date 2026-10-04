@@ -49,3 +49,8 @@ site/dist/matching-gsplat/
 
 # Local frame-count and focused-area experiments
 experiments_local/
+
+# Insta360 source frames and private reconstructions/previews
+insta360_frames_500/
+insta360_local/
+site/dist/insta360-assets/

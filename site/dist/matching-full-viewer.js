@@ -24,7 +24,7 @@ async function load(source,fileName){
  if(busy)return;busy=true;
  select.disabled=true;document.getElementById('matching-full-fetch').disabled=true;document.getElementById('matching-full-file').disabled=true;
  try{
-  init();status.textContent='Loading the full local PLY; all trained Gaussians and SH3 appearance are retained.';
+  init();status.textContent='Loading the full local PLY; all valid exported Gaussians and SH3 appearance are retained without sampling.';
   if(mesh){runtime.scene.remove(mesh);mesh.dispose();mesh=null;}
   const options=typeof source==='string'?{url:source,maxSh:3}:{fileBytes:new Uint8Array(source),fileName,maxSh:3};
   const next=new SplatMesh(options);await next.initialized;mesh=next;runtime.scene.add(mesh);preset();
@@ -34,13 +34,14 @@ async function load(source,fileName){
 function selected(){
  const m=catalog.models[select.value],a=document.getElementById('matching-full-local');
  a.href=`${catalog.local_viewer}?model=${encodeURIComponent(select.value)}`;
- document.getElementById('matching-full-count').textContent=m.gaussian_count?`${m.gaussian_count.toLocaleString()} trained Gaussians · full model ${(m.model_bytes/1e6).toFixed(1)} MB · retained locally`:`${m.label} · ${m.state}`;
+ document.getElementById('matching-full-count').textContent=m.gaussian_count?`${m.gaussian_count.toLocaleString()} valid exported Gaussians${m.excluded_invalid_gaussians?` · ${m.excluded_invalid_gaussians} non-finite rows omitted by gsplat`:''} · full model ${(m.model_bytes/1e6).toFixed(1)} MB · retained locally`:`${m.label} · ${m.state}`;
  status.textContent='Load the full model from this computer, open the local viewer, or choose its PLY file below. Files stay on this computer and are not uploaded.';
 }
 document.getElementById('matching-full-file').onchange=async event=>{
  const file=event.target.files[0];if(!file)return;
  const header=await file.slice(0,8192).text();const count=Number(header.match(/element vertex (\d+)/)?.[1]);
  if(count!==catalog.models[select.value].gaussian_count){status.textContent='This PLY point count does not match the selected trained component. Choose the matching component first.';return;}
+ try{init();}catch(error){status.textContent=error.message;return;}
  await load(await file.arrayBuffer(),file.name);
 };
 document.getElementById('matching-full-reset').onclick=preset;
@@ -51,6 +52,6 @@ fetch(local?'catalog.json':'matching-gsplat/index.json',{cache:'no-store'}).then
  catalog=data;const entries=Object.entries(data.models).filter(([,m])=>m.state==='complete');
  select.replaceChildren(...entries.map(([key,m])=>new Option(`${m.label} · component ${m.component} · ${m.registered_images} cameras`,key)));
  if(!entries.length){status.textContent='Training is still running. Full models will appear after completion.';return;}
- const requested=new URLSearchParams(location.search).get('model');if(entries.some(([key])=>key===requested))select.value=requested;selected();
+ const requested=new URLSearchParams(location.search).get('model')||'sequential_no_loop_component_2';if(entries.some(([key])=>key===requested))select.value=requested;selected();
  if(local){document.getElementById('matching-full-local').hidden=true;load(`model/${encodeURIComponent(select.value)}.ply`);select.onchange=()=>{selected();load(`model/${encodeURIComponent(select.value)}.ply`);};}
 }).catch(error=>{status.textContent=error.message;});

@@ -10,6 +10,7 @@ const stages=[
 ];
 let report,examples,scale='1x',active=0;
 const el=id=>document.getElementById(id),fmt=n=>n==null?'—':n.toLocaleString(),duration=s=>s==null?'Not finished':s<60?`${s.toFixed(1)} seconds`:`${(s/60).toFixed(1)} minutes`;
+const pixelError=n=>Number.isFinite(n)?n.toFixed(6):'—';
 function renderExamples(){
  if(!examples)return;
  const items=examples.scales[scale];el('examples-scale').textContent=`${scale==='1x'?'FULL RESOLUTION':scale.toUpperCase()+' DOWNSAMPLE'} · ${items[0].width} × ${items[0].height}`;
@@ -31,7 +32,7 @@ function render(){
  let measured='This stage has not completed.';
  if(s.state==='complete'){
   measured=`Completed in ${duration(s.seconds)}.`;
-  if(['mapping','bundle_adjustment'].includes(key))measured+=` Largest component: ${fmt(d.registered_images)} registered images and ${fmt(d.points3D)} sparse points. Mean reprojection error: ${d.mean_reprojection_error?.toFixed(3)??'—'} pixels.`;
+  if(['mapping','bundle_adjustment'].includes(key))measured+=` Final refined largest component: ${fmt(d.registered_images)} registered images and ${fmt(d.points3D)} sparse points. Mean reprojection error after bundle adjustment and filtering: ${pixelError(d.mean_reprojection_error)} input-image pixels (${pixelError(d.mean_reprojection_error_full_resolution_px)} full-resolution-equivalent pixels).`;
   if(key==='fusion')measured+=` Fused vertices: ${fmt(d.fused?.vertex)}.`;
   if(key==='mesh')measured+=` Mesh: ${fmt(d.mesh?.vertex)} vertices, ${fmt(d.mesh?.face)} faces.`;
  }else if(s.state==='running')measured='Running at the time of this report snapshot. The page does not stream live progress.';
@@ -47,7 +48,7 @@ function render(){
 }
 fetch('results.json').then(r=>{if(!r.ok)throw Error('Report unavailable');return r.json()}).then(data=>{
  report=data;el('updated').textContent=`Snapshot: ${new Date(data.updated).toLocaleString()}`;
- el('folders').innerHTML=Object.entries(data.scales).map(([k,d])=>`<tr><td><b>${k==='1x'?'Full resolution':k+' downsample'}</b></td><td>${d.folder}</td><td>${d.width} × ${d.height}</td><td>${(d.width*d.height/1e6).toFixed(2)} MP</td><td>${(d.bytes/1e9).toFixed(2)} GB</td></tr>`).join('');
+ el('folders').innerHTML=Object.entries(data.scales).map(([k,d])=>`<tr><td><b>${k==='1x'?'Full resolution':k+' downsample'}</b></td><td>${d.folder}</td><td>${d.width} × ${d.height}</td><td>${(d.width*d.height/1e6).toFixed(2)} MP</td><td>${(d.bytes/1e9).toFixed(2)} GB</td><td>${pixelError(d.mean_reprojection_error)}</td><td>${pixelError(d.mean_reprojection_error_full_resolution_px)}</td></tr>`).join('');
  if(data.repo_url){el('repo-link').href=data.repo_url;el('repo-link').hidden=false}
  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{scale=b.dataset.scale;render()});render();
 }).catch(e=>{el('updated').textContent='Unable to load results. Open this report through its web server.';console.error(e)});

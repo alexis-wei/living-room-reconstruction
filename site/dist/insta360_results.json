@@ -1,0 +1,204 @@
+{
+  "updated": "2026-10-04T20:39:46.256546+00:00",
+  "dataset": {
+    "count": 500,
+    "exclude_before_seconds": 10.0,
+    "eligible_interval_seconds": [
+      10.0,
+      92.95833333333334
+    ],
+    "selection": "One frame per equal-duration temporal bin; weighted preview sharpness (0.55), local visual novelty (0.30), bin-center proximity (0.15), exposure penalties.",
+    "limitations": "Even temporal coverage and local appearance diversity are not guaranteed 3D viewpoint uniqueness; nearby views and some overlap remain. No synthetic views, frame blending or super-resolution.",
+    "full_resolution": {
+      "folder": "full_resolution",
+      "width": 3840,
+      "height": 2160,
+      "count": 500,
+      "format": "PNG",
+      "mode": "RGB",
+      "bit_depth": 8
+    },
+    "downsample_4x": {
+      "folder": "downsample_4x_960x540",
+      "width": 960,
+      "height": 540,
+      "count": 500,
+      "filter": "Pillow LANCZOS directly from native decoded master"
+    },
+    "timestamp_gap_seconds": {
+      "min": 0.04166666666665719,
+      "median": 0.16666666666666607,
+      "max": 0.2916666666666714
+    },
+    "source": {
+      "source": "insta360_living_room_footage.mp4",
+      "source_bytes": 606924618,
+      "width": 3840,
+      "height": 2160,
+      "rate": 24.0,
+      "codec": "hevc",
+      "pixel_format": "yuvj420p",
+      "duration_seconds": 92.958333,
+      "container_metadata": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2mp41",
+        "creation_time": "2018-10-06T20:49:50.000000Z",
+        "encoder": "Lavf60.3.100"
+      }
+    },
+    "filename_alignment": "Identical filenames identify identical source frames.",
+    "privacy": "All photographs, video and review files stay local."
+  },
+  "validation": {
+    "state": "complete",
+    "frames_per_resolution": 500,
+    "pngs_checked": 1000,
+    "unique_decoded_rgb_frames": 500,
+    "first_timestamp_seconds": 10.083333333333334,
+    "last_timestamp_seconds": 92.875,
+    "full_png_pixels_equal_decoded_rgb": true,
+    "downsample_png_pixels_equal_lanczos_output": true,
+    "total_bytes_by_resolution": {
+      "full_resolution": 2782855203,
+      "downsample_4x_960x540": 337607788
+    }
+  },
+  "settings": {
+    "source": "insta360_living_room_footage.mp4",
+    "trim_before_seconds": 10,
+    "frames": 500,
+    "camera_model": "OPENCV_FISHEYE",
+    "parameter_order": [
+      "fx",
+      "fy",
+      "cx",
+      "cy",
+      "k1",
+      "k2",
+      "k3",
+      "k4"
+    ],
+    "intrinsics_status": "Estimated for this flat MegaView export, not factory or checkerboard calibration.",
+    "initialization": "Equidistant f=width/radians(170), fx=fy; centered principal point, k1..k4=0. Nominal FOV interpretation is an assumption.",
+    "shared_intrinsics": true,
+    "principal_point_refined": false,
+    "focal_and_distortion_refined": true,
+    "matching": "15 neighbors, offsets 20/40/80/160/320, anchors every 20 frames; CUDA guided matches and CPU geometry verification.",
+    "features": "SIFT max8192 at native dimensions per scale; CUDA",
+    "mapping": "CPU incremental mapper seed0,12threads; global BA and observation filtering4px/1.5deg",
+    "dense": "COLMAP fisheye-to-pinhole undistortion at native long edge;10sourceviews;CUDA geometric PatchMatch5iterations;CPU fusion12GBcache;Poisson depth10",
+    "gsplat": {
+      "version": "1.5.3",
+      "steps": 30000,
+      "data_factor": 1,
+      "batch_size": 1,
+      "packed": true,
+      "sh_degree": 3,
+      "pose_opt": false,
+      "appearance_opt": false,
+      "ssim_lambda": 0.2,
+      "seed": 42,
+      "holdout": "Fixed source frames1,9,...497; SfM used all views. Images are original-derived calibrated undistorted pixels with matching pinhole cameras."
+    },
+    "sources": [
+      "https://www.insta360.com/blog/tips/understanding-8K-360-video.html",
+      "https://onlinemanual.insta360.com/studio/en-us/operation-guide/edit-function/adjust-the-perspective",
+      "https://colmap.github.io/cameras.html",
+      "https://docs.opencv.org/4.x/db/d58/group__calib3d__fisheye.html"
+    ],
+    "initial_camera_params": {
+      "4x": [
+        323.55263725034723,
+        323.55263725034723,
+        480.0,
+        270.0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "1x": [
+        1294.210549001389,
+        1294.210549001389,
+        1920.0,
+        1080.0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "privacy": "Native images, full clouds, meshes and checkpoints remain local. Private Site gets derived previews only."
+  },
+  "queue": {
+    "state": "running",
+    "started_at": "2026-10-04T20:29:28.757307+00:00",
+    "order": "Sparse both scales;4x dense+gsplat;full undistortion+gsplat;full dense"
+  },
+  "scales": {
+    "1x": {
+      "label": "Full resolution",
+      "width": 3840,
+      "height": 2160,
+      "input_images": 500,
+      "folder": "full_resolution",
+      "storage_bytes": 2782855203,
+      "stages": {},
+      "selected_model": null,
+      "components": [],
+      "sift_keypoints": null,
+      "metrics": {},
+      "dense": null,
+      "mesh": null,
+      "solver_warning_count": 0,
+      "registered_union": 0
+    },
+    "4x": {
+      "label": "4\u00d7 downsample",
+      "width": 960,
+      "height": 540,
+      "input_images": 500,
+      "folder": "downsample_4x_960x540",
+      "storage_bytes": 337607788,
+      "stages": {
+        "features": {
+          "state": "complete",
+          "started_at": "2026-10-04T20:29:28.774710+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-04T20:29:33.043255+00:00",
+          "elapsed_ns": 4268318935,
+          "seconds": 4.268318935,
+          "exit_code": 0
+        },
+        "matching": {
+          "state": "complete",
+          "started_at": "2026-10-04T20:29:33.057122+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-04T20:29:57.971197+00:00",
+          "elapsed_ns": 24913910287,
+          "seconds": 24.913910287,
+          "exit_code": 0
+        },
+        "mapping": {
+          "state": "running",
+          "started_at": "2026-10-04T20:29:57.971395+00:00",
+          "device": "CPU"
+        }
+      },
+      "selected_model": null,
+      "components": [],
+      "sift_keypoints": 1218200,
+      "metrics": {},
+      "dense": null,
+      "mesh": null,
+      "solver_warning_count": 21,
+      "matching_counts": {
+        "matched_pairs": 13167,
+        "verified_pairs": 10237,
+        "verified_inliers": 3232477
+      },
+      "registered_union": 0
+    }
+  }
+}

@@ -291,3 +291,35 @@ python3 living-room-reconstruction/scripts/summarize_matching_strategy_timing.py
 ```
 
 The runner accepts explicit overrides for the workspace paths, matcher and mapper project files, vocabulary tree, COLMAP launcher, and callback interval. It refuses to overwrite a non-empty run and keeps copied databases and all run outputs in the selected local output directory. The public aggregate audit is `reports/matching_timing.json`; raw images, feature databases, process logs, and model files are not stored in GitHub.
+
+## Attempt 05 — gsplat for the three newest matching strategies (2026-10-04)
+
+Step 05 adds photo-supervised gsplat reconstructions for sequential matching with loop detection off, sequential matching with loop detection on, and exhaustive matching. These use the exact saved COLMAP components from `timed_rerun_20261003_loop_enabled`, the original 500 4× PNGs (540×960), and each component's recovered OPENCV cameras and sparse points. No COLMAP stage is rerun. The existing camera calibration remains estimated from the images, not measured factory calibration.
+
+Each disconnected component has its own coordinate system and is trained independently. Eight components have at least ten cameras and 100 sparse points; all eight are included in the queue. The exhaustive two-camera/200-point fragment remains available in the COLMAP viewer but is too small for a reliable Gaussian comparison and is explicitly excluded. Main components are trained first, followed by smaller fragments.
+
+The recipe is the pinned gsplat 1.5.3 official `examples/simple_trainer.py` default strategy: 30,000 steps, seed 42, batch size 1, packed CUDA rasterization, SH degree 3, 0.8 L1 + 0.2 SSIM loss, and no camera-pose or appearance optimization. Evaluation and checkpoints occur at 7,000 and 30,000 steps; a full SH3 PLY is saved at 30,000. `data_factor=1` means no additional image reduction. The parser undistorts the OPENCV input and removes one border pixel, giving 539×959 training views. GPU jobs run serially on the local RTX 4090, without closing desktop COLMAP windows. The settings are held constant across methods; they are not tuned separately to favor a result.
+
+Source frames 1, 9, 17, …, 497 are excluded from Gaussian fitting in every component. The main no-loop, loop-on, and exhaustive components use 224/32, 435/61, and 430/62 training/validation images respectively. Thirty-two validation frames are shared by all three main components. COLMAP camera estimation and sparse initialization already used these images, so this evaluates held-out appearance, not independent geometric accuracy.
+
+The private page provides paired method/component selectors and four same-frame predictions from the full SH3 models (frames 249, 329, 409 and 497). Smaller components provide two viewpoints each. Native prediction pixels are preserved in lossless WebP; the source-photo half of the trainer's validation canvas is not uploaded. Metrics are shown for every component with their different validation subsets disclosed. A second comparison recalculates PSNR, SSIM and AlexNet LPIPS on all 32 shared frames from the saved 8-bit canvases, CPU only. Each method uses its own camera undistortion, which still limits exact cross-method comparability. These metrics measure image agreement and do not establish correct room geometry.
+
+Measured training durations use `time.perf_counter_ns` around each complete trainer process, including startup, evaluation and saving. Raw nanoseconds and unrounded seconds remain in the aggregate report; the page displays milliseconds. This is separate from the earlier matching/mapping timers. Saved checkpoints, configuration files, logs, validation canvases and full PLYs are retained locally in `gsplat_local/matching_20261003` and are excluded from public GitHub.
+
+Full 3D viewing loads every trained Gaussian and SH3 coefficients directly from this computer through the loopback viewer, or from a local PLY selected in the browser. The private Site's “Explore a full trained model in 3D” control uses this local viewer; no full PLY is hosted or uploaded. WebGL2 and enough browser memory are required (the main models contain millions of Gaussians). If local-network loading is blocked, open the local-viewer link or choose the corresponding PLY. Start or restart the server with:
+
+```bash
+python3 living-room-reconstruction/scripts/serve_matching_gsplat.py
+```
+
+It listens only at `http://127.0.0.1:8790/`, serves a restricted completed-model allowlist, and permits cross-origin reads only from the existing private Site and local preview. Read-only model serving does not run a second training job. Reproduce and refresh from the enclosing workspace:
+
+```bash
+.gsplat-env/bin/python living-room-reconstruction/scripts/run_matching_gsplat.py
+.gsplat-env/bin/python living-room-reconstruction/scripts/score_matching_gsplat.py
+.gsplat-env/bin/python living-room-reconstruction/scripts/export_matching_gsplat.py
+```
+
+The queue lock prevents duplicate training; completed jobs are retained and skipped. Failed outputs must be preserved before a retry. `reports/matching_gsplat_results.json` contains the current aggregate results and settings. The original photograph-resolution comparison question remains separate from this authorized 4× matching experiment.
+
+To stay within the private Site's archive limit, twenty existing prediction renders and sixteen previously authorized source-example browser copies were converted from PNG to pixel-verified lossless WebP. Native PNG masters, image dimensions, all baseline Gaussian geometry and all COLMAP point-cloud assets remain unchanged. Only code and aggregate reports are published to public GitHub; all new rendered images stay on the owner-private Site. Official workflow: [gsplat COLMAP capture trainer](https://docs.gsplat.studio/main/examples/colmap.html).

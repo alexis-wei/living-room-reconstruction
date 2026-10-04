@@ -390,6 +390,12 @@ All eight runs completed and retain their original checkpoints and full valid SH
 Four models are disconnected sequential loop-off components; three belong to exhaustive matching; loop-on has one. Scores above cover each component’s validation set. The common 32-frame main-model scores are recorded separately in the aggregate report and on Step 05. Tiny or fragmented models can have poor appearance agreement despite containing many Gaussians; they remain visible for inspecting gaps.
 
 
+### Insta360 geometry failure and separate recovery
+
+The original 500-view sparse baselines are preserved and visible with every sparse point: 260,369 native and 112,825 at 4×. Numeric registration and reprojection fit did not establish valid camera geometry. The 4× PatchMatch stage failed after 1628.022944567 seconds when collapsed local camera/point groups could not provide positive MVS depth ranges; 487 partial photometric depth maps remain local. Audits identified 180 collapsed 4× cameras and 34 native cameras. These are failed-quality baselines, not successful dense reconstructions.
+
+A separate screened recovery uses copies of the final models, the same estimated OPENCV_FISHEYE calibration and original-resolution pixels. The scale-relative criterion excludes a camera when its median positive observed depth is below 10⁻⁵ times the 95th-percentile camera radius, or it has fewer than 100 positive-depth observations. Unsupported tracks and observations are filtered; only a global similarity normalization is applied, with no new bundle adjustment. Prepared 4× input retains 320 cameras / 67,152 points; native retains 457 / 242,918 (34 collapsed plus nine poorly supported cameras removed). Recovery depth/fusion/gsplat results are pending. All original models, photographs and partial maps remain unchanged, and missing coverage must remain disclosed.
+
 ## Step 08 — Full-resolution gsplat camera cleanup (2026-10-04)
 
 The original full-resolution Gaussian run contained a recovered camera for frame 230 far outside the room trajectory. Only six sparse-point observations supported that pose. Because the pinned official gsplat trainer derives scene scale from the maximum camera radius, its scale was 21.649098214, versus about 2.48 at 4x. This scales position learning rates and Gaussian size thresholds. Native validation renders were already obscured before browser compression.
@@ -400,4 +406,21 @@ Training uses the same native 2126x3781 undistorted PNGs, data factor 1, gsplat 
 
 Prepare with `PYTHONPATH=.colmap-tools python3 living-room-reconstruction/scripts/prepare_gsplat_fix.py`, then queue `.gsplat-env/bin/python living-room-reconstruction/scripts/run_gsplat_fix.py`. The runner waits on the shared GPU queue, saves checkpoints/validation renders/full PLY locally, and exports result previews after completion. Original Attempt 01 outputs are preserved. Step 8 uses the same four held-out viewpoints before/after; browser prediction previews are resized to 800px long edge then encoded losslessly. Full SH3 models remain local and can be opened through `serve_gsplat_fix.py` on localhost port 8792.
 
-Current result: inputs prepared and validated; training is queued behind the already active Insta360 pipeline. Pending metrics are not zero or a quality claim. The eventual result report is `reports/gsplat_fix_results.json`; source images, camera geometry, checkpoints, full PLYs and private previews are excluded from public GitHub.
+Completed on the RTX 4090 at 2026-10-04T22:31:42Z, preserving the original model. The timer uses monotonic nanoseconds around startup, training, native validation and saving, excluding queue waiting. Baseline time is available only at its saved precision; no extra precision is inferred.
+
+| Measurement | Original full resolution | Cleaned-camera rerun |
+| --- | ---: | ---: |
+| Recovered / training / held-out views | 493 / 431 / 62 | 487 / 425 / 62 |
+| Sparse initialization points | 283,276 | 283,245 |
+| Valid / trained Gaussians | 343,663 / 343,663 | 1,355,457 / 1,355,457 |
+| PSNR, same 62 native held-out views | 13.176762580871582 | 15.53478717803955 |
+| SSIM | 0.7689108848571777 | 0.7694727182388306 |
+| LPIPS | 0.6012338995933533 | 0.5254483222961426 |
+| Run elapsed seconds | 1722.47 | 1701.8677089 |
+| Full SH3 PLY bytes | 81,105,945 | 319,889,330 |
+
+The cleaned model improves held-out appearance: PSNR +2.3580245971679688 dB, SSIM +0.000561833381652832, LPIPS −0.0757855772972107. This is a camera/track-cleanup experiment, not a measurement of physical room accuracy; uncertainty and poorly observed surfaces remain.
+
+Final CPU integrity validation passed all 284 checks without warnings: checkpoint step and six tensor shapes, finite values and activated scales, complete 59-float SH3 PLY byte length/count, all 62 native 4252×3781 side-by-side canvases, exact ground-truth tile identities and unchanged original source hashes. Both PLYs retain every trained Gaussian; zero invalid rows were omitted. Run `.gsplat-env/bin/python living-room-reconstruction/scripts/validate_gsplat_fix.py` to reproduce the audit locally. Detailed audit files include private paths and remain local. `reports/gsplat_fix_results.json` contains aggregate validation and results only.
+
+Step 8 publishes the same four before/after prediction previews, settings and measurements. Full models can be loaded through the local viewer; native photographs, camera geometry, checkpoints, full PLYs and private previews are excluded from public GitHub.

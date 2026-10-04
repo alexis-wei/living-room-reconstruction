@@ -58,3 +58,6 @@ site/dist/insta360-assets/
 # Full-resolution gsplat cleanup previews and isolated private Site checkout.
 site/dist/fixing-gsplat-assets/
 site-step8/
+
+# Private screened Insta360 geometry and Gaussian previews
+site/dist/insta360-recovery-assets/

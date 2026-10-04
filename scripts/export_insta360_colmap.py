@@ -30,10 +30,12 @@ def cloud(key,xyz,rgb,cameras,limit):
     packed=np.column_stack(((xyz[ix]-center)/radius,rgb[ix]/255)).astype('<f4')
     assert np.isfinite(packed).all()
     file=ASSETS/(key+'.bin.gz');tmp=file.with_suffix('.tmp')
-    tmp.write_bytes(gzip.compress(packed.tobytes(),6));tmp.replace(file)
-    assert len(gzip.decompress(file.read_bytes()))==len(ix)*24
+    compact=np.empty(len(ix),dtype=[('xyz','<f4',(3,)),('rgb','u1',(3,))]);compact['xyz']=packed[:,:3];compact['rgb']=rgb[ix]
+    assert np.array_equal(compact['xyz'],packed[:,:3])
+    tmp.write_bytes(gzip.compress(compact.tobytes(),9));tmp.replace(file)
+    assert len(gzip.decompress(file.read_bytes()))==len(ix)*15
     return {'url':'insta360-assets/'+file.name,'total_points':n,'displayed_points':len(ix),
-            'sampled':n>len(ix),'render_all':True,
+            'sampled':n>len(ix),'render_all':True,'format':'xyz-f32-rgb-u8',
             'camera_positions':[((np.asarray(c)-center)/radius).tolist() for c in cameras]}
 
 def main():
@@ -53,6 +55,11 @@ def main():
                 'storage_bytes':sum(f.stat().st_size for f in (ROOT/'insta360_frames_500'/folder).glob('*.png')),
                 'stages':status['stages'],'selected_model':selected,'components':[],'sift_keypoints':None,
                 'metrics':load(run/'sparse_metrics.json',{}),'dense':ply_counts(run/'dense/fused.ply'),'mesh':ply_counts(run/'dense/mesh_poisson.ply')}
+        audit=load(run/'depth_scale_audit.json',{})
+        if audit:
+            record['geometry_quality']={'state':'degenerate_camera_groups_detected',
+                'cameras_with_median_observed_depth_below_1e_minus_5':len(audit.get('degenerate_frames',[])),
+                'warning':'Some camera/point groups collapse to near-zero local depth relative to the overall scene. Registration and reprojection error do not demonstrate physical accuracy; dense processing may fail.'}
         mapping_log=run/'mapping.log'
         record['solver_warning_count']=sum('Linear solver failure' in line for line in mapping_log.open()) if mapping_log.exists() else 0
         if record['metrics'].get('mean_reprojection_error') is not None:

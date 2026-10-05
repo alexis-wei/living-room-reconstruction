@@ -28,4 +28,5 @@ def main():
  (OUT/'common_validation.json').write_text(json.dumps(report,indent=2)+'\n')
  aggregate={k:v for k,v in report.items() if k not in ['frames','models']};aggregate['models']={k:{'mean':v['mean']} for k,v in report['models'].items()}
  (ROOT/'living-room-reconstruction/reports/insta360_recovery_common.json').write_text(json.dumps(aggregate,indent=2)+'\n')
+ (ROOT/'insta360_local/recovery/publication_stage/insta360_recovery_common.json').write_text(json.dumps(aggregate,indent=2)+'\n')
 if __name__=='__main__':main()

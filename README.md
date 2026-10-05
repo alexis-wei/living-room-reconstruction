@@ -441,3 +441,22 @@ The 4× gsplat run completed 30,000 steps on the RTX 4090 in **338.643327543 sec
 This is **partial and inconsistent appearance recovery**. A kitchen/table validation view is recognizable, but several couch/window views become smooth occluding color fields. All 40 saved native validation canvases were decoded and their source halves matched prescribed photographs exactly. Independent projection checks agree before/after trainer normalization within approximately 8e-12 pixels on sampled 4× observations, ruling out an image-index, tile or normalization wiring error. Counts, low reprojection error and completed optimization do not establish faithful physical reconstruction.
 
 Recovery previews and held-out renders are available in the private Insta360 chapter; the full unsampled SH3 model is served locally by `scripts/serve_insta360_recovery.py` on port 8793. Native-resolution Gaussian training remains queued/running in the same sequential queue, followed by native dense reconstruction. Aggregate scores use different 40/55 held-out subsets and image resolutions; 39 source-frame identities are shared and will be compared separately when both models finish. All photographs, full models, validation audit details and camera identity lists remain excluded from this code-only GitHub repository.
+
+
+### Insta360 native gsplat and common-view comparison (2026-10-05)
+
+Native-resolution Gaussian training completed 30,000 steps on the RTX 4090 in **1619.600885151 seconds**, with 402 training and 55 held-out source views. All **854,975** raw checkpoint Gaussians are finite; the complete SH3 PLY retains every row with **zero omitted Gaussians**, exactly **201,775,577 bytes**. All 55 saved native validation canvases were decoded, each containing a 3840×2160 source reference and prediction. Trainer float-render metrics are PSNR **14.379073143005371**, SSIM **0.692996621131897**, LPIPS **0.5352635979652405**.
+
+The private report now compares native and 4× predictions at the same four source frames (81, 217, 337 and 497), and both complete local SH3 models are accessible through the independent recovery viewer. Both runs have partial, inconsistent appearance: the kitchen/table view is recognizable with blurred or ghosted detail, while several couch/window views are largely smooth, occluding color fields. A numerically finite native model is not a faithful whole-room reconstruction.
+
+A separate reproducible CPU evaluation (`scripts/evaluate_insta360_recovery_common.py`) compares **39 identical held-out source frames**, using each model's saved 8-bit native-resolution PNG reference/prediction halves. It is separate from trainer float-render metrics and still confounded by image resolution and calibrated undistortion; it is not a controlled physical-accuracy comparison.
+
+| Common 39-view mean | Native | 4× |
+|---|---:|---:|
+| PSNR ↑ | 14.814224512149126 | 17.36521323521932 |
+| SSIM ↑ | 0.6918336844597107 | 0.6594010496941897 |
+| LPIPS ↓ | 0.4991650138145838 | 0.5133265396341299 |
+
+The mixed metric ranking does not support a general native-resolution quality advantage. Per-frame evaluations and photographs remain local; only aggregate means and reproducible code go to GitHub. Native dense stereo is still running in the existing single-GPU queue after passing its storage reserve guard.
+
+The 4× non-finite scale diagnostic found **2,136 negative-infinite log-scale values**, zero NaNs or positive infinities, in 712 Gaussian rows. Initial float32 SfM positions contain 2,480 exact duplicate rows; 714 initial points are in duplicate groups of at least four. Upstream initializes scales from the log of mean three-neighbor distance, so zero-distance duplicate clusters are a strong explanation; this is not proven row-by-row attribution. Original models and checkpoints are preserved, and no automatic retraining or point deletion was performed.

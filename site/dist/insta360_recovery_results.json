@@ -1,8 +1,10 @@
 {
-  "updated": "2026-10-05T00:09:22.448734+00:00",
+  "updated": "2026-10-05T01:11:04.269414+00:00",
   "queue": {
-    "state": "running",
-    "started_at": "2026-10-04T23:16:08.961217+00:00"
+    "state": "canceled_by_user",
+    "started_at": "2026-10-04T23:16:08.961217+00:00",
+    "finished_at": "2026-10-05T01:09:09.380219+00:00",
+    "reason": "User canceled remaining dense reconstruction; retain sparse and completed Gaussian results. Do not resume dense without a new request."
   },
   "policy": "Separate screened partial recovery; original 500-view sparse models and all photographs preserved. Intrinsics unchanged; no new BA.",
   "scales": {
@@ -43,6 +45,22 @@
           "device": "CPU",
           "finished_at": "2026-10-04T22:30:22.548261+00:00",
           "note": "Separate screened recovery images; original baseline unchanged"
+        },
+        "depth_maps": {
+          "state": "canceled_by_user",
+          "started_at": "2026-10-05T00:41:29.214751+00:00",
+          "device": "CUDA",
+          "finished_at": "2026-10-05T01:09:09.380219+00:00",
+          "reason": "User canceled remaining dense reconstruction; retain sparse and completed Gaussian results. Do not resume dense without a new request.",
+          "partial_maps_preserved": true
+        },
+        "fusion": {
+          "state": "not_requested",
+          "reason": "User canceled remaining dense reconstruction; retain sparse and completed Gaussian results. Do not resume dense without a new request."
+        },
+        "mesh": {
+          "state": "not_requested",
+          "reason": "User canceled remaining dense reconstruction; retain sparse and completed Gaussian results. Do not resume dense without a new request."
         }
       },
       "mvs_validation": {

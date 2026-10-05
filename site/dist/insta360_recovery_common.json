@@ -1,0 +1,20 @@
+{
+  "common_frame_count": 39,
+  "protocol": "Same held-out source frames; native resolution per model. CPU metrics from saved8-bit PNG reference/prediction halves, distinct from trainer float-render metrics. Different resolution and undistortion remain confounders.",
+  "models": {
+    "4x": {
+      "mean": {
+        "psnr": 17.36521323521932,
+        "ssim": 0.6594010496941897,
+        "lpips": 0.5133265396341299
+      }
+    },
+    "1x": {
+      "mean": {
+        "psnr": 14.814224512149126,
+        "ssim": 0.6918336844597107,
+        "lpips": 0.4991650138145838
+      }
+    }
+  }
+}

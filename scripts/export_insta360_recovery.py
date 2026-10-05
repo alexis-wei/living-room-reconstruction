@@ -19,9 +19,20 @@ def main():
   (STAGE/'insta360_gsplat_results.json').replace(STAGE/'insta360_recovery_gsplat_results.json')
   for file in [assets/'gsplat.json']:
    data=json.loads(file.read_text());data['local_viewer']='http://127.0.0.1:8793/'
-   for model in data['models'].values():
+   for key,model in data['models'].items():
+    review=load(REC/'gsplat/runs'/key/'visual_review.json')
+    if review:model['visual_quality']=review
+    audit=load(REC/'gsplat/runs'/key/'full_validation.json')
+    if audit:model['validation_audit']={k:v for k,v in audit.items() if k not in ['native_validation_renders']}
     for view in model['views']:view['render']=view['render'].replace('insta360-assets/','insta360-recovery-assets/')
    write(file,data)
+  aggregate=load(STAGE/'insta360_recovery_gsplat_results.json')
+  for key,model in data['models'].items():
+   for field in ['visual_quality','validation_audit']:
+    if field in model:
+     aggregate['models'][key][field]={k:v for k,v in model[field].items() if k!='reviewed_validation_frames'}
+     if field=='visual_quality':aggregate['models'][key][field]['reviewed_views']=len(model[field].get('reviewed_validation_frames',[]))
+  write(STAGE/'insta360_recovery_gsplat_results.json',aggregate);write(ex.REPORT,aggregate)
   return
  import numpy as np,pycolmap as p
  import export_insta360_colmap as ex

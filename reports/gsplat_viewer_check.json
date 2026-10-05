@@ -1,0 +1,39 @@
+{
+  "checked_at": "2026-10-05T02:37:26.877Z",
+  "page": "02 · First gsplat trials",
+  "url": "https://alexis-living-room-reconstruction.hello420892.chatgpt.site/gsplat",
+  "cause": "Browser could not create a WebGL2 rendering context; original model assets were present.",
+  "fix": "Automatic Canvas2D worker-based anisotropic Gaussian preview when GPU rendering cannot initialize.",
+  "software_preview": {
+    "max_gaussians": 120000,
+    "max_dimensions": [
+      720,
+      480
+    ],
+    "max_projected_footprint_radius_px": 96,
+    "quality": "Approximate deterministic sampled navigation preview; saved rendered images show the full trained model."
+  },
+  "gpu_mode": {
+    "policy": "All browser-exported Gaussians retained",
+    "browser_verification": "WebGL2 unavailable in the tested in-app browser; full GPU rendering could not be visually tested here."
+  },
+  "verified_models": {
+    "8x": 4338943,
+    "4x": 3311106,
+    "2x": 1539874,
+    "1x": 343663,
+    "8x_component_2": 3808517
+  },
+  "verification": {
+    "all_five_software_models_loaded_locally": true,
+    "live_4x_loaded": true,
+    "rotation_zoom_reset_checked": true,
+    "all_original_model_chunk_bytes_unchanged": true
+  },
+  "deployment": {
+    "source_commit": "ed8a7890bb68da1003e09cd6357ec168c5325f81",
+    "id": "appgdep_6ac30c53788081918e85b61ae4985506",
+    "status": "succeeded"
+  },
+  "github_commit": "60e10954989ac84f0b28d3e5a36442f8a4374422"
+}

@@ -467,3 +467,33 @@ The 4× non-finite scale diagnostic found **2,136 negative-infinite log-scale va
 The user canceled remaining dense reconstruction to free the GPU. The native depth worker and its parent queue were terminated cleanly, and the CPU completion watcher and recurring recovery monitor were stopped/paused. Native dense status is `canceled_by_user`; native fusion/mesh are `not_requested`. Do not restart dense work without a new direct user request. Original photos, sparse models, completed 4× dense outputs, partial native depth maps and both completed Gaussian models remain preserved locally.
 
 The private Insta360 page now displays **all four sparse clouds together** in independent interactive panels: original native **260,369 points**, original 4× **112,825 points**, screened native **242,918 points**, and screened 4× **67,152 points**. Every sparse point is displayed, including software rendering; no component is missing and no sparse sampling or new geometry compression was introduced. Dense choices are hidden on this sparse-focused page; previously completed dense statistics remain historical measurements. Separate reconstructions have independent coordinate frames, so their point sets are not merged arbitrarily. Other chapters and completed Step 8 are unchanged. No reconstruction CUDA worker remains; the user's existing idle COLMAP GUI windows remain open.
+
+## Attempt 09 — voxel inputs for the latest Insta360 4× gsplat scene
+
+The original screened 4× reconstruction and two voxel-filtered copies were trained with identical images and camera poses: 320 recovered views, 280 training photographs and the same 40 held-out frames, all at 960 × 540. A data factor of 1 prevents another downsample. Training uses the prepared undistorted PINHOLE pixels derived from the estimated OPENCV_FISHEYE reconstruction.
+
+Each occupied voxel retains one original point, prioritizing longest track, lower existing reprojection error, then point ID. The voxel origin is the median original XYZ. Retained XYZ, RGB, errors and tracks remain exact; deleted observation references are cleared in a copied complete COLMAP model. Sizes 0.08 and 0.20 are arbitrary model units, not meters. Original model and all 320 photograph hashes are unchanged. This reduces starting spatial density, not binary coordinate precision.
+
+| Measurement | Original input | Voxel 0.08 | Voxel 0.20 |
+|---|---:|---:|---:|
+| Starting sparse points | 67,152 | 34,199 | 17,269 |
+| points3D.bin bytes | 6,617,864 | 3,745,965 | 2,053,919 |
+| Final checkpoint Gaussians | 1,327,862 | 1,102,659 | 1,324,575 |
+| Valid full SH3 export Gaussians | 1,327,150 | 1,102,659 | 1,324,575 |
+| PSNR ↑, same 40 held-out views | 17.227296829223633 | 16.389047622680664 | 17.698135375976562 |
+| SSIM ↑ | 0.6609835028648376 | 0.6381871104240417 | 0.6740999817848206 |
+| LPIPS ↓ | 0.5224205851554871 | 0.5400334000587463 | 0.5012368559837341 |
+| Official cumulative training-loop seconds | 328.99822878837585 | 321.03027153015137 | 352.23348093032837 |
+| Whole-process elapsed seconds | 338.643327543 | 330.318947471 | 361.969770439 |
+
+Both voxel runs completed 30,000 steps sequentially on the RTX 4090, with gsplat 1.5.3, seed 42, batch size 1, packed rasterization, SH degree 3, SSIM weight 0.2 and DefaultStrategy. Camera, appearance and depth-loss optimization remain disabled. Evaluation/checkpoint steps are 7,000 and 30,000; the full SH3 PLY is saved at 30,000. Process timers include startup, training, evaluation and saving but exclude queue waiting; trainer cumulative time is reported separately. Validation rasterization time per image is not training time.
+
+The moderate input produced fewer final Gaussians and slightly shorter runtime, but worse held-out image scores. The coarser input improved all three image-agreement metrics and took longer; adaptive densification grew it back to nearly the baseline Gaussian count. These scores do not establish ground-truth room accuracy or a general voxel-size optimum.
+
+Voxel selection also changes KNN initial Gaussian sizes and removes coincident seeds. The original input had 714 zero initial KNN scales; its completed checkpoint contains 712 rows with negative-infinite log scales, explicitly omitted from the finite PLY. Both voxel checkpoints and full PLYs are finite. This is not a count-only intervention. Existing COLMAP reprojection residuals over different selected populations are not fresh accuracy measurements. Parser PCA normalization depends on retained points, so the website uses each model's corresponding recovered camera for the same frame rather than copying raw world coordinates between models.
+
+Independent CPU validation checked all three final checkpoints, complete 59-float-property SH3 exports and all 120 native validation canvases; every ground-truth half matches its source photograph exactly. Shared illustrations use frames 81, 217, 337 and 497. Native predictions are saved as lossless WebP without resizing. The private Site serves explicitly sampled SH0 3D previews and offers the complete unsampled SH3 models through a localhost-only server or local file selection. Every photograph, full checkpoint and model stays local; none is uploaded to this public repository.
+
+Reproducible tools: `prepare_voxel_inputs.py`, `run_voxel_gsplat.py`, `voxel_interface_entry.py`, `finish_voxel_trials.py`, `validate_voxel_final.py`, `export_voxel_comparison.py` and `serve_voxel_gsplat.py`. Aggregate results are in `reports/voxel_gsplat_results.json`. The canceled native dense queue and both paused monitors remain stopped.
+
+Private chapter: [09 · Voxel input comparison](https://alexis-living-room-reconstruction.hello420892.chatgpt.site/voxel-gsplat). Official workflow: [gsplat COLMAP trainer and browser viewer](https://docs.gsplat.studio/main/examples/colmap.html).

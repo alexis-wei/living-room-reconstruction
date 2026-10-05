@@ -41,6 +41,14 @@ function collectGaussians(catalog){
   model
  }));
 }
+function collectVoxelGaussians(catalog){
+ return Object.entries(catalog.models).map(([key,model])=>({
+  id:`voxel-gsplat:${key}`,kind:'gsplat',modelKey:key,source:'gsplat · Insta360 4× voxel study',
+  label:`gsplat · Insta360 4× · ${model.label}`,
+  model:{...model,count:model.gaussian_count,bytes:model.model_bytes,download_bytes:model.model_bytes},
+  viewerHref:`voxel-gsplat.html?model=${encodeURIComponent(key)}#voxel-3d`,fullLocal:true
+ }));
+}
 function makePanel(id,side){
  const panel=document.getElementById(id);
  panel.innerHTML=`<div class="compare-panel-head"><p class="compare-side">${side}</p><label>Result<select class="compare-choice"></select></label></div><p class="cloud-status" role="status">Choose a result.</p><canvas class="cloud-canvas" aria-label="Interactive COLMAP point cloud. Use pointer to orbit and scroll to zoom."></canvas><img class="compare-preview" alt="Saved rendered view from a gsplat model" hidden><label class="compare-view-control" hidden>Rendered viewpoint<select></select></label><div class="cloud-controls compare-cloud-controls"><button type="button" class="compare-reset">Reset view</button><label>Point size <input class="compare-size" type="range" min="1" max="5" value="2" step="0.5"></label><label><input class="compare-cameras" type="checkbox" checked>Camera centers</label></div><div class="compare-stats"></div>`;
@@ -85,8 +93,8 @@ function showGaussian(state,item){
  const updateView=()=>{const view=views[Number(viewSelect.value)||0];if(view){preview.src=view.render;preview.alt=`${item.label}, rendered from ${view.frame}`}};
  viewSelect.onchange=updateView;viewSelect.value='0';updateView();
  status.textContent='Saved gsplat render · use the interactive viewer link to orbit the trained model.';
- stats.innerHTML=`<strong>${fmt(model.count)} Gaussians</strong> · ${((model.download_bytes||model.bytes||0)/1e6).toFixed(1)} MB model preview`;
- const link=document.createElement('a');link.className='compare-model-link';link.href=`index.html?model=${encodeURIComponent(item.modelKey)}#gaussian-viewer`;link.textContent='Open this model in the interactive 3D viewer';stats.append(document.createElement('br'),link);
+ stats.innerHTML=`<strong>${fmt(model.count)} Gaussians</strong> · ${((model.download_bytes||model.bytes||0)/1e6).toFixed(1)} MB ${item.fullLocal?'complete local SH3 model':'model preview'}`;
+ const link=document.createElement('a');link.className='compare-model-link';link.href=item.viewerHref||`gsplat.html?model=${encodeURIComponent(item.modelKey)}#gaussian-viewer`;link.textContent='Open this model in the interactive 3D viewer';stats.append(document.createElement('br'),link);
 }
 function loadSelection(state,item){
  if(!item)return;
@@ -97,9 +105,9 @@ function loadSelection(state,item){
  const status=document.getElementById('compare-catalog-status');
  const left=makePanel('compare-a','LEFT RESULT'),right=makePanel('compare-b','RIGHT RESULT');
  try{
-  const [base,experiments,gaussians,matching]=await Promise.all([json('clouds/index.json'),json('clouds/experiments.json'),json('gaussians/index.json'),json('clouds/matching.json')]);
+  const [base,experiments,gaussians,matching,voxels]=await Promise.all([json('clouds/index.json'),json('clouds/experiments.json'),json('gaussians/index.json'),json('clouds/matching.json'),json('voxel-gsplat-assets/index.json').catch(()=>({models:{}}))]);
   const combined={scales:{...experiments.scales,...matching.scales}};
-  const items=[...collectClouds(base,combined),...collectGaussians(gaussians)];
+  const items=[...collectClouds(base,combined),...collectGaussians(gaussians),...collectVoxelGaussians(voxels)];
   if(!items.length)throw Error('No comparison results are available.');
   populateSelect(left,items);populateSelect(right,items);
   const selectLeft=$(left.panel,'.compare-choice'),selectRight=$(right.panel,'.compare-choice');

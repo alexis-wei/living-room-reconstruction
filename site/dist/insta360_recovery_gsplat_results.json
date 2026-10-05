@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-05T00:16:47.485608+00:00",
+  "updated": "2026-10-05T00:43:56.796259+00:00",
   "shared_frames": [
     "frame_0081.png",
     "frame_0217.png",
@@ -36,12 +36,85 @@
           2160
         ]
       ],
-      "state": "running",
+      "state": "complete",
       "training_images": 402,
       "validation_images": 55,
-      "seconds": null,
-      "elapsed_ns": null,
-      "metrics": null
+      "seconds": 1619.600885151,
+      "elapsed_ns": 1619600885151,
+      "metrics": {
+        "psnr": 14.379073143005371,
+        "ssim": 0.692996621131897,
+        "lpips": 0.5352635979652405,
+        "ellipse_time": 0.018320655822753905,
+        "num_GS": 854975
+      },
+      "gaussian_count": 854975,
+      "trained_gaussian_count": 854975,
+      "excluded_invalid_gaussians": 0,
+      "model_bytes": 201775577,
+      "visual_quality": {
+        "state": "partial_inconsistent_appearance",
+        "finding": "Partial and inconsistent appearance: kitchen/table frame0337 retains recognizable layout with blurred/ghosted detail; frames0081,0217,0497 are dominated by featureless/occluding color fields. Native resolution does not recover faithful whole-room appearance.",
+        "reviewed_views": 4
+      },
+      "validation_audit": {
+        "state": "complete",
+        "checkpoint_gaussians": 854975,
+        "checkpoint_nonfinite_values": {
+          "means": 0,
+          "opacities": 0,
+          "quats": 0,
+          "scales": 0,
+          "sh0": 0,
+          "shN": 0
+        },
+        "checkpoint_all_finite": true,
+        "checkpoint_nonfinite_types": {
+          "means": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "opacities": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "quats": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "scales": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "sh0": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "shN": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          }
+        },
+        "full_ply_gaussians": 854975,
+        "all_ply_values_finite": true,
+        "sh_degree": 3,
+        "training_images": 402,
+        "validation_images": 55,
+        "metrics": {
+          "psnr": 14.379073143005371,
+          "ssim": 0.692996621131897,
+          "lpips": 0.5352635979652405,
+          "ellipse_time": 0.018320655822753905,
+          "num_GS": 854975
+        },
+        "quality_note": "Finite outputs and completed optimization do not establish faithful room geometry; inspect held-out predictions."
+      }
     },
     "4x_component_0": {
       "name": "4x_component_0",
@@ -90,6 +163,38 @@
           "shN": 0
         },
         "checkpoint_all_finite": false,
+        "checkpoint_nonfinite_types": {
+          "means": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "opacities": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "quats": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "scales": {
+            "negative_infinity": 2136,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "sh0": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          },
+          "shN": {
+            "negative_infinity": 0,
+            "positive_infinity": 0,
+            "nan": 0
+          }
+        },
         "full_ply_gaussians": 1327150,
         "all_ply_values_finite": true,
         "sh_degree": 3,

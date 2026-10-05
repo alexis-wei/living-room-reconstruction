@@ -64,3 +64,4 @@ site/dist/insta360-recovery-assets/
 
 # Derived voxel-trial previews stay in the private Site; native models stay local.
 site/dist/voxel-gsplat-assets/
+site-viewer-repair/

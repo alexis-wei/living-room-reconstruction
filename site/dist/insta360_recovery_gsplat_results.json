@@ -1,0 +1,109 @@
+{
+  "updated": "2026-10-05T00:16:47.485608+00:00",
+  "shared_frames": [
+    "frame_0081.png",
+    "frame_0217.png",
+    "frame_0337.png",
+    "frame_0497.png"
+  ],
+  "settings": {
+    "version": "1.5.3",
+    "steps": 30000,
+    "data_factor": 1,
+    "batch_size": 1,
+    "packed": true,
+    "sh_degree": 3,
+    "pose_opt": false,
+    "appearance_opt": false,
+    "ssim_lambda": 0.2,
+    "seed": 42,
+    "holdout": "Fixed source frames1,9,...497; SfM used all views. Images are original-derived calibrated undistorted pixels with matching pinhole cameras."
+  },
+  "skipped_components": [],
+  "preview_policy": "Prediction-only browser images resized to at most960px long edge then saved as lossless WebP. Native predictions and complete SH3 PLYs remain local.",
+  "models": {
+    "1x_component_0": {
+      "name": "1x_component_0",
+      "scale": "1x",
+      "label": "Full resolution",
+      "component": "0",
+      "registered_images": 457,
+      "sparse_points": 242918,
+      "primary_component": true,
+      "undistorted_sizes": [
+        [
+          3840,
+          2160
+        ]
+      ],
+      "state": "running",
+      "training_images": 402,
+      "validation_images": 55,
+      "seconds": null,
+      "elapsed_ns": null,
+      "metrics": null
+    },
+    "4x_component_0": {
+      "name": "4x_component_0",
+      "scale": "4x",
+      "label": "4\u00d7 downsample",
+      "component": "0",
+      "registered_images": 320,
+      "sparse_points": 67152,
+      "primary_component": true,
+      "undistorted_sizes": [
+        [
+          960,
+          540
+        ]
+      ],
+      "state": "complete",
+      "training_images": 280,
+      "validation_images": 40,
+      "seconds": 338.643327543,
+      "elapsed_ns": 338643327543,
+      "metrics": {
+        "psnr": 17.227296829223633,
+        "ssim": 0.6609835028648376,
+        "lpips": 0.5224205851554871,
+        "ellipse_time": 0.0027104198932647707,
+        "num_GS": 1327862
+      },
+      "gaussian_count": 1327150,
+      "trained_gaussian_count": 1327862,
+      "excluded_invalid_gaussians": 712,
+      "model_bytes": 313208878,
+      "visual_quality": {
+        "state": "partial_inconsistent_appearance",
+        "finding": "Partial and inconsistent appearance: the kitchen/table view at frame0337 is plausible, while inspected couch/window and other views are dominated by featureless or occluding color fields. Completed optimization does not establish faithful whole-room reconstruction.",
+        "reviewed_views": 5
+      },
+      "validation_audit": {
+        "state": "complete",
+        "checkpoint_gaussians": 1327862,
+        "checkpoint_nonfinite_values": {
+          "means": 0,
+          "opacities": 0,
+          "quats": 0,
+          "scales": 2136,
+          "sh0": 0,
+          "shN": 0
+        },
+        "checkpoint_all_finite": false,
+        "full_ply_gaussians": 1327150,
+        "all_ply_values_finite": true,
+        "sh_degree": 3,
+        "training_images": 280,
+        "validation_images": 40,
+        "metrics": {
+          "psnr": 17.227296829223633,
+          "ssim": 0.6609835028648376,
+          "lpips": 0.5224205851554871,
+          "ellipse_time": 0.0027104198932647707,
+          "num_GS": 1327862
+        },
+        "quality_note": "Finite outputs and completed optimization do not establish faithful room geometry; inspect held-out predictions."
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-08",
+  "selectable_models": 20,
+  "unique_native_exports": 18,
+  "native_ply_bytes": 10664660574,
+  "streaming_objects": 947,
+  "rad_chunks": 911,
+  "streaming_and_navigation_bytes": 2623392550,
+  "native_sources_unchanged": true,
+  "hierarchy_methods": {
+    "Bhattacharyya_base_1_75": 17,
+    "TinyLoD_base_1_5": 1
+  },
+  "software_preview_max_gaussians": 120000,
+  "webgl2_required_for_progressive_SH3": true,
+  "browser_quality_test": "Software fallback, model selection, saved renders and reset tested across original, matching, cleanup, Insta360 and voxel pages. The available test browser has no WebGL2, so GPU streaming was not visually verified.",
+  "worker_unit_checks": "passed: read, HEAD, range, suffix range, invalid range, ETag, clean routes, denied uploads and descriptive downloads",
+  "external_viewers_in_access_policy": 2,
+  "access_mode": "custom",
+  "source_photos_and_training_checkpoints": "local",
+  "hosting": "authenticated same-origin model storage; no desktop dependency"
+}

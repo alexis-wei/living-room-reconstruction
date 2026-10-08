@@ -65,3 +65,19 @@ site/dist/insta360-recovery-assets/
 # Derived voxel-trial previews stay in the private Site; native models stay local.
 site/dist/voxel-gsplat-assets/
 site-viewer-repair/
+
+# Authenticated progressive-model assets and relocated private Site assets.
+*.gsz
+*.splat
+*.splat.gz
+*.rad
+*.radc
+site/dist/client/clouds/
+site/dist/client/examples/
+site/dist/client/gaussians/
+site/dist/client/matching-gsplat/
+site/dist/client/fixing-gsplat-assets/
+site/dist/client/insta360-assets/
+site/dist/client/insta360-recovery-assets/
+site/dist/client/voxel-gsplat-assets/
+site/dist/client/online-models.json

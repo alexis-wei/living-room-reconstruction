@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Choose any two COLMAP reconstructions or gsplat models and view them side by side.">
+  <title>00 · Compare any two · Living Room Reconstruction Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-skip-legacy-clouds="true" data-chapter="0">
+<header class="site-header"><a class="brand" href="index.html">LIVING ROOM / RECONSTRUCTION LAB</a><span class="privacy">PRIVATE RESEARCH SITE</span></header><nav class="study-navigation" aria-label="Chapter navigation"></nav>
+<main class="compare-main">
+  <div class="intro compare-intro">
+    <div><p class="eyebrow">STEP 00 / COMPARISON TOOL</p><h1>Choose any two results.</h1><p class="lead">Compare a resolution, frame-count experiment, camera-model variant, sparse or dense point cloud, or trained gsplat model.</p></div>
+    <aside><strong>Separate reconstructions are not aligned.</strong><p>Each point cloud is framed independently. Similar-looking placement does not mean the coordinate systems or scales match.</p></aside>
+  </div>
+  <div class="compare-toolbar"><button id="compare-swap" type="button">Swap sides</button><p id="compare-catalog-status" role="status">Loading result catalog…</p></div>
+  <section class="cloud-comparison compare-grid" aria-label="Side-by-side reconstruction comparison">
+    <article class="compare-panel" id="compare-a" aria-label="Left reconstruction"></article>
+    <article class="compare-panel" id="compare-b" aria-label="Right reconstruction"></article>
+  </section>
+  <p class="cloud-note">COLMAP sparse components show every point included in the published preview; dense clouds are sampled previews and show the total point count. gsplat panels use saved rendered views from the trained model; open the selected model in the interactive Gaussian viewer for free orbit controls.</p>
+  <footer><span>Point-cloud previews and saved renders are shown here; complete Gaussian models are available through the linked progressive viewers.</span><div><a href="index.html">Back to learning path</a><a href="colmap.html#colmap-study">COLMAP results</a></div></footer>
+</main>
+<script src="cloud-viewer.js"></script>
+<script src="compare.js"></script>
+<script src="chapter-nav.js"></script></body>
+</html>

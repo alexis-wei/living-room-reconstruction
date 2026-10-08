@@ -17,6 +17,7 @@ r=await handle(req('/models/model.ply',{headers:{'If-None-Match':'"test"'}}),bin
 r=await handle(req('/models/model.ply',{method:'HEAD'}),bindings);assert.equal(r.headers.get('Content-Length'),'10');assert.equal(await r.text(),'');
 r=await handle(req('/models/matching/loopoff/identity/model.ply?download=1'),bindings);assert.equal(r.headers.get('Content-Disposition'),'attachment; filename="matching_loopoff_SH3.ply"');
 r=await handle(req('/__model-import?key=model.ply&action=create',{method:'POST',body:'{}'}),bindings);assert.equal(r.status,403);assert.equal(created,0);
+r=await handle(req('/__model-import?key=model.ply&action=create',{method:'POST',headers:{'X-Model-Import-Secret':'test-secret'},body:'{}'}),bindings);assert.equal(r.status,403);assert.equal(created,0);
 r=await handle(req('/models/model.ply',{method:'PUT',body:'data'}),bindings);assert.equal(r.status,405);
 r=await handle(req('/matching'),bindings);assert.equal(await r.text(),'/matching.html');
 r=await handle(req('/'),bindings);assert.equal(await r.text(),'/index.html');

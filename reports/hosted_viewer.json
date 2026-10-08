@@ -18,5 +18,25 @@
   "external_viewers_in_access_policy": 2,
   "access_mode": "custom",
   "source_photos_and_training_checkpoints": "local",
-  "hosting": "authenticated same-origin model storage; no desktop dependency"
+  "hosting": "authenticated same-origin model storage; no desktop dependency",
+  "production_verification": {
+    "objects": 994,
+    "stored_bytes": 13475221662,
+    "range_readback_verified": true,
+    "anonymous_statuses": {
+      "model.ply": 403,
+      "model-lod.rad": 403,
+      "model-lod-0.radc": 403
+    },
+    "pages": {
+      "/gsplat": 200,
+      "/matching": 200,
+      "/insta360": 200,
+      "/fixing-gsplat": 200,
+      "/voxel-gsplat": 200,
+      "/": 200
+    },
+    "temporary_import_disabled": true
+  },
+  "site_version": 49
 }

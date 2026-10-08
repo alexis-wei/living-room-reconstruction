@@ -1,6 +1,28 @@
 (()=>{
 'use strict';
 const cache=new Map();
+// Every panel must decode the catalog's storage format before rendering.
+// Treating byte-plane-packed XYZ/RGB as interleaved floats scrambles geometry
+// and creates saturated rainbow colors; it is not a visualization mode.
+function decodePointCloud(buffer,cloud={}){
+ const format=cloud.format||'xyzrgb-f32',packed=format==='xyz-f32-rgb-u8'||format==='xyz-f32-rgb-u8-shuffled';
+ if(!packed&&format!=='xyzrgb-f32')throw Error('Unsupported point-cloud format');
+ const stride=packed?15:24,n=cloud.displayed_points??buffer.byteLength/stride;
+ if(!Number.isSafeInteger(n)||n<0||buffer.byteLength!==n*stride)throw Error('Point count mismatch');
+ let raw=buffer;
+ if(format==='xyz-f32-rgb-u8-shuffled'){
+  const planes=new Uint8Array(buffer),interleaved=new Uint8Array(buffer.byteLength);
+  for(let lane=0;lane<15;lane++)for(let i=0;i<n;i++)interleaved[i*15+lane]=planes[lane*n+i];
+  raw=interleaved.buffer;
+ }
+ const input=new DataView(raw),decoded=new Float32Array(n*6);
+ for(let i=0;i<n;i++)for(let j=0;j<3;j++){
+  const xyz=input.getFloat32(i*stride+j*4,true),color=packed?input.getUint8(i*stride+12+j)/255:input.getFloat32(i*stride+12+j*4,true);
+  if(!Number.isFinite(xyz)||!Number.isFinite(color)||color<0||color>1)throw Error('Invalid point-cloud coordinates or colors');
+  decoded[i*6+j]=xyz;decoded[i*6+3+j]=color;
+ }
+ return decoded.buffer;
+}
 class CloudRenderer{
  constructor(canvas){
   this.canvas=canvas;this.gl=canvas.getContext('webgl',{antialias:true,alpha:false});this.ctx=this.gl?null:canvas.getContext('2d');if(!this.gl&&!this.ctx)throw Error('Canvas rendering is unavailable.');
@@ -20,7 +42,7 @@ class CloudRenderer{
   new ResizeObserver(()=>this.draw()).observe(canvas);
  }
  reset(){this.yaw=.25;this.pitch=-.2;this.pan=[0,0];this.distance=2.8;if(this.canvas)this.draw()}
- load(buffer,cameras,renderAll=false){this.renderAll=renderAll;const gl=this.gl;this.count=buffer.byteLength/24;if(!gl){this.softwarePoints=new Float32Array(buffer);this.softwareCameras=cameras;this.reset();this.draw();return}gl.bindBuffer(gl.ARRAY_BUFFER,this.pointBuffer);gl.bufferData(gl.ARRAY_BUFFER,buffer,gl.STATIC_DRAW);const arr=new Float32Array(cameras.length*6);cameras.forEach((p,i)=>arr.set([...p,1,.5,.14],i*6));this.cameraCount=cameras.length;gl.bindBuffer(gl.ARRAY_BUFFER,this.cameraBuffer);gl.bufferData(gl.ARRAY_BUFFER,arr,gl.STATIC_DRAW);this.reset()}
+ load(buffer,cameras,renderAll=false,cloud={}){buffer=decodePointCloud(buffer,cloud);this.renderAll=renderAll;const gl=this.gl;this.count=buffer.byteLength/24;if(!gl){this.softwarePoints=new Float32Array(buffer);this.softwareCameras=cameras;this.reset();this.draw();return}gl.bindBuffer(gl.ARRAY_BUFFER,this.pointBuffer);gl.bufferData(gl.ARRAY_BUFFER,buffer,gl.STATIC_DRAW);const arr=new Float32Array(cameras.length*6);cameras.forEach((p,i)=>arr.set([...p,1,.5,.14],i*6));this.cameraCount=cameras.length;gl.bindBuffer(gl.ARRAY_BUFFER,this.cameraBuffer);gl.bufferData(gl.ARRAY_BUFFER,arr,gl.STATIC_DRAW);this.reset()}
  clear(){this.count=0;this.cameraCount=0;this.draw()}
  draw(){const gl=this.gl;if(!gl){this.drawSoftware();return;}const c=this.canvas,dpr=Math.min(devicePixelRatio,2),w=Math.round(c.clientWidth*dpr),h=Math.round(c.clientHeight*dpr);if(c.width!==w||c.height!==h){c.width=w;c.height=h}gl.viewport(0,0,w,h);gl.clearColor(.035,.075,.115,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.useProgram(this.program);
  const uniform=(name)=>gl.getUniformLocation(this.program,name);gl.uniform2f(uniform('angle'),this.yaw,this.pitch);gl.uniform2fv(uniform('pan'),this.pan);gl.uniform1f(uniform('distance'),this.distance);gl.uniform1f(uniform('aspect'),w/h);
@@ -51,12 +73,13 @@ function setupPanel(id,index,preferred){
   const ids=new Set(cloud.frame_ids||[]);for(let i=1;i<=(d.input_images||500);i++){const span=document.createElement('span');span.className=ids.has(i)?'present':'';span.title=`Frame ${String(i).padStart(4,'0')}: ${ids.has(i)?'registered':'not in this component'}`;strip.append(span)}
   label.textContent=cloud.kind==='dense'?'Dense fusion from the largest sparse component.':`Blue = registered in this component · ${ids.size}/${d.input_images||500} frames · chronological order`;
   stats.innerHTML=`<strong>${cloud.total_points.toLocaleString()} ${cloud.kind==='dense'?'fused':'sparse'} points</strong> · ${Math.min(cloud.displayed_points,(renderer.gl||cloud.render_all)?Infinity:60000).toLocaleString()} displayed${(cloud.sampled||(!renderer.gl&&!cloud.render_all&&cloud.displayed_points>60000))?' (sampled preview)':' (all points)'}${cloud.kind==='sparse'?`<br>${cloud.registered_images} registered images · ${cloud.substantial?'substantial component':'small / potentially unstable component'}${Number.isFinite(cloud.mean_reprojection_error)?` · ${cloud.mean_reprojection_error.toFixed(3)} px mean reprojection error`:''}`:''}`;
-  try{if(!cache.has(cloud.url))cache.set(cloud.url,fetch(cloud.url,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Cloud file unavailable');return cloud.url.endsWith(".gz")?new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).arrayBuffer():r.arrayBuffer()}));let buf=await cache.get(cloud.url);if(ticket!==token)return;if(cloud.format==='xyz-f32-rgb-u8-shuffled'){const n=cloud.displayed_points;if(!Number.isSafeInteger(n)||n<0||!Number.isSafeInteger(n*15)||buf.byteLength!==n*15)throw Error('Point count mismatch');const planes=new Uint8Array(buf),interleaved=new Uint8Array(buf.byteLength);for(let lane=0;lane<15;lane++)for(let i=0;i<n;i++)interleaved[i*15+lane]=planes[lane*n+i];buf=interleaved.buffer;}if(cloud.format==='xyz-f32-rgb-u8'||cloud.format==='xyz-f32-rgb-u8-shuffled'){if(buf.byteLength!==cloud.displayed_points*15)throw Error('Point count mismatch');const raw=new DataView(buf),decoded=new Float32Array(cloud.displayed_points*6);for(let i=0;i<cloud.displayed_points;i++){for(let j=0;j<3;j++){decoded[i*6+j]=raw.getFloat32(i*15+j*4,true);decoded[i*6+3+j]=raw.getUint8(i*15+12+j)/255;}}buf=decoded.buffer;}renderer.load(buf,cloud.camera_positions||[],cloud.render_all||false);status.textContent=(renderer.gl?'GPU viewer':(cloud.render_all?'Software viewer · all exported points':'Software viewer · up to 60,000 points'))+' · Drag to explore. Orange dots show camera centers.'}catch(e){if(ticket===token)status.textContent=e.message}
+  try{if(!cache.has(cloud.url))cache.set(cloud.url,fetch(cloud.url,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Cloud file unavailable');return cloud.url.endsWith(".gz")?new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).arrayBuffer():r.arrayBuffer()}));const buf=await cache.get(cloud.url);if(ticket!==token)return;renderer.load(buf,cloud.camera_positions||[],cloud.render_all||false,cloud);status.textContent=(renderer.gl?'GPU viewer':(cloud.render_all?'Software viewer · all exported points':'Software viewer · up to 60,000 points'))+' · Original photo colors · Drag to explore. Orange dots show camera centers.'}catch(e){if(ticket===token)status.textContent=e.message}
  };
  const changeResolution=()=>{const d=index.scales[res.value];if(heading)heading.textContent=d.label||res.value;comp.replaceChildren();for(const c of d.components){const opt=new Option(`Component ${c.id} · ${c.registered_images} views${c.substantial?'':' · small'}${c.total_points?'':' · no points'}`,c.id);opt.disabled=!c.total_points;comp.add(opt)}if(d.dense&&document.body.dataset.sparseOnly!=='true')comp.add(new Option('Dense fused cloud · largest component','dense'));const first=d.components.find(c=>c.url);if(first)comp.value=first.id;else if(d.dense&&document.body.dataset.sparseOnly!=='true')comp.value='dense';
  panel.querySelector('details p').textContent=`${d.registered_union} unique frames belong to non-empty sparse models. ${d.missing_frame_ids.length} frames remain outside them. Missing frame IDs: ${d.missing_frame_ids.length?d.missing_frame_ids.join(', '):'none'}. Substantial means at least 10 registered images and 100 points. Smaller non-empty models are also inspectable; zero-point models are listed but disabled.`;load()};
  res.onchange=changeResolution;comp.onchange=load;panel.querySelector('button').onclick=()=>renderer.reset();panel.querySelector('input[type=range]').oninput=e=>{renderer.pointSize=Number(e.target.value);renderer.draw()};panel.querySelector('input[type=checkbox]').onchange=e=>{renderer.showCameras=e.target.checked;renderer.draw()};changeResolution();
 }
 window.CloudRenderer=CloudRenderer;
+window.decodePointCloud=decodePointCloud;
 if(!document.body.dataset.skipLegacyClouds){fetch(document.body.dataset.cloudIndex||'clouds/index.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Point-cloud previews are not available yet.');return r.json()}).then(index=>{const keys=Object.keys(index.scales),ready=keys.filter(k=>index.scales[k].components.some(c=>c.url));setupPanel('cloud-a',index,document.body.dataset.cloudA||ready[0]||keys[0]);setupPanel('cloud-b',index,document.body.dataset.cloudB||(ready.includes('8x')?'8x':ready[1]||ready[0]||keys[0]));for(const panel of document.querySelectorAll('.cloud-panel[data-cloud-key]'))setupPanel(panel.id,index,panel.dataset.cloudKey)}).catch(e=>{const panel=document.getElementById('cloud-a');if(panel)panel.textContent=e.message})}
 })();

@@ -54,7 +54,7 @@ function makePanel(id,side){
  panel.innerHTML=`<div class="compare-panel-head"><p class="compare-side">${side}</p><label>Result<select class="compare-choice"></select></label></div><p class="cloud-status" role="status">Choose a result.</p><canvas class="cloud-canvas" aria-label="Interactive COLMAP point cloud. Use pointer to orbit and scroll to zoom."></canvas><img class="compare-preview" alt="Saved rendered view from a gsplat model" hidden><label class="compare-view-control" hidden>Rendered viewpoint<select></select></label><div class="cloud-controls compare-cloud-controls"><button type="button" class="compare-reset">Reset view</button><label>Point size <input class="compare-size" type="range" min="1" max="5" value="2" step="0.5"></label><label><input class="compare-cameras" type="checkbox" checked>Camera centers</label></div><div class="compare-stats"></div>`;
  const canvas=$(panel,'.cloud-canvas');
  let renderer;
- try{renderer=new window.CloudRenderer(canvas)}catch(error){$(panel,'.cloud-status').textContent=error.message}
+ try{renderer=new window.CloudRenderer(canvas);renderer.showCameras=false;$(panel,'.compare-cameras').checked=false}catch(error){$(panel,'.cloud-status').textContent=error.message}
  $(panel,'.compare-reset').addEventListener('click',()=>renderer?.reset());
  $(panel,'.compare-size').addEventListener('input',event=>{if(renderer){renderer.pointSize=Number(event.target.value);renderer.draw()}});
  $(panel,'.compare-cameras').addEventListener('change',event=>{if(renderer){renderer.showCameras=event.target.checked;renderer.draw()}});
@@ -83,7 +83,7 @@ function showCloud(state,item){
  const cacheKey=cloud.url;
  if(!bufferCache.has(cacheKey))bufferCache.set(cacheKey,fetch(cloud.url,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('Point-cloud preview could not be loaded.');return cloud.url.endsWith('.gz')?new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer():response.arrayBuffer()}));
  const ticket=state.token;
- bufferCache.get(cacheKey).then(buffer=>{if(ticket!==state.token)return;renderer.load(buffer,cloud.camera_positions||[],cloud.render_all||false);status.textContent=`${renderer.gl?'GPU':'Software'} point-cloud view · drag to orbit · scroll to zoom.`}).catch(error=>{if(ticket===state.token)status.textContent=error.message});
+ bufferCache.get(cacheKey).then(buffer=>{if(ticket!==state.token)return;renderer.load(buffer,cloud.camera_positions||[],cloud.render_all||false,cloud);status.textContent=`${renderer.gl?'GPU':'Software'} point-cloud view · original photo colors · drag to orbit · scroll to zoom.`}).catch(error=>{if(ticket===state.token)status.textContent=error.message});
 }
 function showGaussian(state,item){
  const {panel}=state,canvas=$(panel,'.cloud-canvas'),preview=$(panel,'.compare-preview'),viewControl=$(panel,'.compare-view-control'),viewSelect=$('select',viewControl),controls=$(panel,'.compare-cloud-controls'),status=$(panel,'.cloud-status'),stats=$(panel,'.compare-stats');
